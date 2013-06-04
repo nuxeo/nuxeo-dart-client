@@ -1,0 +1,9 @@
+name: nuxeo
+version: 0.0.1
+description: >
+  A Nuxeo Automation Client
+authors:
+- Nelson Silva <nelson.silva@inevo.pt>
+dependencies:
+  browser: any
+  unittest: any
