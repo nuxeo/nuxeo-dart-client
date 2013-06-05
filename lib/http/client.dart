@@ -1,7 +1,6 @@
 library http_client;
 
 import 'dart:html';
-import 'dart:uri';
 import 'dart:async';
 import 'package:nuxeo/http.dart' as http;
 
@@ -32,9 +31,12 @@ class Request implements http.Request {
     var completer = new Completer<Response>();
     request.onReadyStateChange.listen((e) {
       if (request.readyState == HttpRequest.DONE &&
-          (request.status == 200 || request.status == 0)) {
+          (request.status == 200)) {
         completer.complete(new Response(request.response));
       }
+    });
+    request.onError.listen((e) {
+      throw(e);
     });
     request.send(data);
     return completer.future;

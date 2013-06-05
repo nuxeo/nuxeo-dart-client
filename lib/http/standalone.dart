@@ -1,7 +1,6 @@
 library standalone_client;
 
 import 'dart:io';
-import 'dart:uri';
 import 'dart:async';
 import 'dart:json' as JSON;
 import 'package:nuxeo/http.dart' as http;

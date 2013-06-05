@@ -1,6 +1,5 @@
 library nuxeo;
 
-import 'dart:uri';
 import 'dart:async';
 import 'dart:json' as JSON;
 import 'package:nuxeo/http.dart' as http;
@@ -20,6 +19,8 @@ class Automation {
   Automation(this.client);
 
   op(String id) => new OperationRequest(id, client);
+
+  Future<OperationRegistry> get registry => OperationRegistry.get(client.uri, client);
 
   Directory(String name) => op("Directory.Entries")({"directoryName": name});
 }

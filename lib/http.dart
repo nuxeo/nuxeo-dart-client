@@ -1,6 +1,5 @@
 library http;
 
-import 'dart:uri';
 import 'dart:async';
 
 const HEADER_CONTENT_TYPE = "content-type";

@@ -22,6 +22,7 @@ class Operation {
     return new Operation._internal()
     ..id = json["id"]
     ..label = json["label"]
+    ..description = json["description"]
     ..category = json["category"]
     ..requires = json["requires"]
     ..url = json["url"]
@@ -54,6 +55,7 @@ class OperationParam {
    ..type = json["type"]
    ..isRequired = json["required"]
    ..widget = json["widget"]
+   ..values = json["values"]
    ..order = json["order"];
 
   toString() => "$name [$type] ${isRequired ? "required" : "optional"}";
