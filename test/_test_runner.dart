@@ -18,10 +18,10 @@ void runTests(http.Client client) {
   var nx = new nuxeo.Automation(client);
   group('Nuxeo Automation Tests', () {
     test('query a directory', () {
-      nx.Directory("continent").then((conts) {
+      nx.Directory("continent").then(expectAsync1((conts) {
         expect(conts.length, equals(7));
         expect(conts[0]["id"], equals("europe"));
-      });
+      }));
 
     });
   });
