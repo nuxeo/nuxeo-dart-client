@@ -9,35 +9,21 @@ class OperationRegistry {
   Map<String, Operation> ops;
   Map<String, Operation> chains;
 
-  static Map<Uri, OperationRegistry> _registries = null;
+  static Map<Uri, OperationRegistry> _registries = new Map<Uri, OperationRegistry>();
 
   static Future<OperationRegistry> get(Uri uri, [http.Client client]) {
-    var completer = new Completer<OperationRegistry>();
-
-    if (_registries == null) {
-      _registries = new Map<Uri, OperationRegistry>();
-    }
-
-    String realm = "default";
-
     if (_registries.containsKey(uri)) {
-      completer.complete(_registries[uri]);
+      return new Future.value(_registries[uri]);
     } else {
-      client
-      ..getUrl(uri)
-      .then((http.Request request) {
-        request.headers.set("Accept", CTYPE_AUTOMATION);
-        return request.send();
-      })
-      .then((http.Response response) => response.body)
-      .then((body) {
-        var json = JSON.parse(body);
+      var request = client.get(uri)..headers.set("Accept", CTYPE_AUTOMATION);
+      return request.send()
+      .then((http.Response response) {
+        var body = response.body,
+            json = JSON.parse(body);
         _registries[uri] = new OperationRegistry.fromJSON(json);
-        completer.complete(_registries[uri]);
+        return _registries[uri];
       });
     }
-
-    return completer.future;
   }
 
   OperationRegistry._internal(this.paths, this.ops, this.chains);

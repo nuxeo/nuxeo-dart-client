@@ -1,10 +1,10 @@
 #!/usr/bin/env dart
-// If 'dart' is in your path (and your on a *nix system) the above line makes
-// this file directly executable
 
+import 'package:unittest/vm_config.dart';
 import 'package:nuxeo/http/standalone.dart' as http;
-import '_test_runner.dart';
+import 'tck.dart' as TCK;
 
 main() {
-  runTests(new http.Client());
+  useVMConfiguration();
+  TCK.run(new http.Client());
 }
