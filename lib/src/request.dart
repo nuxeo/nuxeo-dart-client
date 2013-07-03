@@ -8,7 +8,7 @@ class OperationRequest {
   Duration execTimeout, uploadTimeout;
   String documentSchemas;
 
-  static const ALLOWED_PARAMETERS = const ["operationId", "batchId"];
+  AutomationUploader _batchUploader;
 
   OperationRequest(this.opId, this.uri, this.client, {
       this.execTimeout, this.uploadTimeout, this.documentSchemas}) {
@@ -35,13 +35,27 @@ class OperationRequest {
         data["params"] = {};
         params.forEach((key, value) {
           var param = op[key];
-          if (param == null && (!ALLOWED_PARAMETERS.contains(key))) {
+          if (param == null) {
             throw new ArgumentError("No such parameter '$key' for operation ${op.id}.");
           }
           if (value != null) {
             data["params"][key] = value;
           }
         });
+      }
+
+      var targetUri = opUri;
+
+      // Check for batch upload
+      if (hasBatchUpload) {
+        if (data["params"] == null) {
+          data["params"] = {};
+        }
+        data["params"]["operationId"] = opId;
+        data["params"]["batchId"] = batchId;
+
+        // Override the target url
+        targetUri = Uri.parse("${uri}/batch/execute");
       }
 
       var isMultipart = (input is http.Blob);
@@ -56,7 +70,7 @@ class OperationRequest {
         data["context"] = context;
       }
 
-      var request = client.post(opUri, multipart: isMultipart);
+      var request = client.post(targetUri, multipart: isMultipart);
 
       // Setup the headers
       var txTimeout = 5 + ((execTimeout != null) ? execTimeout.inSeconds : 0);
@@ -85,34 +99,43 @@ class OperationRequest {
         return request.send(json).then(_handleResponse);
       }
 
-      });
+  });
 
-      _handleResponse(response) {
-        var body = response.body,
-            json = JSON.parse(body);
+  _handleResponse(response) {
+    var body = response.body,
+        json = JSON.parse(body);
 
-        switch (json["entity-type"]) {
-          case "document":
-            return new Document.fromJSON(json);
-            break;
-          case "documents":
-            var docs = json["entries"].map((doc) => new Document.fromJSON(doc));
+    switch (json["entity-type"]) {
+      case "document":
+        return new Document.fromJSON(json);
+        break;
+      case "documents":
+        var docs = json["entries"].map((doc) => new Document.fromJSON(doc));
 
-            if (!json.containsKey("isPaginable") || !json["isPaginable"]) {
-              return docs;
-            }
-
-            return new PaginableDocuments(docs)
-                ..totalSize = json["totalSize"]
-                ..pageIndex = json["pageIndex"]
-                ..pageSize = json["pageSize"]
-                ..pageCount = json["pageCount"];
-
-            break;
-          case "exception":
-            throw new Exception(json("message"));
-            break;
+        if (!json.containsKey("isPaginable") || !json["isPaginable"]) {
+          return docs;
         }
-      }
 
+        return new PaginableDocuments(docs)
+            ..totalSize = json["totalSize"]
+            ..pageIndex = json["pageIndex"]
+            ..pageSize = json["pageSize"]
+            ..pageCount = json["pageCount"];
+
+        break;
+      case "exception":
+        throw new Exception(json["message"]);
+        break;
+    }
+  }
+
+  String get batchId => _batchUploader.batchId;
+  bool get hasBatchUpload => _batchUploader != null;
+
+  AutomationUploader get uploader {
+    if (_batchUploader == null) {
+      _batchUploader = new AutomationUploader(uri, client);
+    }
+    return _batchUploader;
+  }
 }

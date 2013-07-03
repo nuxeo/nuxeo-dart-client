@@ -42,12 +42,6 @@ class Upload {
   Future<Upload> get future => _completer.future;
 }
 
-typedef AutomationUploaderExecutor({
-  Map<String, Object> params,
-  Map<String, String> context,
-  String repository,
-  bool voidOp});
-
 /*******************************************************
  * Manage upload of files in a queue with a target
  * number of concurrent uploads
@@ -58,10 +52,11 @@ class AutomationUploader {
 
   static final LOG = new Logger("nuxeo.automation.uploader");
 
-  Automation nx;
+  Uri uri;
+  http.Client client;
 
   StreamController<AutomationUploaderEvent> evtController = new StreamController<AutomationUploaderEvent>();
-  Stream<AutomationUploaderEvent> get onLayoutComplete => evtController.stream.where((e) => e.type == "layoutComplete");
+  Stream<AutomationUploaderEvent> get onBatchStarted => evtController.stream.where((e) => e.type == "batchStarted");
 
   int numConcurrentUploads;
 
@@ -80,7 +75,7 @@ class AutomationUploader {
   int _nbUploadInprogress = 0;
   List _completedUploads = [];
 
-  AutomationUploader(this.nx, {
+  AutomationUploader(this.uri, this.client, {
     this.numConcurrentUploads : 5,
     // define if upload should be triggered directly
     this.directUpload : true,
@@ -102,26 +97,6 @@ class AutomationUploader {
     return entry.future;
   }
 
-  AutomationUploaderExecutor op(String opId) => ({
-    Map<String, Object> params,
-    Map<String, String> context,
-    String repository,
-    bool voidOp: false}) {
-
-    if (params == null) {
-      params = {};
-
-    }
-    params["operationId"] = opId;
-    params["batchId"] = batchId;
-
-    var op = nx.op(opId);
-    // Override the target url
-    op.opUri = Uri.parse("${nx.uri}/batch/execute");
-
-    return op(params: params, context: context);
-  };
-
   uploadFiles() {
 
     if (_nbUploadInprogress >= numConcurrentUploads) {
@@ -140,7 +115,7 @@ class AutomationUploader {
       var upload = _uploadStack.removeFirst();
 
       // create a new xhr object
-      var xhr = nx.client.post(Uri.parse("${nx.uri}/batch/upload"));
+      var xhr = client.post(Uri.parse("${uri}/batch/upload"));
 
       upload.fileIndex = _uploadIdx + 0;
       upload.downloadStartTime = new DateTime.now();

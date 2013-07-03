@@ -32,7 +32,6 @@ class Automation {
 
   http.Client client;
   Uri uri;
-  AutomationUploader _batchUploader;
 
   Automation(this.client, [String url = "http://localhost:8080/nuxeo/site/automation"]) {
     uri = Uri.parse(url);
@@ -46,14 +45,6 @@ class Automation {
       execTimeout: execTimeout,
       uploadTimeout: uploadTimeout,
       documentSchemas: documentSchemas);
-
-
-  AutomationUploader get uploader {
-    if (_batchUploader == null) {
-      _batchUploader = new AutomationUploader(this);
-    }
-    return _batchUploader;
-  }
 
   Future<OperationRegistry> get registry => OperationRegistry.get(uri, client);
 

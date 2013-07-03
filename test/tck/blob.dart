@@ -80,13 +80,15 @@ void testBlobs(nuxeo.Automation nx) {
       }));
     });
 
+    var op = nx.op("FileManager.Import");
+
     test('Create Blob1 (txt)', () {
       var blob = new http.Blob(
           content: "some content in plain text",
           mimetype: "text/plain",
           filename: "testMe.txt");
 
-      nx.uploader.uploadFile(blob)
+      op.uploader.uploadFile(blob)
       .then(expectAsync1((nuxeo.Upload upload) {
         expect(upload.fileIndex, equals(0));
       }));
@@ -98,7 +100,7 @@ void testBlobs(nuxeo.Automation nx) {
           mimetype: "application/something",
           filename: "testBin.bin");
 
-      nx.uploader.uploadFile(blob)
+      op.uploader.uploadFile(blob)
       .then(expectAsync1((nuxeo.Upload upload) {
         expect(upload.fileIndex, equals(1));
       }));
@@ -110,7 +112,7 @@ void testBlobs(nuxeo.Automation nx) {
           mimetype: "application/something",
           filename: "testBin.bin");
 
-      nx.uploader.op("FileManager.Import")(context : {
+      op(context : {
         "currentDocument" : root.path
       })
       .then(expectAsync1((Iterable<nuxeo.Document> docs) {
