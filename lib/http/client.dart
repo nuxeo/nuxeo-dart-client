@@ -23,7 +23,8 @@ class Request extends base.Request {
   Request(String method, Uri uri) {
     request = new html.HttpRequest()
     ..open(method, uri.toString(), async: true)
-    ..withCredentials = true;
+    ..withCredentials = true
+    ..setRequestHeader("Accept", "*/*"); // explicitly set the accept header to make FF work
   }
 
   get upload => request.upload;
