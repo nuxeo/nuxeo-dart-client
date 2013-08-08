@@ -1,0 +1,1 @@
+{"dependencies":[],"name":"dart:","location":"0","revision":"0","libraries":[{"refId":"http_client"},{"refId":"logging","name":"package:logging/logging.dart"},{"refId":"nuxeo_automation"}],"description":"Dart System Libraries"}

@@ -1,0 +1,137 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Blob class / http_client Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="http_client" data-type="Blob">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../http_client.html">http_client</a> &rsaquo; <a href="../http_client/Blob.html">Blob</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Blob</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class Blob {
+ String filename;
+ List&lt;int&gt; content;
+ String mimetype;
+
+ Blob({this.filename: "blob", content, this.mimetype}) {
+   if (content is String) {
+     this.content = encodeUtf8(content);
+   } else if (content is List&lt;int&gt;) {
+     this.content = content;
+   }
+ }
+
+ int get length =&gt; content.length;
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>Blob</strong>({String filename: "blob", content, String mimetype}) <a class="anchor-link" href="#"
+              title="Permalink to Blob.Blob">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from Object </div></div>
+<pre class="source">
+Blob({this.filename: "blob", content, this.mimetype}) {
+ if (content is String) {
+   this.content = encodeUtf8(content);
+ } else if (content is List&lt;int&gt;) {
+   this.content = content;
+ }
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="content">
+<button class="show-code">Code</button>
+List&lt;int&gt;         <strong>content</strong> <a class="anchor-link"
+            href="#content"
+            title="Permalink to Blob.content">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+List&lt;int&gt; content
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="filename">
+<button class="show-code">Code</button>
+String         <strong>filename</strong> <a class="anchor-link"
+            href="#filename"
+            title="Permalink to Blob.filename">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String filename
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="length">
+<button class="show-code">Code</button>
+final int         <strong>length</strong> <a class="anchor-link"
+            href="#length"
+            title="Permalink to Blob.length">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+int get length =&gt; content.length;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="mimetype">
+<button class="show-code">Code</button>
+String         <strong>mimetype</strong> <a class="anchor-link"
+            href="#mimetype"
+            title="Permalink to Blob.mimetype">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String mimetype
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

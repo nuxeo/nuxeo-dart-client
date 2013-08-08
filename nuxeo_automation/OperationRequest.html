@@ -1,0 +1,480 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>OperationRequest class / nuxeo_automation Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="nuxeo_automation" data-type="OperationRequest">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../nuxeo_automation.html">nuxeo_automation</a> &rsaquo; <a href="../nuxeo_automation/OperationRequest.html">OperationRequest</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>OperationRequest</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p><a class="crossref" href="../nuxeo_automation/OperationRequest.html">OperationRequest</a> wraps an <a class="crossref" href="../nuxeo_automation/Operation.html">Operation</a> call.
+This class implements the <a class="crossref" href="../nuxeo_automation/OperationRequest.html#call">call</a> method this it can be invoked as a <a class="crossref" href="../dart_core/Function.html">Function</a>.
+Tipically this is called throught the <a class="crossref" href="../nuxeo_automation/OperationRegistry.html">OperationRegistry</a>.</p>
+<pre class="source">
+class OperationRequest {
+
+ static final LOG = new Logger("nuxeo.automation.operation");
+
+ http.Client client;
+ Uri uri;
+ String opId;
+ Uri opUri;
+ Duration execTimeout, uploadTimeout;
+
+ AutomationUploader _batchUploader;
+
+ OperationRequest(this.opId, this.uri, this.client, {
+     this.execTimeout, this.uploadTimeout}) {
+   opUri = Uri.parse("$uri/$opId");
+ }
+
+ Future&lt;Operation&gt; get op =&gt; OperationRegistry.get(uri, client).then((registry) =&gt; registry[opId]);
+
+ /// Call the operation.
+ /// Returns a [Future]
+ /// Throws [AutomationException]
+ Future call({
+         dynamic input: null,
+         Map&lt;String, Object&gt; params: null,
+         Map&lt;String, String&gt; context: null,
+         String repository,
+         String documentSchemas: "dublincore",
+         bool voidOp: false}) =&gt; op.then((Operation op) {
+
+     if (op == null) {
+       throw new ArgumentError("No such operation: $opId");
+     }
+
+     var data = {};
+
+     // Setup the parameters
+     if (params != null) {
+       data["params"] = {};
+       params.forEach((key, value) {
+         var param = op[key];
+         if (param == null) {
+           throw new ArgumentError("No such parameter '$key' for operation ${op.id}.");
+         }
+         if (value != null) {
+           data["params"][key] = value;
+         }
+       });
+     }
+
+     var targetUri = opUri;
+
+     // Check for batch upload
+     if (hasBatchUpload) {
+       if (data["params"] == null) {
+         data["params"] = {};
+       }
+       data["params"]["operationId"] = opId;
+       data["params"]["batchId"] = batchId;
+
+       // Override the target url
+       targetUri = Uri.parse("${uri}/batch/execute");
+     }
+
+     var isMultipart = (input is http.Blob);
+
+     // Setup the input
+     if (input != null &amp;&amp; !isMultipart) {
+       data["input"] = input;
+     }
+
+     // Setup the context
+     if (context != null) {
+       data["context"] = context;
+     }
+
+     var request = client.post(targetUri, multipart: isMultipart);
+
+     // Setup the headers
+     var txTimeout = 5 + ((execTimeout != null) ? execTimeout.inSeconds : 0);
+
+     request.headers.set(HEADER_NX_VOIDOP, voidOp.toString());
+     request.headers.set(HEADER_NX_TX_TIMEOUT, txTimeout.toString());
+     if (documentSchemas.isNotEmpty) {
+       request.headers.set(HEADER_NX_SCHEMAS, documentSchemas);
+     }
+     if (repository != null) {
+       request.headers.set(HEADER_NX_REPOSITORY, repository);
+     }
+
+     var json = JSON.stringify(data);
+
+     // The data to send
+     var requestData;
+
+     // check for multipart request
+     if (isMultipart) {
+       var params = new http.Blob(content: json, mimetype: CTYPE_REQUEST_NOCHARSET, filename: "request");
+       var formData = new http.MultipartFormData();
+       formData.append("request", params);
+       formData.append(input.filename, input);
+       requestData = formData;
+     } else {
+       // Set the content type
+       request.headers.set(http.HEADER_CONTENT_TYPE, CTYPE_REQUEST_NOCHARSET);
+       requestData = json;
+     }
+
+     return request
+         .send(requestData)
+         .catchError((e) {
+           throw new AutomationException(e.message);
+         })
+         .then(_handleResponse);
+
+
+ });
+
+ _handleResponse(response) {
+   var body = response.body,
+       json = JSON.parse(body);
+
+   switch (json["entity-type"]) {
+     case "document":
+       return new Document.fromJSON(json);
+       break;
+     case "documents":
+       var docs = json["entries"].map((doc) =&gt; new Document.fromJSON(doc));
+
+       if (!json.containsKey("isPaginable") || !json["isPaginable"]) {
+         return docs;
+       }
+
+       return new PaginableDocuments(docs)
+           ..totalSize = json["totalSize"]
+           ..pageIndex = json["pageIndex"]
+           ..pageSize = json["pageSize"]
+           ..pageCount = json["pageCount"];
+
+       break;
+     case "exception":
+       throw new Exception(json["message"]);
+       break;
+   }
+ }
+
+ String get batchId =&gt; _batchUploader.batchId;
+ bool get hasBatchUpload =&gt; _batchUploader != null;
+
+ AutomationUploader get uploader {
+   if (_batchUploader == null) {
+     _batchUploader = new AutomationUploader(uri, client);
+   }
+   return _batchUploader;
+ }
+}
+</pre>
+</div>
+<div>
+<h3>Static Properties</h3>
+<div class="field"><h4 id="LOG">
+<button class="show-code">Code</button>
+final         <strong>LOG</strong> <a class="anchor-link"
+            href="#LOG"
+            title="Permalink to OperationRequest.LOG">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static final LOG = new Logger("nuxeo.automation.operation")
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>OperationRequest</strong>(String opId, Uri uri, <a href="../http_client/Client.html">Client</a> client, {Duration execTimeout, Duration uploadTimeout}) <a class="anchor-link" href="#"
+              title="Permalink to OperationRequest.OperationRequest">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from Object </div></div>
+<pre class="source">
+OperationRequest(this.opId, this.uri, this.client, {
+   this.execTimeout, this.uploadTimeout}) {
+ opUri = Uri.parse("$uri/$opId");
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="batchId">
+<button class="show-code">Code</button>
+final String         <strong>batchId</strong> <a class="anchor-link"
+            href="#batchId"
+            title="Permalink to OperationRequest.batchId">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String get batchId =&gt; _batchUploader.batchId;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="client">
+<button class="show-code">Code</button>
+<a href="../http_client/Client.html">Client</a>         <strong>client</strong> <a class="anchor-link"
+            href="#client"
+            title="Permalink to OperationRequest.client">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+http.Client client
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="execTimeout">
+<button class="show-code">Code</button>
+Duration         <strong>execTimeout</strong> <a class="anchor-link"
+            href="#execTimeout"
+            title="Permalink to OperationRequest.execTimeout">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Duration execTimeout
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="hasBatchUpload">
+<button class="show-code">Code</button>
+final bool         <strong>hasBatchUpload</strong> <a class="anchor-link"
+            href="#hasBatchUpload"
+            title="Permalink to OperationRequest.hasBatchUpload">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+bool get hasBatchUpload =&gt; _batchUploader != null;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="op">
+<button class="show-code">Code</button>
+final Future&lt;<a href="../nuxeo_automation/Operation.html">Operation</a>&gt;         <strong>op</strong> <a class="anchor-link"
+            href="#op"
+            title="Permalink to OperationRequest.op">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Future&lt;Operation&gt; get op =&gt; OperationRegistry.get(uri, client).then((registry) =&gt; registry[opId]);
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="opId">
+<button class="show-code">Code</button>
+String         <strong>opId</strong> <a class="anchor-link"
+            href="#opId"
+            title="Permalink to OperationRequest.opId">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String opId
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="opUri">
+<button class="show-code">Code</button>
+Uri         <strong>opUri</strong> <a class="anchor-link"
+            href="#opUri"
+            title="Permalink to OperationRequest.opUri">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Uri opUri
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="uploader">
+<button class="show-code">Code</button>
+final <a href="../nuxeo_automation/AutomationUploader.html">AutomationUploader</a>         <strong>uploader</strong> <a class="anchor-link"
+            href="#uploader"
+            title="Permalink to OperationRequest.uploader">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+AutomationUploader get uploader {
+ if (_batchUploader == null) {
+   _batchUploader = new AutomationUploader(uri, client);
+ }
+ return _batchUploader;
+}
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="uploadTimeout">
+<button class="show-code">Code</button>
+Duration         <strong>uploadTimeout</strong> <a class="anchor-link"
+            href="#uploadTimeout"
+            title="Permalink to OperationRequest.uploadTimeout">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Duration execTimeout, uploadTimeout
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="uri">
+<button class="show-code">Code</button>
+Uri         <strong>uri</strong> <a class="anchor-link"
+            href="#uri"
+            title="Permalink to OperationRequest.uri">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Uri uri
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="call">
+<button class="show-code">Code</button>
+Future <strong>call</strong>({input: null, Map&lt;String, Object&gt; params: null, Map&lt;String, String&gt; context: null, String repository, String documentSchemas: "dublincore", bool voidOp: false}) <a class="anchor-link" href="#call"
+              title="Permalink to OperationRequest.call">#</a></h4>
+<div class="doc">
+<p>Call the operation.
+Returns a <a class="crossref" href="../dart_async/Future.html">Future</a>
+Throws <a class="crossref" href="../nuxeo_automation/AutomationException.html">AutomationException</a></p>
+<pre class="source">
+Future call({
+       dynamic input: null,
+       Map&lt;String, Object&gt; params: null,
+       Map&lt;String, String&gt; context: null,
+       String repository,
+       String documentSchemas: "dublincore",
+       bool voidOp: false}) =&gt; op.then((Operation op) {
+
+   if (op == null) {
+     throw new ArgumentError("No such operation: $opId");
+   }
+
+   var data = {};
+
+   // Setup the parameters
+   if (params != null) {
+     data["params"] = {};
+     params.forEach((key, value) {
+       var param = op[key];
+       if (param == null) {
+         throw new ArgumentError("No such parameter '$key' for operation ${op.id}.");
+       }
+       if (value != null) {
+         data["params"][key] = value;
+       }
+     });
+   }
+
+   var targetUri = opUri;
+
+   // Check for batch upload
+   if (hasBatchUpload) {
+     if (data["params"] == null) {
+       data["params"] = {};
+     }
+     data["params"]["operationId"] = opId;
+     data["params"]["batchId"] = batchId;
+
+     // Override the target url
+     targetUri = Uri.parse("${uri}/batch/execute");
+   }
+
+   var isMultipart = (input is http.Blob);
+
+   // Setup the input
+   if (input != null &amp;&amp; !isMultipart) {
+     data["input"] = input;
+   }
+
+   // Setup the context
+   if (context != null) {
+     data["context"] = context;
+   }
+
+   var request = client.post(targetUri, multipart: isMultipart);
+
+   // Setup the headers
+   var txTimeout = 5 + ((execTimeout != null) ? execTimeout.inSeconds : 0);
+
+   request.headers.set(HEADER_NX_VOIDOP, voidOp.toString());
+   request.headers.set(HEADER_NX_TX_TIMEOUT, txTimeout.toString());
+   if (documentSchemas.isNotEmpty) {
+     request.headers.set(HEADER_NX_SCHEMAS, documentSchemas);
+   }
+   if (repository != null) {
+     request.headers.set(HEADER_NX_REPOSITORY, repository);
+   }
+
+   var json = JSON.stringify(data);
+
+   // The data to send
+   var requestData;
+
+   // check for multipart request
+   if (isMultipart) {
+     var params = new http.Blob(content: json, mimetype: CTYPE_REQUEST_NOCHARSET, filename: "request");
+     var formData = new http.MultipartFormData();
+     formData.append("request", params);
+     formData.append(input.filename, input);
+     requestData = formData;
+   } else {
+     // Set the content type
+     request.headers.set(http.HEADER_CONTENT_TYPE, CTYPE_REQUEST_NOCHARSET);
+     requestData = json;
+   }
+
+   return request
+       .send(requestData)
+       .catchError((e) {
+         throw new AutomationException(e.message);
+       })
+       .then(_handleResponse);
+
+
+});
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        
