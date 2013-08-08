@@ -1,4 +1,4 @@
-part of nuxeo;
+part of nuxeo_automation;
 
 class AutomationUploaderEvent {
   String type;
@@ -42,11 +42,9 @@ class Upload {
   Future<Upload> get future => _completer.future;
 }
 
-/*******************************************************
- * Manage upload of files in a queue with a target
- * number of concurrent uploads
- * @param opts
- * @returns
+/**
+ * [AutomationUploader] manages the upload of files in a queue with a target
+ * number of concurrent uploads.
  */
 class AutomationUploader {
 

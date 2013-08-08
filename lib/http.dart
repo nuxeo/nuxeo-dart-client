@@ -1,4 +1,7 @@
-library nuxeo_http;
+/**
+ * Provides abstractions for an HTTP client for both client and server side uses.
+ */
+library http_client;
 
 import 'dart:async';
 import 'dart:utf';

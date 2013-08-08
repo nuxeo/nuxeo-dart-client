@@ -1,5 +1,8 @@
-part of nuxeo;
+part of nuxeo_automation;
 
+/**
+ * [Operation] is the Nuxeo Automation Operation model.
+ */
 class Operation {
   String id;
   String label;
@@ -33,6 +36,9 @@ class Operation {
 
 }
 
+/**
+ * [OperationParam] is the model for a parameter in a Nuxeo Automation Operation.
+ */
 class OperationParam {
 
   String name;

@@ -1,4 +1,4 @@
-name: nuxeo
+name: nuxeo_automation
 version: 0.0.1
 author: Nelson Silva <nelson.silva@inevo.pt>
 description: A Nuxeo Automation Client
@@ -8,4 +8,6 @@ dependencies:
   http: any
   logging: any
   logging_handlers: any
+dev_dependencies:
+  hop: '>=0.24.1'
   unittest: any

@@ -4,8 +4,8 @@ import 'dart:io' as io;
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:json' as JSON;
-import 'package:nuxeo/http.dart' as base;
 import 'package:http/http.dart' as http;
+import '../http.dart' as base;
 
 class Response implements base.Response {
   http.Response _response;

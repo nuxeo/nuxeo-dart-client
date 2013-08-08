@@ -1,9 +1,12 @@
-part of nuxeo;
+part of nuxeo_automation;
 
 Future<bool> authenticateFn(Uri url, String scheme, String realm) {
 
 }
 
+/**
+ * [OperationRegistry] retrieves and caches the available operations per server [Uri].
+ */
 class OperationRegistry {
   Map<String, String> paths;
   Map<String, Operation> ops;
@@ -17,12 +20,15 @@ class OperationRegistry {
     } else {
       var request = client.get(uri)..headers.set("Accept", CTYPE_AUTOMATION);
       return request.send()
-      .then((http.Response response) {
-        var body = response.body,
-            json = JSON.parse(body);
-        _registries[uri] = new OperationRegistry.fromJSON(json);
-        return _registries[uri];
-      });
+          .then((http.Response response) {
+            var body = response.body,
+                json = JSON.parse(body);
+            _registries[uri] = new OperationRegistry.fromJSON(json);
+            return _registries[uri];
+          })
+          .catchError((e) {
+            throw new AutomationException(e.toString());
+          });
     }
   }
 
@@ -45,5 +51,6 @@ class OperationRegistry {
 
   getPath(String key) => paths[key];
 
+  /// Get an [Operation] with the given id.
   Operation operator[](String key) => ops.containsKey(key) ? ops[key] : chains[key];
 }

@@ -1,4 +1,4 @@
-part of nuxeo;
+part of nuxeo_automation;
 
 class Document {
 

@@ -1,27 +1,50 @@
-part of nuxeo;
+part of nuxeo_automation;
 
+const CTYPE_AUTOMATION = "application/json+nxautomation";
+const CTYPE_ENTITY = "application/json+nxentity";
+const CTYPE_REQUEST_NOCHARSET = "application/json+nxrequest";
+const CTYPE_MULTIPART_RELATED = "multipart/related";
+const CTYPE_MULTIPART_MIXED = "multipart/mixed";
+const CTYPE_REQUEST = "application/json+nxrequest; charset=UTF-8";
+const KEY_ENTITY_TYPE = "entity-type";
+const HEADER_NX_SCHEMAS = "X-NXDocumentProperties";
+const HEADER_NX_VOIDOP = "X-NXVoidOperation";
+const HEADER_NX_TX_TIMEOUT = "Nuxeo-Transaction-Timeout";
+const HEADER_NX_REPOSITORY = "X-NXRepository";
+
+/**
+ * [OperationRequest] wraps an [Operation] call.
+ * This class implements the [call] method this it can be invoked as a [Function].
+ * Tipically this is called throught the [OperationRegistry].
+ */
 class OperationRequest {
+
+  static final LOG = new Logger("nuxeo.automation.operation");
+
   http.Client client;
   Uri uri;
   String opId;
   Uri opUri;
   Duration execTimeout, uploadTimeout;
-  String documentSchemas;
 
   AutomationUploader _batchUploader;
 
   OperationRequest(this.opId, this.uri, this.client, {
-      this.execTimeout, this.uploadTimeout, this.documentSchemas}) {
+      this.execTimeout, this.uploadTimeout}) {
     opUri = Uri.parse("$uri/$opId");
   }
 
   Future<Operation> get op => OperationRegistry.get(uri, client).then((registry) => registry[opId]);
 
+  /// Call the operation.
+  /// Returns a [Future]
+  /// Throws [AutomationException]
   Future call({
           dynamic input: null,
           Map<String, Object> params: null,
           Map<String, String> context: null,
           String repository,
+          String documentSchemas: "dublincore",
           bool voidOp: false}) => op.then((Operation op) {
 
       if (op == null) {
@@ -86,18 +109,29 @@ class OperationRequest {
 
       var json = JSON.stringify(data);
 
+      // The data to send
+      var requestData;
+
       // check for multipart request
       if (isMultipart) {
         var params = new http.Blob(content: json, mimetype: CTYPE_REQUEST_NOCHARSET, filename: "request");
         var formData = new http.MultipartFormData();
         formData.append("request", params);
         formData.append(input.filename, input);
-        return request.send(formData).then(_handleResponse);
+        requestData = formData;
       } else {
         // Set the content type
         request.headers.set(http.HEADER_CONTENT_TYPE, CTYPE_REQUEST_NOCHARSET);
-        return request.send(json).then(_handleResponse);
+        requestData = json;
       }
+
+      return request
+          .send(requestData)
+          .catchError((e) {
+            throw new AutomationException(e.message);
+          })
+          .then(_handleResponse);
+
 
   });
 

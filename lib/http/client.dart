@@ -3,7 +3,7 @@ library http_client;
 import 'dart:html' as html;
 import 'dart:utf';
 import 'dart:async';
-import 'package:nuxeo/http.dart' as base;
+import 'package:nuxeo_automation/http.dart' as base;
 
 class Response implements base.Response {
   Object response;
@@ -49,7 +49,7 @@ class Request extends base.Request {
       data.data.forEach((k, v) {
         if (v is base.Blob) {
           var blob = new html.Blob([decodeUtf8(v.content)], v.mimetype);
-          formData.append(k, blob, v.filename);
+          formData.appendBlob(k, blob, v.filename);
         }
       });
       request.send(formData);
