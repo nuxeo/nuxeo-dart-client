@@ -2,19 +2,19 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>Automation class / nuxeo_automation Library / Dart Documentation</title>
+        <title>Client class / nuxeo_automation_browser Library / Dart Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="../styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
         <link rel="shortcut icon" href="../favicon.ico">
         
         </head>
-        <body data-library="nuxeo_automation" data-type="Automation">
+        <body data-library="nuxeo_automation_browser" data-type="Client">
         <div class="page">
         <div class="header">
           <a href="../index.html"><div class="logo"></div></a>
           <a href="../index.html">Dart Documentation</a>
-         &rsaquo; <a href="../nuxeo_automation.html">nuxeo_automation</a> &rsaquo; <a href="../nuxeo_automation/Automation.html">Automation</a>        <div id="search-box">
+         &rsaquo; <a href="../nuxeo_automation_browser.html">nuxeo_automation_browser</a> &rsaquo; <a href="../nuxeo_automation_browser/Client.html">Client</a>        <div id="search-box">
           <input type="search" name="q" id="q" autocomplete="off"
               class="search-input" placeholder="Search API">
         </div>
@@ -26,62 +26,30 @@
         
 </div>
 <div class="content">
-        <h2><strong>Automation</strong>
+        <h2><strong>Client</strong>
           class
         </h2>
         
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
-<p><a class="crossref" href="../nuxeo_automation/Automation.html">Automation</a> client.</p>
 <pre class="source">
-class Automation {
+class Client extends automation.Client {
 
- static final LOG = new Logger("nuxeo.automation");
-
- /// The [http.Client] to use
- http.Client client;
-
- Uri uri;
-
- Automation(this.client, [String url = "http://localhost:8080/nuxeo/site/automation"]) {
-   uri = Uri.parse(url);
- }
-
- /// Creates an [OperationRequest] for the [Operation] with the given [id].
- /// You can also specify an [execTimeout] and an [uploadTimeout].
- OperationRequest op(String id, {
-   execTimeout: const Duration(seconds: 30),
-   uploadTimeout: const Duration(minutes: 20)
- }) =&gt; new OperationRequest(id, uri, client,
-     execTimeout: execTimeout,
-     uploadTimeout: uploadTimeout);
-
- Future&lt;OperationRegistry&gt; get registry =&gt; OperationRegistry.get(uri, client);
+ Client({String url : "http://localhost:8080/nuxeo/site/automation"}) :
+   super(new http.Client(), url);
 
 }
 </pre>
 </div>
-<div>
-<h3>Static Properties</h3>
-<div class="field"><h4 id="LOG">
-<button class="show-code">Code</button>
-final         <strong>LOG</strong> <a class="anchor-link"
-            href="#LOG"
-            title="Permalink to Automation.LOG">#</a>
-        </h4>
-        <div class="doc">
-<pre class="source">
-static final LOG = new Logger("nuxeo.automation")
-</pre>
-</div>
-</div>
-</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../nuxeo_automation/Client.html">Client</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>Client</strong></span></p>
 <div>
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>Automation</strong>(<a href="../http_client/Client.html">Client</a> client, [String url = "http://localhost:8080/nuxeo/site/automation"]) <a class="anchor-link" href="#"
-              title="Permalink to Automation.Automation">#</a></h4>
+new <strong>Client</strong>({String url: "http://localhost:8080/nuxeo/site/automation"}) <a class="anchor-link" href="#"
+              title="Permalink to Client.Client">#</a></h4>
 <div class="doc">
 <div class="inherited">
 <p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
@@ -90,60 +58,59 @@ through their identity. An <a class="crossref" href="../dart_core/Object.html">O
 only.</p>
 <div class="docs-inherited-from">docs inherited from Object </div></div>
 <pre class="source">
-Automation(this.client, [String url = "http://localhost:8080/nuxeo/site/automation"]) {
- uri = Uri.parse(url);
-}
+Client({String url : "http://localhost:8080/nuxeo/site/automation"}) :
+ super(new http.Client(), url);
 </pre>
 </div>
 </div>
 </div>
-<div>
+<div class="inherited">
 <h3>Properties</h3>
-<div class="field"><h4 id="client">
+<div class="field inherited"><h4 id="client">
 <button class="show-code">Code</button>
 <a href="../http_client/Client.html">Client</a>         <strong>client</strong> <a class="anchor-link"
             href="#client"
-            title="Permalink to Automation.client">#</a>
+            title="Permalink to Client.client">#</a>
         </h4>
-        <div class="doc">
+        <div class="inherited-from">inherited from <a href="../nuxeo_automation/Client.html">Client</a> </div><div class="doc">
 <p>The <a class="crossref" href="../http_client/Client.html">http.Client</a> to use</p>
 <pre class="source">
 http.Client client
 </pre>
 </div>
 </div>
-<div class="field"><h4 id="registry">
+<div class="field inherited"><h4 id="registry">
 <button class="show-code">Code</button>
 final Future&lt;<a href="../nuxeo_automation/OperationRegistry.html">OperationRegistry</a>&gt;         <strong>registry</strong> <a class="anchor-link"
             href="#registry"
-            title="Permalink to Automation.registry">#</a>
+            title="Permalink to Client.registry">#</a>
         </h4>
-        <div class="doc">
+        <div class="inherited-from">inherited from <a href="../nuxeo_automation/Client.html">Client</a> </div><div class="doc">
 <pre class="source">
 Future&lt;OperationRegistry&gt; get registry =&gt; OperationRegistry.get(uri, client);
 </pre>
 </div>
 </div>
-<div class="field"><h4 id="uri">
+<div class="field inherited"><h4 id="uri">
 <button class="show-code">Code</button>
 Uri         <strong>uri</strong> <a class="anchor-link"
             href="#uri"
-            title="Permalink to Automation.uri">#</a>
+            title="Permalink to Client.uri">#</a>
         </h4>
-        <div class="doc">
+        <div class="inherited-from">inherited from <a href="../nuxeo_automation/Client.html">Client</a> </div><div class="doc">
 <pre class="source">
 Uri uri
 </pre>
 </div>
 </div>
 </div>
-<div>
+<div class="inherited">
 <h3>Methods</h3>
-<div class="method"><h4 id="op">
+<div class="method inherited"><h4 id="op">
 <button class="show-code">Code</button>
 <a href="../nuxeo_automation/OperationRequest.html">OperationRequest</a> <strong>op</strong>(String id, {execTimeout: const Duration(seconds:30), uploadTimeout: const Duration(minutes:20)}) <a class="anchor-link" href="#op"
-              title="Permalink to Automation.op">#</a></h4>
-<div class="doc">
+              title="Permalink to Client.op">#</a></h4>
+<div class="inherited-from">inherited from <a href="../nuxeo_automation/Client.html">Client</a> </div><div class="doc">
 <p>Creates an <a class="crossref" href="../nuxeo_automation/OperationRequest.html">OperationRequest</a> for the <a class="crossref" href="../nuxeo_automation/Operation.html">Operation</a> with the given 
 <span class="param">id</span>.
 You can also specify an 

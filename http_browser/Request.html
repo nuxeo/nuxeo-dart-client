@@ -1,0 +1,197 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Request class / http_browser Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="http_browser" data-type="Request">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../http_browser.html">http_browser</a> &rsaquo; <a href="../http_browser/Request.html">Request</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Request</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class Request extends base.Request {
+ html.HttpRequest request;
+
+ Request(String method, Uri uri) {
+   request = new html.HttpRequest()
+   ..open(method, uri.toString(), async: true)
+   ..withCredentials = true
+   ..setRequestHeader("Accept", "*/*"); // explicitly set the accept header to make FF work
+ }
+
+ get upload =&gt; request.upload;
+
+ get headers =&gt; new Headers(request);
+
+ Future&lt;Response&gt; send([data]) {
+   var completer = new Completer&lt;Response&gt;();
+   request.onReadyStateChange.listen((e) {
+     if (request.readyState == html.HttpRequest.DONE &amp;&amp;
+         (request.status == 200)) {
+       completer.complete(new Response(request.response));
+     }
+   });
+   request.onError.listen((e) {
+     completer.completeError(new Exception(e));
+   });
+
+   // Convert to html.FormData and html.Blob
+   if (data is base.MultipartFormData) {
+     var formData = new html.FormData();
+     data.data.forEach((k, v) {
+       if (v is base.Blob) {
+         var blob = new html.Blob([decodeUtf8(v.content)], v.mimetype);
+         formData.appendBlob(k, blob, v.filename);
+       }
+     });
+     request.send(formData);
+   } else if (data is base.Blob) {
+     request.send(decodeUtf8(data.content));
+   } else {
+     request.send(data);
+   }
+   return completer.future;
+ }
+}
+</pre>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../http_client/Request.html">Request</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>Request</strong></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>Request</strong>(String method, Uri uri) <a class="anchor-link" href="#"
+              title="Permalink to Request.Request">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from Object </div></div>
+<pre class="source">
+Request(String method, Uri uri) {
+ request = new html.HttpRequest()
+ ..open(method, uri.toString(), async: true)
+ ..withCredentials = true
+ ..setRequestHeader("Accept", "*/*"); // explicitly set the accept header to make FF work
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="headers">
+<button class="show-code">Code</button>
+final         <strong>headers</strong> <a class="anchor-link"
+            href="#headers"
+            title="Permalink to Request.headers">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+get headers =&gt; new Headers(request);
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="request">
+<button class="show-code">Code</button>
+HttpRequest         <strong>request</strong> <a class="anchor-link"
+            href="#request"
+            title="Permalink to Request.request">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+html.HttpRequest request
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="upload">
+<button class="show-code">Code</button>
+final         <strong>upload</strong> <a class="anchor-link"
+            href="#upload"
+            title="Permalink to Request.upload">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+get upload =&gt; request.upload;
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="send">
+<button class="show-code">Code</button>
+Future&lt;<a href="../http_browser/Response.html">Response</a>&gt; <strong>send</strong>([data]) <a class="anchor-link" href="#send"
+              title="Permalink to Request.send">#</a></h4>
+<div class="doc">
+<pre class="source">
+Future&lt;Response&gt; send([data]) {
+ var completer = new Completer&lt;Response&gt;();
+ request.onReadyStateChange.listen((e) {
+   if (request.readyState == html.HttpRequest.DONE &amp;&amp;
+       (request.status == 200)) {
+     completer.complete(new Response(request.response));
+   }
+ });
+ request.onError.listen((e) {
+   completer.completeError(new Exception(e));
+ });
+
+ // Convert to html.FormData and html.Blob
+ if (data is base.MultipartFormData) {
+   var formData = new html.FormData();
+   data.data.forEach((k, v) {
+     if (v is base.Blob) {
+       var blob = new html.Blob([decodeUtf8(v.content)], v.mimetype);
+       formData.appendBlob(k, blob, v.filename);
+     }
+   });
+   request.send(formData);
+ } else if (data is base.Blob) {
+   request.send(decodeUtf8(data.content));
+ } else {
+   request.send(data);
+ }
+ return completer.future;
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        
