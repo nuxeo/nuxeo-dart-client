@@ -1,6 +1,6 @@
 part of tck;
 
-void testPagination(nuxeo.Automation nx) {
+void testPagination(nuxeo.Client nx) {
 
   group('Pagination', () {
 

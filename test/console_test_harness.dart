@@ -3,7 +3,7 @@
 import 'package:unittest/unittest.dart';
 import 'package:unittest/vm_config.dart';
 
-import 'package:nuxeo_automation/http/standalone.dart' as http;
+import 'package:nuxeo_automation/standalone_client.dart' as nuxeo;
 import 'tck.dart' as TCK;
 
 main() {
@@ -12,5 +12,5 @@ main() {
 
 runTCK(Configuration config) {
   unittestConfiguration = config;
-  TCK.run(new http.Client());
+  TCK.run(new nuxeo.Client());
 }

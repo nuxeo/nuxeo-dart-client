@@ -1,6 +1,6 @@
 part of tck;
 
-void testBlobs(nuxeo.Automation nx) {
+void testBlobs(nuxeo.Client nx) {
   group('Direct Blob upload', () {
 
     nuxeo.Document root;

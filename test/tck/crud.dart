@@ -1,6 +1,6 @@
 part of tck;
 
-void testCRUD(nuxeo.Automation nx) {
+void testCRUD(nuxeo.Client nx) {
 
   nuxeo.Document root;
   List<nuxeo.Document> children = [];

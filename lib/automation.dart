@@ -10,6 +10,7 @@
  *       nuxeo_automation: any
  *
  * Then run `pub install`.
+ *
  */
 library nuxeo_automation;
 
@@ -29,7 +30,7 @@ part 'src/document.dart';
 /**
  * [Automation] client.
  */
-class Automation {
+abstract class Client {
 
   static final LOG = new Logger("nuxeo.automation");
 
@@ -38,7 +39,7 @@ class Automation {
 
   Uri uri;
 
-  Automation(this.client, [String url = "http://localhost:8080/nuxeo/site/automation"]) {
+  Client(this.client, String url) {
     uri = Uri.parse(url);
   }
 

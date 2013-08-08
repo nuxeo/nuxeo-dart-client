@@ -1,9 +1,7 @@
-library standalone_client;
+library http_standalone;
 
 import 'dart:io' as io;
 import 'dart:async';
-import 'dart:typed_data';
-import 'dart:json' as JSON;
 import 'package:http/http.dart' as http;
 import '../http.dart' as base;
 
@@ -77,11 +75,11 @@ class Client implements base.Client {
   HttpClient _client;
   Uri uri;
 
-  Client([
-      String url = "http://localhost:8080/nuxeo/site/automation",
-      String username = "Administrator",
-      String password = "Administrator",
-      String realm = "default"]) {
+  Client(String url, {
+      String username,
+      String password,
+      String realm
+  }) {
     uri = Uri.parse(url);
     var credentials = new io.HttpClientBasicCredentials(username, password);
     _client = new HttpClient(uri, realm, credentials);

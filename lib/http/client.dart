@@ -1,9 +1,9 @@
-library http_client;
+library http_browser;
 
 import 'dart:html' as html;
 import 'dart:utf';
 import 'dart:async';
-import 'package:nuxeo_automation/http.dart' as base;
+import '../http.dart' as base;
 
 class Response implements base.Response {
   Object response;

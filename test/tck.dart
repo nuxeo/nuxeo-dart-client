@@ -14,7 +14,7 @@ part 'tck/blob.dart';
 
 var LOG = new Logger("nuxeo.automation.TCK");
 
-void run(http.Client client) {
+void run(nuxeo.Client nx) {
 
   // Setup logging
   Logger.root.level = Level.ALL;
@@ -23,8 +23,6 @@ void run(http.Client client) {
   groupSep = ' - ';
 
   try {
-    nuxeo.Automation nx = new nuxeo.Automation(client);
-
     testCRUD(nx);
     testPagination(nx);
     testBlobs(nx);
