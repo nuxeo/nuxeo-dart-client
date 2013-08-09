@@ -14,27 +14,27 @@ const HEADER_NX_REPOSITORY = "X-NXRepository";
 
 /**
  * [OperationRequest] wraps an [Operation] call.
- * This class implements the [call] method this it can be invoked as a [Function].
- * Tipically this is called throught the [OperationRegistry].
+ * This class implements the [call] method so it can be invoked as a [Function].
+ * Tipically this is called through the [OperationRegistry].
  */
 class OperationRequest {
 
   static final LOG = new Logger("nuxeo.automation.operation");
 
-  http.Client client;
-  Uri uri;
-  String opId;
-  Uri opUri;
+  http.Client _client;
+  Uri _uri;
+  String id;
+  Uri _opUri;
   Duration execTimeout, uploadTimeout;
 
   AutomationUploader _batchUploader;
 
-  OperationRequest(this.opId, this.uri, this.client, {
+  OperationRequest._(this.id, this._uri, this._client, {
       this.execTimeout, this.uploadTimeout}) {
-    opUri = Uri.parse("$uri/$opId");
+    _opUri = Uri.parse("$_uri/$id");
   }
 
-  Future<Operation> get op => OperationRegistry.get(uri, client).then((registry) => registry[opId]);
+  Future<Operation> get op => OperationRegistry.get(_uri, _client).then((registry) => registry[id]);
 
   /// Call the operation.
   /// Returns a [Future]
@@ -48,7 +48,7 @@ class OperationRequest {
           bool voidOp: false}) => op.then((Operation op) {
 
       if (op == null) {
-        throw new ArgumentError("No such operation: $opId");
+        throw new ArgumentError("No such operation: $id");
       }
 
       var data = {};
@@ -67,18 +67,18 @@ class OperationRequest {
         });
       }
 
-      var targetUri = opUri;
+      var targetUri = _opUri;
 
       // Check for batch upload
-      if (hasBatchUpload) {
+      if (_hasBatchUpload) {
         if (data["params"] == null) {
           data["params"] = {};
         }
-        data["params"]["operationId"] = opId;
+        data["params"]["operationId"] = id;
         data["params"]["batchId"] = batchId;
 
         // Override the target url
-        targetUri = Uri.parse("${uri}/batch/execute");
+        targetUri = Uri.parse("${_uri}/batch/execute");
       }
 
       var isMultipart = (input is http.Blob);
@@ -93,7 +93,7 @@ class OperationRequest {
         data["context"] = context;
       }
 
-      var request = client.post(targetUri, multipart: isMultipart);
+      var request = _client.post(targetUri, multipart: isMultipart);
 
       // Setup the headers
       var txTimeout = 5 + ((execTimeout != null) ? execTimeout.inSeconds : 0);
@@ -164,11 +164,11 @@ class OperationRequest {
   }
 
   String get batchId => _batchUploader.batchId;
-  bool get hasBatchUpload => _batchUploader != null;
+  bool get _hasBatchUpload => _batchUploader != null;
 
   AutomationUploader get uploader {
     if (_batchUploader == null) {
-      _batchUploader = new AutomationUploader(uri, client);
+      _batchUploader = new AutomationUploader(_uri, _client);
     }
     return _batchUploader;
   }

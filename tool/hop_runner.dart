@@ -1,7 +1,6 @@
 library hop_runner;
 
 import 'dart:async';
-import 'dart:io';
 import 'package:hop/hop.dart';
 import 'package:hop/hop_tasks.dart';
 
@@ -13,14 +12,9 @@ void main() {
 
   addTask('test', createUnitTestTask(test.runTCK));
 
-  addTask('docs', createDartDocTask(_getLibs));
+  addTask('docs', createDartDocTask(_getLibs, excludeLibs: ['logging']));
 
   runHop();
 }
 
-Future<List<String>> _getLibs() {
-  return new Directory('lib').list()
-      .where((FileSystemEntity fse) => fse is File)
-      .map((File file) => file.path)
-      .toList();
-}
+Future<List<String>> _getLibs() => new Future.value(['lib/automation.dart']);

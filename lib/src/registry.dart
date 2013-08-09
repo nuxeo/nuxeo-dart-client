@@ -1,9 +1,5 @@
 part of nuxeo_automation;
 
-Future<bool> authenticateFn(Uri url, String scheme, String realm) {
-
-}
-
 /**
  * [OperationRegistry] retrieves and caches the available operations per server [Uri].
  */
@@ -23,7 +19,7 @@ class OperationRegistry {
           .then((http.Response response) {
             var body = response.body,
                 json = JSON.parse(body);
-            _registries[uri] = new OperationRegistry.fromJSON(json);
+            _registries[uri] = new OperationRegistry._fromJSON(json);
             return _registries[uri];
           })
           .catchError((e) {
@@ -34,7 +30,7 @@ class OperationRegistry {
 
   OperationRegistry._internal(this.paths, this.ops, this.chains);
 
-  factory OperationRegistry.fromJSON(Map<String, Object> json) {
+  factory OperationRegistry._fromJSON(Map<String, Object> json) {
 
     var paths = json["paths"];
 

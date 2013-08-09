@@ -1,5 +1,5 @@
 name: nuxeo_automation
-version: 0.0.1
+version: 0.0.1+1
 author: Nelson Silva <nelson.silva@inevo.pt>
 description: A Nuxeo Automation Client
 homepage: https://github.com/nelsonsilva/nuxeo-dart-automation
