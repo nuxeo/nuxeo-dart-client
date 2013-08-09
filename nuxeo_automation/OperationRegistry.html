@@ -50,7 +50,7 @@ class OperationRegistry {
          .then((http.Response response) {
            var body = response.body,
                json = JSON.parse(body);
-           _registries[uri] = new OperationRegistry.fromJSON(json);
+           _registries[uri] = new OperationRegistry._fromJSON(json);
            return _registries[uri];
          })
          .catchError((e) {
@@ -61,7 +61,7 @@ class OperationRegistry {
 
  OperationRegistry._internal(this.paths, this.ops, this.chains);
 
- factory OperationRegistry.fromJSON(Map&lt;String, Object&gt; json) {
+ factory OperationRegistry._fromJSON(Map&lt;String, Object&gt; json) {
 
    var paths = json["paths"];
 
@@ -100,39 +100,13 @@ static Future&lt;OperationRegistry&gt; get(Uri uri, [http.Client client]) {
        .then((http.Response response) {
          var body = response.body,
              json = JSON.parse(body);
-         _registries[uri] = new OperationRegistry.fromJSON(json);
+         _registries[uri] = new OperationRegistry._fromJSON(json);
          return _registries[uri];
        })
        .catchError((e) {
          throw new AutomationException(e.toString());
        });
  }
-}
-</pre>
-</div>
-</div>
-</div>
-<div>
-<h3>Constructors</h3>
-<div class="method"><h4 id="fromJSON">
-<button class="show-code">Code</button>
-factory <strong>OperationRegistry.fromJSON</strong>(Map&lt;String, Object&gt; json) <a class="anchor-link" href="#fromJSON"
-              title="Permalink to OperationRegistry.OperationRegistry.fromJSON">#</a></h4>
-<div class="doc">
-<pre class="source">
-factory OperationRegistry.fromJSON(Map&lt;String, Object&gt; json) {
-
- var paths = json["paths"];
-
- var ops = {};
- (json["operations"] as List).forEach((json) {
-   var op = new Operation.fromJSON(json);
-   ops[op.id] = op;
- });
-
- var chains = {};
-
- return new OperationRegistry._internal(paths, ops, chains);
 }
 </pre>
 </div>

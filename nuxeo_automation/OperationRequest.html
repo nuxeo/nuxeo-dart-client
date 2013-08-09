@@ -33,27 +33,27 @@
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
 <p><a class="crossref" href="../nuxeo_automation/OperationRequest.html">OperationRequest</a> wraps an <a class="crossref" href="../nuxeo_automation/Operation.html">Operation</a> call.
-This class implements the <a class="crossref" href="../nuxeo_automation/OperationRequest.html#call">call</a> method this it can be invoked as a <a class="crossref" href="../dart_core/Function.html">Function</a>.
-Tipically this is called throught the <a class="crossref" href="../nuxeo_automation/OperationRegistry.html">OperationRegistry</a>.</p>
+This class implements the <a class="crossref" href="../nuxeo_automation/OperationRequest.html#call">call</a> method so it can be invoked as a <a class="crossref" href="../dart_core/Function.html">Function</a>.
+Tipically this is called through the <a class="crossref" href="../nuxeo_automation/OperationRegistry.html">OperationRegistry</a>.</p>
 <pre class="source">
 class OperationRequest {
 
  static final LOG = new Logger("nuxeo.automation.operation");
 
- http.Client client;
- Uri uri;
- String opId;
- Uri opUri;
+ http.Client _client;
+ Uri _uri;
+ String id;
+ Uri _opUri;
  Duration execTimeout, uploadTimeout;
 
  AutomationUploader _batchUploader;
 
- OperationRequest(this.opId, this.uri, this.client, {
+ OperationRequest._(this.id, this._uri, this._client, {
      this.execTimeout, this.uploadTimeout}) {
-   opUri = Uri.parse("$uri/$opId");
+   _opUri = Uri.parse("$_uri/$id");
  }
 
- Future&lt;Operation&gt; get op =&gt; OperationRegistry.get(uri, client).then((registry) =&gt; registry[opId]);
+ Future&lt;Operation&gt; get op =&gt; OperationRegistry.get(_uri, _client).then((registry) =&gt; registry[id]);
 
  /// Call the operation.
  /// Returns a [Future]
@@ -67,7 +67,7 @@ class OperationRequest {
          bool voidOp: false}) =&gt; op.then((Operation op) {
 
      if (op == null) {
-       throw new ArgumentError("No such operation: $opId");
+       throw new ArgumentError("No such operation: $id");
      }
 
      var data = {};
@@ -86,18 +86,18 @@ class OperationRequest {
        });
      }
 
-     var targetUri = opUri;
+     var targetUri = _opUri;
 
      // Check for batch upload
-     if (hasBatchUpload) {
+     if (_hasBatchUpload) {
        if (data["params"] == null) {
          data["params"] = {};
        }
-       data["params"]["operationId"] = opId;
+       data["params"]["operationId"] = id;
        data["params"]["batchId"] = batchId;
 
        // Override the target url
-       targetUri = Uri.parse("${uri}/batch/execute");
+       targetUri = Uri.parse("${_uri}/batch/execute");
      }
 
      var isMultipart = (input is http.Blob);
@@ -112,7 +112,7 @@ class OperationRequest {
        data["context"] = context;
      }
 
-     var request = client.post(targetUri, multipart: isMultipart);
+     var request = _client.post(targetUri, multipart: isMultipart);
 
      // Setup the headers
      var txTimeout = 5 + ((execTimeout != null) ? execTimeout.inSeconds : 0);
@@ -183,11 +183,11 @@ class OperationRequest {
  }
 
  String get batchId =&gt; _batchUploader.batchId;
- bool get hasBatchUpload =&gt; _batchUploader != null;
+ bool get _hasBatchUpload =&gt; _batchUploader != null;
 
  AutomationUploader get uploader {
    if (_batchUploader == null) {
-     _batchUploader = new AutomationUploader(uri, client);
+     _batchUploader = new AutomationUploader(_uri, _client);
    }
    return _batchUploader;
  }
@@ -210,28 +210,6 @@ static final LOG = new Logger("nuxeo.automation.operation")
 </div>
 </div>
 <div>
-<h3>Constructors</h3>
-<div class="method"><h4 id="">
-<button class="show-code">Code</button>
-new <strong>OperationRequest</strong>(String opId, Uri uri, <a href="../http_client/Client.html">Client</a> client, {Duration execTimeout, Duration uploadTimeout}) <a class="anchor-link" href="#"
-              title="Permalink to OperationRequest.OperationRequest">#</a></h4>
-<div class="doc">
-<div class="inherited">
-<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
-<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
-through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
-only.</p>
-<div class="docs-inherited-from">docs inherited from Object </div></div>
-<pre class="source">
-OperationRequest(this.opId, this.uri, this.client, {
-   this.execTimeout, this.uploadTimeout}) {
- opUri = Uri.parse("$uri/$opId");
-}
-</pre>
-</div>
-</div>
-</div>
-<div>
 <h3>Properties</h3>
 <div class="field"><h4 id="batchId">
 <button class="show-code">Code</button>
@@ -242,18 +220,6 @@ final String         <strong>batchId</strong> <a class="anchor-link"
         <div class="doc">
 <pre class="source">
 String get batchId =&gt; _batchUploader.batchId;
-</pre>
-</div>
-</div>
-<div class="field"><h4 id="client">
-<button class="show-code">Code</button>
-<a href="../http_client/Client.html">Client</a>         <strong>client</strong> <a class="anchor-link"
-            href="#client"
-            title="Permalink to OperationRequest.client">#</a>
-        </h4>
-        <div class="doc">
-<pre class="source">
-http.Client client
 </pre>
 </div>
 </div>
@@ -269,15 +235,15 @@ Duration execTimeout
 </pre>
 </div>
 </div>
-<div class="field"><h4 id="hasBatchUpload">
+<div class="field"><h4 id="id">
 <button class="show-code">Code</button>
-final bool         <strong>hasBatchUpload</strong> <a class="anchor-link"
-            href="#hasBatchUpload"
-            title="Permalink to OperationRequest.hasBatchUpload">#</a>
+String         <strong>id</strong> <a class="anchor-link"
+            href="#id"
+            title="Permalink to OperationRequest.id">#</a>
         </h4>
         <div class="doc">
 <pre class="source">
-bool get hasBatchUpload =&gt; _batchUploader != null;
+String id
 </pre>
 </div>
 </div>
@@ -289,31 +255,7 @@ final Future&lt;<a href="../nuxeo_automation/Operation.html">Operation</a>&gt;  
         </h4>
         <div class="doc">
 <pre class="source">
-Future&lt;Operation&gt; get op =&gt; OperationRegistry.get(uri, client).then((registry) =&gt; registry[opId]);
-</pre>
-</div>
-</div>
-<div class="field"><h4 id="opId">
-<button class="show-code">Code</button>
-String         <strong>opId</strong> <a class="anchor-link"
-            href="#opId"
-            title="Permalink to OperationRequest.opId">#</a>
-        </h4>
-        <div class="doc">
-<pre class="source">
-String opId
-</pre>
-</div>
-</div>
-<div class="field"><h4 id="opUri">
-<button class="show-code">Code</button>
-Uri         <strong>opUri</strong> <a class="anchor-link"
-            href="#opUri"
-            title="Permalink to OperationRequest.opUri">#</a>
-        </h4>
-        <div class="doc">
-<pre class="source">
-Uri opUri
+Future&lt;Operation&gt; get op =&gt; OperationRegistry.get(_uri, _client).then((registry) =&gt; registry[id]);
 </pre>
 </div>
 </div>
@@ -327,7 +269,7 @@ final <a href="../nuxeo_automation/AutomationUploader.html">AutomationUploader</
 <pre class="source">
 AutomationUploader get uploader {
  if (_batchUploader == null) {
-   _batchUploader = new AutomationUploader(uri, client);
+   _batchUploader = new AutomationUploader(_uri, _client);
  }
  return _batchUploader;
 }
@@ -343,18 +285,6 @@ Duration         <strong>uploadTimeout</strong> <a class="anchor-link"
         <div class="doc">
 <pre class="source">
 Duration execTimeout, uploadTimeout
-</pre>
-</div>
-</div>
-<div class="field"><h4 id="uri">
-<button class="show-code">Code</button>
-Uri         <strong>uri</strong> <a class="anchor-link"
-            href="#uri"
-            title="Permalink to OperationRequest.uri">#</a>
-        </h4>
-        <div class="doc">
-<pre class="source">
-Uri uri
 </pre>
 </div>
 </div>
@@ -379,7 +309,7 @@ Future call({
        bool voidOp: false}) =&gt; op.then((Operation op) {
 
    if (op == null) {
-     throw new ArgumentError("No such operation: $opId");
+     throw new ArgumentError("No such operation: $id");
    }
 
    var data = {};
@@ -398,18 +328,18 @@ Future call({
      });
    }
 
-   var targetUri = opUri;
+   var targetUri = _opUri;
 
    // Check for batch upload
-   if (hasBatchUpload) {
+   if (_hasBatchUpload) {
      if (data["params"] == null) {
        data["params"] = {};
      }
-     data["params"]["operationId"] = opId;
+     data["params"]["operationId"] = id;
      data["params"]["batchId"] = batchId;
 
      // Override the target url
-     targetUri = Uri.parse("${uri}/batch/execute");
+     targetUri = Uri.parse("${_uri}/batch/execute");
    }
 
    var isMultipart = (input is http.Blob);
@@ -424,7 +354,7 @@ Future call({
      data["context"] = context;
    }
 
-   var request = client.post(targetUri, multipart: isMultipart);
+   var request = _client.post(targetUri, multipart: isMultipart);
 
    // Setup the headers
    var txTimeout = 5 + ((execTimeout != null) ? execTimeout.inSeconds : 0);

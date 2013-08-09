@@ -29,12 +29,24 @@
 <h2><strong>nuxeo_automation</strong> library</h2>
 <div class="doc"><p>Provides a Nuxeo Automation Client Library.</p>
 <h2>Installing</h2>
-<p>Use [pub][] to install this package. Add the following to your <code>pubspec.yaml</code>
+<p>Use <a href="http://pub.dartlang.org">pub</a> to install this package. Add the following to your <code>pubspec.yaml</code>
 file.</p>
 <pre><code>dependencies:
   nuxeo_automation: any
 </code></pre>
-<p>Then run <code>pub install</code>.</p></div>
+<p>Then run <code>pub install</code>.</p>
+<h2>Quick Start</h2>
+<p>This library should not be imported directly.
+You should use either <code>browser_client</code> or <code>standalone_client</code>
+as these provide proper abstractions (see <a href="http_client.html">http_client</a>).</p><ul><li>
+<p>For browser applications use:</p>
+<p><code>import 'package:nuxeo_automation/browser_client.dart' as nuxeo_automation;</code></p></li><li>
+<p>For standalone/console applications use:</p>
+<p><code>import 'package:nuxeo_automation/standalone_client.dart' as nuxeo_automation;</code></p></li><li>
+<p>Then create your <a class="crossref" href="nuxeo_automation/Client.html">Client</a> instance:</p>
+<p><code>var nx = new nuxeo_automation.Client();</code></p></li></ul>
+<p>For more information, see the
+<a href="http://pub.dartlang.org/packages/nuxeo_automation">nuxeo_automation package on pub.dartlang.org</a>.</p></div>
 <div>
 <h3>Properties</h3>
 <div class="field"><h4 id="CTYPE_AUTOMATION">
@@ -166,21 +178,6 @@ const         <strong>KEY_ENTITY_TYPE</strong> <a class="anchor-link"
         <div class="doc">
 <pre class="source">
 const KEY_ENTITY_TYPE = "entity-type"
-</pre>
-</div>
-</div>
-</div>
-<div>
-<h3>Functions</h3>
-<div class="method"><h4 id="authenticateFn">
-<button class="show-code">Code</button>
-Future&lt;bool&gt; <strong>authenticateFn</strong>(Uri url, String scheme, String realm) <a class="anchor-link" href="#authenticateFn"
-              title="Permalink to authenticateFn">#</a></h4>
-<div class="doc">
-<pre class="source">
-Future&lt;bool&gt; authenticateFn(Uri url, String scheme, String realm) {
-
-}
 </pre>
 </div>
 </div>

@@ -61,7 +61,6 @@ class Document {
 
  factory Document.fromJSON(json) =&gt; new Document._internal(json);
 
-
  operator[]= (key, value) {
    if (key is List) {
      for (var i = 0; i &lt; key.length; i++) {
