@@ -56,7 +56,7 @@ You can run the Dart Automation Client TCK with your own Nuxeo server (version >
 ### Standalone Automation Client
 
 * Start Nuxeo server
-* Run the browser tests harness at test/browser_test_harness.dart
+* Run the console tests harness at test/console_test_harness.dart
 * Check the console output for the test results
 
 ### Browser Automation Client

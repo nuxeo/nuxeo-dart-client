@@ -2,7 +2,7 @@ name: nuxeo_automation
 version: 0.0.1
 author: Nelson Silva <nelson.silva@inevo.pt>
 description: A Nuxeo Automation Client
-homepage: http://nelsonsilva.github.io/nuxeo-dart-automation
+homepage: https://github.com/nelsonsilva/nuxeo-dart-automation
 dependencies:
   browser: any
   crypto: any

@@ -1,6 +1,7 @@
 library nuxeo_automation_standalone;
 
 import 'automation.dart' as automation;
+export 'automation.dart';
 import 'http/standalone.dart' as http;
 
 class Client extends automation.Client {
