@@ -1,8 +1,8 @@
-![Nuxeo Dart](https://raw.github.com/nelsonsilva/nuxeo_dart_automation/master/resources/nuxeo_dart.png)
+![Nuxeo Dart](https://raw.github.com/nelsonsilva/nuxeo-dart-automation/master/resources/nuxeo_dart.png)
 
 ## A Nuxeo Automation client in Dart
 
-[![Build Status](https://drone.io/github.com/nelsonsilva/nuxeo_dart_automation/status.png)](https://drone.io/github.com/nelsonsilva/nuxeo_dart_automation/latest)
+[![Build Status](https://drone.io/github.com/nelsonsilva/nuxeo-dart-automation/status.png)](https://drone.io/github.com/nelsonsilva/nuxeo-dart-automation/latest)
 
 ## Getting started
 
