@@ -2,7 +2,7 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>AutomationUploader class / nuxeo_automation Library / Dart Documentation</title>
+        <title>AutomationUploader class / nuxeo_automation Library / Dart Automation Client Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="../styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
@@ -13,7 +13,7 @@
         <div class="page">
         <div class="header">
           <a href="../index.html"><div class="logo"></div></a>
-          <a href="../index.html">Dart Documentation</a>
+          <a href="../index.html">Dart Automation Client Documentation</a>
          &rsaquo; <a href="../nuxeo_automation.html">nuxeo_automation</a> &rsaquo; <a href="../nuxeo_automation/AutomationUploader.html">AutomationUploader</a>        <div id="search-box">
           <input type="search" name="q" id="q" autocomplete="off"
               class="search-input" placeholder="Search API">
@@ -287,7 +287,7 @@ static final LOG = new Logger("nuxeo.automation.uploader")
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>AutomationUploader</strong>(Uri uri, <a href="../http_client/Client.html">Client</a> client, {int numConcurrentUploads: 5, bool directUpload: true, num uploadRateRefreshTime: 1000, num uploadTimeout: 0}) <a class="anchor-link" href="#"
+new <strong>AutomationUploader</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> uri, <a href="../http_client/Client.html">Client</a> client, {<a href="http://api.dartlang.org/dart_core/int.html">int</a> numConcurrentUploads: 5, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> directUpload: true, <a href="http://api.dartlang.org/dart_core/num.html">num</a> uploadRateRefreshTime: 1000, <a href="http://api.dartlang.org/dart_core/num.html">num</a> uploadTimeout: 0}) <a class="anchor-link" href="#"
               title="Permalink to AutomationUploader.AutomationUploader">#</a></h4>
 <div class="doc">
 <div class="inherited">
@@ -295,7 +295,7 @@ new <strong>AutomationUploader</strong>(Uri uri, <a href="../http_client/Client.
 <p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
 through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
 only.</p>
-<div class="docs-inherited-from">docs inherited from Object </div></div>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
 AutomationUploader(this.uri, this.client, {
  this.numConcurrentUploads : 5,
@@ -317,7 +317,7 @@ AutomationUploader(this.uri, this.client, {
 <h3>Properties</h3>
 <div class="field"><h4 id="batchId">
 <button class="show-code">Code</button>
-String         <strong>batchId</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>batchId</strong> <a class="anchor-link"
             href="#batchId"
             title="Permalink to AutomationUploader.batchId">#</a>
         </h4>
@@ -341,7 +341,7 @@ http.Client client
 </div>
 <div class="field"><h4 id="directUpload">
 <button class="show-code">Code</button>
-bool         <strong>directUpload</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>directUpload</strong> <a class="anchor-link"
             href="#directUpload"
             title="Permalink to AutomationUploader.directUpload">#</a>
         </h4>
@@ -353,7 +353,7 @@ bool directUpload
 </div>
 <div class="field"><h4 id="evtController">
 <button class="show-code">Code</button>
-StreamController&lt;<a href="../nuxeo_automation/AutomationUploaderEvent.html">AutomationUploaderEvent</a>&gt;         <strong>evtController</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_async/StreamController.html">StreamController</a>&lt;<a href="../nuxeo_automation/AutomationUploaderEvent.html">AutomationUploaderEvent</a>&gt;         <strong>evtController</strong> <a class="anchor-link"
             href="#evtController"
             title="Permalink to AutomationUploader.evtController">#</a>
         </h4>
@@ -365,7 +365,7 @@ StreamController&lt;AutomationUploaderEvent&gt; evtController = new StreamContro
 </div>
 <div class="field"><h4 id="numConcurrentUploads">
 <button class="show-code">Code</button>
-int         <strong>numConcurrentUploads</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>numConcurrentUploads</strong> <a class="anchor-link"
             href="#numConcurrentUploads"
             title="Permalink to AutomationUploader.numConcurrentUploads">#</a>
         </h4>
@@ -377,7 +377,7 @@ int numConcurrentUploads
 </div>
 <div class="field"><h4 id="onBatchStarted">
 <button class="show-code">Code</button>
-final Stream&lt;<a href="../nuxeo_automation/AutomationUploaderEvent.html">AutomationUploaderEvent</a>&gt;         <strong>onBatchStarted</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a href="../nuxeo_automation/AutomationUploaderEvent.html">AutomationUploaderEvent</a>&gt;         <strong>onBatchStarted</strong> <a class="anchor-link"
             href="#onBatchStarted"
             title="Permalink to AutomationUploader.onBatchStarted">#</a>
         </h4>
@@ -389,7 +389,7 @@ Stream&lt;AutomationUploaderEvent&gt; get onBatchStarted =&gt; evtController.str
 </div>
 <div class="field"><h4 id="uploadRateRefreshTime">
 <button class="show-code">Code</button>
-num         <strong>uploadRateRefreshTime</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/num.html">num</a>         <strong>uploadRateRefreshTime</strong> <a class="anchor-link"
             href="#uploadRateRefreshTime"
             title="Permalink to AutomationUploader.uploadRateRefreshTime">#</a>
         </h4>
@@ -401,7 +401,7 @@ num uploadRateRefreshTime
 </div>
 <div class="field"><h4 id="uploadTimeout">
 <button class="show-code">Code</button>
-num         <strong>uploadTimeout</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/num.html">num</a>         <strong>uploadTimeout</strong> <a class="anchor-link"
             href="#uploadTimeout"
             title="Permalink to AutomationUploader.uploadTimeout">#</a>
         </h4>
@@ -413,7 +413,7 @@ num uploadTimeout
 </div>
 <div class="field"><h4 id="uri">
 <button class="show-code">Code</button>
-Uri         <strong>uri</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a>         <strong>uri</strong> <a class="anchor-link"
             href="#uri"
             title="Permalink to AutomationUploader.uri">#</a>
         </h4>
@@ -462,7 +462,7 @@ load(Upload upload) {
 </div>
 <div class="method"><h4 id="uploadFile">
 <button class="show-code">Code</button>
-Future&lt;<a href="../nuxeo_automation/Upload.html">Upload</a>&gt; <strong>uploadFile</strong>(cfile) <a class="anchor-link" href="#uploadFile"
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="../nuxeo_automation/Upload.html">Upload</a>&gt; <strong>uploadFile</strong>(cfile) <a class="anchor-link" href="#uploadFile"
               title="Permalink to AutomationUploader.uploadFile">#</a></h4>
 <div class="doc">
 <pre class="source">

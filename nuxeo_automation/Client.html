@@ -2,7 +2,7 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>Client abstract class / nuxeo_automation Library / Dart Documentation</title>
+        <title>Client abstract class / nuxeo_automation Library / Dart Automation Client Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="../styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
@@ -13,7 +13,7 @@
         <div class="page">
         <div class="header">
           <a href="../index.html"><div class="logo"></div></a>
-          <a href="../index.html">Dart Documentation</a>
+          <a href="../index.html">Dart Automation Client Documentation</a>
          &rsaquo; <a href="../nuxeo_automation.html">nuxeo_automation</a> &rsaquo; <a href="../nuxeo_automation/Client.html">Client</a>        <div id="search-box">
           <input type="search" name="q" id="q" autocomplete="off"
               class="search-input" placeholder="Search API">
@@ -81,7 +81,7 @@ static final LOG = new Logger("nuxeo.automation")
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>Client</strong>(<a href="../http_client/Client.html">Client</a> _client, String url) <a class="anchor-link" href="#"
+new <strong>Client</strong>(<a href="../http_client/Client.html">Client</a> _client, <a href="http://api.dartlang.org/dart_core/String.html">String</a> url) <a class="anchor-link" href="#"
               title="Permalink to Client.Client">#</a></h4>
 <div class="doc">
 <div class="inherited">
@@ -89,7 +89,7 @@ new <strong>Client</strong>(<a href="../http_client/Client.html">Client</a> _cli
 <p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
 through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
 only.</p>
-<div class="docs-inherited-from">docs inherited from Object </div></div>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
 Client(this._client, String url) {
  _uri = Uri.parse(url);
@@ -102,7 +102,7 @@ Client(this._client, String url) {
 <h3>Properties</h3>
 <div class="field"><h4 id="registry">
 <button class="show-code">Code</button>
-final Future&lt;<a href="../nuxeo_automation/OperationRegistry.html">OperationRegistry</a>&gt;         <strong>registry</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="../nuxeo_automation/OperationRegistry.html">OperationRegistry</a>&gt;         <strong>registry</strong> <a class="anchor-link"
             href="#registry"
             title="Permalink to Client.registry">#</a>
         </h4>
@@ -117,7 +117,7 @@ Future&lt;OperationRegistry&gt; get registry =&gt; OperationRegistry.get(_uri, _
 <h3>Methods</h3>
 <div class="method"><h4 id="op">
 <button class="show-code">Code</button>
-<a href="../nuxeo_automation/OperationRequest.html">OperationRequest</a> <strong>op</strong>(String id, {execTimeout: const Duration(seconds:30), uploadTimeout: const Duration(minutes:20)}) <a class="anchor-link" href="#op"
+<a href="../nuxeo_automation/OperationRequest.html">OperationRequest</a> <strong>op</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> id, {execTimeout: const Duration(seconds:30), uploadTimeout: const Duration(minutes:20)}) <a class="anchor-link" href="#op"
               title="Permalink to Client.op">#</a></h4>
 <div class="doc">
 <p>Creates an <a class="crossref" href="../nuxeo_automation/OperationRequest.html">OperationRequest</a> for the <a class="crossref" href="../nuxeo_automation/Operation.html">Operation</a> with the given 

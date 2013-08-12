@@ -2,7 +2,7 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>OperationRequest class / nuxeo_automation Library / Dart Documentation</title>
+        <title>OperationRequest class / nuxeo_automation Library / Dart Automation Client Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="../styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
@@ -13,7 +13,7 @@
         <div class="page">
         <div class="header">
           <a href="../index.html"><div class="logo"></div></a>
-          <a href="../index.html">Dart Documentation</a>
+          <a href="../index.html">Dart Automation Client Documentation</a>
          &rsaquo; <a href="../nuxeo_automation.html">nuxeo_automation</a> &rsaquo; <a href="../nuxeo_automation/OperationRequest.html">OperationRequest</a>        <div id="search-box">
           <input type="search" name="q" id="q" autocomplete="off"
               class="search-input" placeholder="Search API">
@@ -213,7 +213,7 @@ static final LOG = new Logger("nuxeo.automation.operation")
 <h3>Properties</h3>
 <div class="field"><h4 id="batchId">
 <button class="show-code">Code</button>
-final String         <strong>batchId</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>batchId</strong> <a class="anchor-link"
             href="#batchId"
             title="Permalink to OperationRequest.batchId">#</a>
         </h4>
@@ -225,7 +225,7 @@ String get batchId =&gt; _batchUploader.batchId;
 </div>
 <div class="field"><h4 id="execTimeout">
 <button class="show-code">Code</button>
-Duration         <strong>execTimeout</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/Duration.html">Duration</a>         <strong>execTimeout</strong> <a class="anchor-link"
             href="#execTimeout"
             title="Permalink to OperationRequest.execTimeout">#</a>
         </h4>
@@ -237,7 +237,7 @@ Duration execTimeout
 </div>
 <div class="field"><h4 id="id">
 <button class="show-code">Code</button>
-String         <strong>id</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>id</strong> <a class="anchor-link"
             href="#id"
             title="Permalink to OperationRequest.id">#</a>
         </h4>
@@ -249,7 +249,7 @@ String id
 </div>
 <div class="field"><h4 id="op">
 <button class="show-code">Code</button>
-final Future&lt;<a href="../nuxeo_automation/Operation.html">Operation</a>&gt;         <strong>op</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="../nuxeo_automation/Operation.html">Operation</a>&gt;         <strong>op</strong> <a class="anchor-link"
             href="#op"
             title="Permalink to OperationRequest.op">#</a>
         </h4>
@@ -278,7 +278,7 @@ AutomationUploader get uploader {
 </div>
 <div class="field"><h4 id="uploadTimeout">
 <button class="show-code">Code</button>
-Duration         <strong>uploadTimeout</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/Duration.html">Duration</a>         <strong>uploadTimeout</strong> <a class="anchor-link"
             href="#uploadTimeout"
             title="Permalink to OperationRequest.uploadTimeout">#</a>
         </h4>
@@ -293,7 +293,7 @@ Duration execTimeout, uploadTimeout
 <h3>Methods</h3>
 <div class="method"><h4 id="call">
 <button class="show-code">Code</button>
-Future <strong>call</strong>({input: null, Map&lt;String, Object&gt; params: null, Map&lt;String, String&gt; context: null, String repository, String documentSchemas: "dublincore", bool voidOp: false}) <a class="anchor-link" href="#call"
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a> <strong>call</strong>({input: null, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>, <a href="http://api.dartlang.org/dart_core/Object.html">Object</a>&gt; params: null, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>, <a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; context: null, <a href="http://api.dartlang.org/dart_core/String.html">String</a> repository, <a href="http://api.dartlang.org/dart_core/String.html">String</a> documentSchemas: "dublincore", <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> voidOp: false}) <a class="anchor-link" href="#call"
               title="Permalink to OperationRequest.call">#</a></h4>
 <div class="doc">
 <p>Call the operation.
