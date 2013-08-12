@@ -10,5 +10,5 @@ dependencies:
   logging: any
   logging_handlers: any
 dev_dependencies:
-  hop: '>=0.24.1'
+  hop: '>=0.24.1+1'
   unittest: any
