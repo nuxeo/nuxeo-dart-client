@@ -1,4 +1,4 @@
-![Nuxeo Dart](https://raw.github.com/nelsonsilva/nuxeo-dart-automation/master/resources/nuxeo_dart.png)
+![Nuxeo Dart](https://raw.github.com/nelsonsilva/nuxeo-dart-automation/master/resource/nuxeo_dart.png)
 
 ## A Nuxeo Automation client in Dart
 
