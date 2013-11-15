@@ -18,7 +18,7 @@ void main(List<String> args) {
       _getLibs,
       linkApi: true,
       postBuild: dartdoc.createPostBuild(_docsCfg),
-      excludeLibs: ['logging']));
+      excludeLibs: ['logging', 'unmodifiable_collection']));
 
   runHop(args, printAtLogLevel: Level.ALL);
 }
