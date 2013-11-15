@@ -1,4 +1,4 @@
-part of nuxeo_automation;
+part of nuxeo_client;
 
 /**
  * [Operation] is the Nuxeo Automation Operation model.

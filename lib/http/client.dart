@@ -1,9 +1,11 @@
 library http_browser;
 
 import 'dart:html' as html;
-import 'dart:utf';
+import 'dart:convert' show UTF8;
 import 'dart:async';
 import '../http.dart' as base;
+
+final LOG = base.LOG;
 
 class Response implements base.Response {
   Object response;
@@ -21,6 +23,7 @@ class Request extends base.Request {
   html.HttpRequest request;
 
   Request(String method, Uri uri) {
+    LOG.finest("$method $uri");
     request = new html.HttpRequest()
     ..open(method, uri.toString(), async: true)
     ..withCredentials = true
@@ -37,10 +40,12 @@ class Request extends base.Request {
       if (request.readyState == html.HttpRequest.DONE &&
           (request.status == 200)) {
         completer.complete(new Response(request.response));
+      } else if (request.status == 500) {
+        completer.completeError(new Exception(request.statusText));
       }
     });
     request.onError.listen((e) {
-      completer.completeError(new Exception(e));
+      completer.completeError(new Exception(request.statusText));
     });
 
     // Convert to html.FormData and html.Blob
@@ -48,13 +53,13 @@ class Request extends base.Request {
       var formData = new html.FormData();
       data.data.forEach((k, v) {
         if (v is base.Blob) {
-          var blob = new html.Blob([decodeUtf8(v.content)], v.mimetype);
+          var blob = new html.Blob([UTF8.decode(v.content)], v.mimetype);
           formData.appendBlob(k, blob, v.filename);
         }
       });
       request.send(formData);
     } else if (data is base.Blob) {
-      request.send(decodeUtf8(data.content));
+      request.send(UTF8.decode(data.content));
     } else {
       request.send(data);
     }
@@ -62,10 +67,9 @@ class Request extends base.Request {
   }
 }
 
-class Client implements base.Client {
+class Client extends base.Client {
 
-  Request get(Uri uri) => new Request('GET', uri);
+  Request method(String method, Uri uri, {bool multipart:false}) => new Request(method, uri);
 
-  Request post(Uri uri, {bool multipart:false}) => new Request('POST', uri);
 }
 

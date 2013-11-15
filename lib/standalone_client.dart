@@ -1,13 +1,13 @@
-library nuxeo_automation_standalone;
+library nuxeo_client_standalone;
 
-import 'automation.dart' as automation;
-export 'automation.dart';
+import 'client.dart' as nx;
+export 'client.dart';
 import 'http/standalone.dart' as http;
 
-class Client extends automation.Client {
+class Client extends nx.Client {
 
   Client({
-    String url : "http://localhost:8080/nuxeo/site/automation",
+    String url : "http://localhost:8080/nuxeo",
     String username : "Administrator",
     String password : "Administrator",
     String realm : "default"}) :

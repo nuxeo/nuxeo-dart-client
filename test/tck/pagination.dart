@@ -7,7 +7,7 @@ void testPagination(nuxeo.Client nx) {
     nuxeo.Document root;
     List<nuxeo.Document> children = [];
 
-    test('Create root', () {
+    test('Create root', () =>
       nx.op("Document.Create")(
           input:"doc:/",
           params: {
@@ -18,25 +18,27 @@ void testPagination(nuxeo.Client nx) {
       .then(expectAsync1((nuxeo.Document doc) {
         expect(doc.uid, isNotNull);
         root = doc;
-      }));
-    });
+      }))
+    );
 
     test('Create 3 child Files', () {
-      for (var idx = 1; idx <= 3; idx++) {
+      expect(root, isNotNull);
+      return Future.wait([1, 2, 3].map((idx) =>
         nx.op("Document.Create")(
-            input:"doc:${root.path}",
-            params: {
-              "type" : "File",
-              "name" : "TestFile$idx",
-            })
-            .then(expectAsync1((nuxeo.Document doc) {
-              expect(doc.uid, isNotNull);
-              expect(doc.path.startsWith(root.path), isTrue);
-            }));
-      }
+          input:"doc:${root.path}",
+          params: {
+            "type" : "File",
+            "name" : "TestFile$idx",
+        })
+        .then(expectAsync1((nuxeo.Document doc) {
+          expect(doc.uid, isNotNull);
+          expect(doc.path.startsWith(root.path), isTrue);
+        }))
+      ));
     });
 
     test('Query for page 1', () {
+      expect(root, isNotNull);
       nx.op("Document.PageProvider")(
           params: {
             "query" : "select * from Document where ecm:parentId = ?",
@@ -53,6 +55,7 @@ void testPagination(nuxeo.Client nx) {
     });
 
     test('Query for page 2', () {
+      expect(root, isNotNull);
       nx.op("Document.PageProvider")(
           params: {
             "query" : "select * from Document where ecm:parentId = ?",

@@ -5,7 +5,7 @@ void testBlobs(nuxeo.Client nx) {
 
     nuxeo.Document root;
 
-    test('Create root', () {
+    test('Create root', () =>
       nx.op("Document.Create")(
           input:"doc:/",
           params: {
@@ -16,16 +16,17 @@ void testBlobs(nuxeo.Client nx) {
       .then(expectAsync1((nuxeo.Document doc) {
         expect(doc.uid, isNotNull);
         root = doc;
-      }));
-    });
+      }))
+    );
 
     test('Create Blob1 (txt)', () {
+      expect(root, isNotNull);
       var blob = new http.Blob(
           content: "some content in plain text",
           mimetype: "text/plain",
           filename: "testMe.txt");
 
-      nx.op("FileManager.Import")(
+      return nx.op("FileManager.Import")(
           input: blob,
           context: {
             "currentDocument": root.path
@@ -36,12 +37,13 @@ void testBlobs(nuxeo.Client nx) {
     });
 
     test('Create Blob2 (bin)', () {
+      expect(root, isNotNull);
       var blob = new http.Blob(
           content: "some fake bin content",
           mimetype: "application/something",
           filename: "testBin.bin");
 
-      nx.op("FileManager.Import")(
+      return nx.op("FileManager.Import")(
           input: blob,
           context: {
             "currentDocument": root.path
@@ -52,6 +54,7 @@ void testBlobs(nuxeo.Client nx) {
     });
 
     test('Read children', () {
+      expect(root, isNotNull);
       nx.op("Document.GetChildren")(
           input: "doc:${root.path}"
        )
@@ -62,11 +65,12 @@ void testBlobs(nuxeo.Client nx) {
 
   });
 
+
   group('Batch Blob upload', () {
 
     nuxeo.Document root;
 
-    test('Create root', () {
+    test('Create root', () =>
       nx.op("Document.Create")(
           input:"doc:/",
           params: {
@@ -77,42 +81,40 @@ void testBlobs(nuxeo.Client nx) {
       .then(expectAsync1((nuxeo.Document doc) {
         expect(doc.uid, isNotNull);
         root = doc;
-      }));
-    });
+      }))
+    );
 
     var op = nx.op("FileManager.Import");
 
     test('Create Blob1 (txt)', () {
+      expect(root, isNotNull);
       var blob = new http.Blob(
           content: "some content in plain text",
           mimetype: "text/plain",
           filename: "testMe.txt");
 
-      op.uploader.uploadFile(blob)
+      return op.uploader.uploadFile(blob)
       .then(expectAsync1((nuxeo.Upload upload) {
         expect(upload.fileIndex, equals(0));
       }));
     });
 
     test('Create Blob2 (bin)', () {
+      expect(root, isNotNull);
       var blob = new http.Blob(
           content: "some fake bin content",
           mimetype: "application/something",
           filename: "testBin.bin");
 
-      op.uploader.uploadFile(blob)
+      return op.uploader.uploadFile(blob)
       .then(expectAsync1((nuxeo.Upload upload) {
         expect(upload.fileIndex, equals(1));
       }));
     });
 
     test('Do import', () {
-      var blob = new http.Blob(
-          content: "some fake bin content",
-          mimetype: "application/something",
-          filename: "testBin.bin");
-
-      op(context : {
+      expect(root, isNotNull);
+      return op(context : {
         "currentDocument" : root.path
       })
       .then(expectAsync1((Iterable<nuxeo.Document> docs) {
@@ -121,6 +123,7 @@ void testBlobs(nuxeo.Client nx) {
     });
 
     test('Read children', () {
+      expect(root, isNotNull);
       nx.op("Document.GetChildren")(
           input: "doc:${root.path}"
        )
@@ -130,4 +133,83 @@ void testBlobs(nuxeo.Client nx) {
     });
 
   });
+
+  group('Batch Blob update', () {
+    nuxeo.Document root;
+
+    var op = nx.op("FileManager.Import");
+    var child;
+    var filename = "testMe.txt";
+
+    test('Create root', () =>
+      nx.op("Document.Create")(
+          input:"doc:/",
+          params: {
+            "type" : "Folder",
+            "name" : "TestBlobsUpdate",
+            "properties" : "dc:title=Test Blobs update via Batch \ndc:description=Simple container"
+          })
+      .then(expectAsync1((nuxeo.Document doc) {
+        expect(doc.uid, isNotNull);
+        root = doc;
+      }))
+    );
+
+    test('Create Child1', () {
+      expect(root, isNotNull);
+      return nx.op("Document.Create")(
+          input:"doc:${root.path}",
+          params: {
+            "type" : "File",
+            "name" : "TestFile1"
+          })
+      .then(expectAsync1((nuxeo.Document doc) {
+        expect(doc.uid, isNotNull);
+        child = doc;
+      }));
+    });
+
+    test('Upload Blob Text', () {
+      expect(root, isNotNull);
+      var blob = new http.Blob(
+          content: "some content in plain text",
+          mimetype: "text/plain",
+          // TODO(nfgs) - size : 26,
+          filename: filename);
+
+      return op.uploader.uploadFile(blob)
+      .then(expectAsync1((nuxeo.Upload upload) {
+        expect(upload.fileIndex, equals(0));
+      }));
+    });
+
+
+    test('Update Child', () {
+      expect(root, isNotNull);
+
+      var properties = {
+        'dc:description': 'New Description',
+        'file:content': {
+          'upload-batch': op.uploader.batchId,
+          'upload-fileId': '0',
+          'type': 'blob'
+        }
+      };
+
+      nx.op("Document.Update")(
+        documentSchemas: "common,dublincore,file",
+        params: {
+          "save": "true",
+          "properties": properties
+        },
+        input: "doc:${child.uid}"
+      )
+      .then(expectAsync1((nuxeo.Document doc) {
+        expect(doc.properties['dc:description'], properties['dc:description']);
+        expect(doc.properties['file:content']['name'], filename);
+      }));
+    });
+
+  });
+
 }

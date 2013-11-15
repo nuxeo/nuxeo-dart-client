@@ -51,7 +51,15 @@ nx.op("Document.GetChildren")(input:"doc:/")
 
 Nuxeo provides a [TCK](http://doc.nuxeo.com/display/NXDOC/Automation+API+and+client+library) (Test Compatibility Kit) that can be used to test the implementation of an automation client library.
 
-You can run the Dart Automation Client TCK with your own Nuxeo server (version >= 5.7.2).
+You can run the Dart Automation Client TCK with your own Nuxeo server (version >= 5.8).
+
+#### Prerequisites
+
+* Download [nuxeo-automation-test](https://maven-us.nuxeo.org/nexus/content/groups/public/org/nuxeo/ecm/automation/nuxeo-automation-test/5.8/nuxeo-automation-test-5.8.jar) to nxserver/bundles
+* Install nuxeo-rest-api
+```
+nuxeoctl mp-install nuxeo-rest-api --accept true
+```
 
 ### Standalone Automation Client
 
@@ -70,6 +78,7 @@ You can run the Dart Automation Client TCK with your own Nuxeo server (version >
 <component name="org.nuxeo.ecm.platform.web.dart.tck">
   <extension target="org.nuxeo.ecm.platform.web.common.requestcontroller.service.RequestControllerService" point="corsConfig">
     <corsConfig name="dartTCK" allowOrigin="http://127.0.0.1:3030">
+      <pattern>/nuxeo/api/.*</pattern>
       <pattern>/nuxeo/site/automation/.*</pattern>
     </corsConfig>
   </extension>

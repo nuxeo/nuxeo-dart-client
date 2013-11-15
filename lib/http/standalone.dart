@@ -5,6 +5,8 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import '../http.dart' as base;
 
+final LOG = base.LOG;
+
 class Response implements base.Response {
   http.Response _response;
 
@@ -27,6 +29,7 @@ class Request implements base.Request {
   bool multipart;
 
   Request(this._client, String method, Uri uri, {this.multipart: false}) {
+    LOG.finest("$method $uri");
     if (multipart) {
       _request = new http.MultipartRequest(method, uri);
     } else {
@@ -70,7 +73,7 @@ class Request implements base.Request {
 
 }
 
-class Client implements base.Client {
+class Client extends base.Client {
 
   HttpClient _client;
   Uri uri;
@@ -85,8 +88,7 @@ class Client implements base.Client {
     _client = new HttpClient(uri, realm, credentials);
   }
 
-  Request get(Uri uri) =>  new Request(_client, "GET", uri);
-  Request post(Uri uri, {bool multipart:false}) => new Request(_client, "POST", uri, multipart: multipart);
+  Request method(String method, Uri uri, {bool multipart:false}) => new Request(_client, method, uri, multipart: multipart);
 }
 
 // This is a copy of http.IOClient to set the credentials

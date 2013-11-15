@@ -1,4 +1,16 @@
-part of nuxeo_automation;
+part of nuxeo_client;
+
+class PropertyMap {
+
+  Map _map;
+
+  PropertyMap(this._map);
+
+  operator[]= (key, value) => _map[key] = value;
+  operator[] (key) => _map[key];
+
+  toString() => _map.keys.map((k) => "$k=${_map[k]}").join("\n");
+}
 
 class Document {
 

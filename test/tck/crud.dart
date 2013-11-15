@@ -7,7 +7,7 @@ void testCRUD(nuxeo.Client nx) {
 
   group('Create and read docs', () {
 
-    test('Create root', () {
+    test('Create root', () =>
       nx.op("Document.Create")(
           input:"doc:/",
           params: {
@@ -18,11 +18,14 @@ void testCRUD(nuxeo.Client nx) {
       .then(expectAsync1((nuxeo.Document doc) {
         expect(doc.uid, isNotNull);
         root = doc;
-      }));
-    });
+      }))
+    );
 
     test('Create first child', () {
-      nx.op("Document.Create")(
+
+      expect(root, isNotNull);
+
+      return nx.op("Document.Create")(
           input:"doc:${root.path}",
           params: {
             "type" : "File",
@@ -36,7 +39,10 @@ void testCRUD(nuxeo.Client nx) {
     });
 
     test('Create second child', () {
-      nx.op("Document.Create")(
+
+      expect(root, isNotNull);
+
+      return nx.op("Document.Create")(
           input:"doc:${root.path}",
           params: {
             "type" : "File",
@@ -50,6 +56,9 @@ void testCRUD(nuxeo.Client nx) {
     });
 
     test('Update second child', () {
+
+      expect(children.length, isNonZero);
+
       nx.op("Document.Update")(
           input:"doc:${children[1].path}",
           params: {
@@ -63,6 +72,9 @@ void testCRUD(nuxeo.Client nx) {
     });
 
     test('Read children', () {
+
+      expect(root, isNotNull);
+
       nx.op("Document.GetChildren")(
           input:"doc:${root.path}"
       )

@@ -4,10 +4,11 @@ import 'dart:async';
 import 'package:hop/hop.dart';
 import 'package:hop/hop_tasks.dart';
 import 'package:hop/src/hop_tasks_experimental.dart' as dartdoc;
+import 'package:logging/logging.dart';
 
 import '../test/console_test_harness.dart' as test;
 
-void main() {
+void main(List<String> args) {
 
   addTask('analyze_libs', createAnalyzerTask(_getLibs));
 
@@ -19,10 +20,10 @@ void main() {
       postBuild: dartdoc.createPostBuild(_docsCfg),
       excludeLibs: ['logging']));
 
-  runHop();
+  runHop(args, printAtLogLevel: Level.ALL);
 }
 
-Future<List<String>> _getLibs() => new Future.value(['lib/automation.dart']);
+Future<List<String>> _getLibs() => new Future.value(['lib/client.dart']);
 
 final _docsCfg = new dartdoc.DocsConfig(
     'Dart Automation Client',

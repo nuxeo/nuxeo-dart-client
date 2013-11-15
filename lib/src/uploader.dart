@@ -1,4 +1,4 @@
-part of nuxeo_automation;
+part of nuxeo_client;
 
 class AutomationUploaderEvent {
   String type;
@@ -62,9 +62,9 @@ class AutomationUploader {
   bool directUpload;
 
   // update upload speed every second
-  num uploadRateRefreshTime;
+  int uploadRateRefreshTime;
 
-  num uploadTimeout;
+  int uploadTimeout;
 
   String batchId;
   bool _sendingRequestsInProgress = false;
@@ -158,7 +158,7 @@ class AutomationUploader {
       //})(xhr);
 
       // compute timeout in seconds and integer
-      var uploadTimeoutS = 5 + (uploadTimeout / 1000);
+      int uploadTimeoutS = (5 + (uploadTimeout / 1000)).toInt();
 
       LOG.info("starting upload for file $_uploadIdx");
 
@@ -171,7 +171,7 @@ class AutomationUploader {
       xhr.headers.set("X-File-Idx", _uploadIdx.toString());
 
       xhr.headers.set('Nuxeo-Transaction-Timeout', uploadTimeoutS.toString());
-      xhr.headers.set("Content-Type", "multipart/form-data");
+      //xhr.headers.set("Content-Type", "multipart/form-data");
 
       //this.opts.handler.uploadStarted(_uploadIdx, file);
       _uploadIdx++;

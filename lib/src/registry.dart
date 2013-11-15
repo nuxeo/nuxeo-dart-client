@@ -1,4 +1,4 @@
-part of nuxeo_automation;
+part of nuxeo_client;
 
 /**
  * [OperationRegistry] retrieves and caches the available operations per server [Uri].
@@ -18,12 +18,12 @@ class OperationRegistry {
       return request.send()
           .then((http.Response response) {
             var body = response.body,
-                json = JSON.parse(body);
+                json = JSON.decode(body);
             _registries[uri] = new OperationRegistry._fromJSON(json);
             return _registries[uri];
           })
           .catchError((e) {
-            throw new AutomationException(e.toString());
+            throw new ClientException(e.toString());
           });
     }
   }

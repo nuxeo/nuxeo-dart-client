@@ -1,14 +1,17 @@
 name: nuxeo_automation
-version: 0.0.1+1
+version: 0.0.2
 author: Nelson Silva <nelson.silva@inevo.pt>
 description: A Nuxeo Automation Client
 homepage: https://github.com/nelsonsilva/nuxeo-dart-automation
+environment:
+  sdk: '>=1.0.0 <2.0.0'
 dependencies:
-  browser: any
-  crypto: any
-  http: any
-  logging: any
-  logging_handlers: any
+  browser: '>=0.9.0 <0.10.0'
+  crypto: '>=0.9.0 <0.10.0'
+  http: '>=0.9.0 <0.10.0'
+  logging: '>=0.9.0 <0.10.0'
+  logging_handlers: '>=0.8.0 <0.9.0'
 dev_dependencies:
-  hop: '>=0.24.1+1'
-  unittest: any
+  hop: '>=0.27.0 <0.28.0'
+  unittest: '>=0.9.0 <0.10.0'
+
