@@ -45,7 +45,7 @@ nx.op("Document.GetChildren")(input:"doc:/")
 
 ## Documentation
 
-[API Reference](http://nelsonsilva.github.io/nuxeo-dart-automation/nuxeo_automation.html)
+[API Reference](http://nelsonsilva.github.io/nuxeo-dart-automation/nuxeo_client.html)
 
 ## Running the TCK
 
