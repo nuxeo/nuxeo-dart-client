@@ -1,0 +1,303 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Request class / nuxeo_client Library / Dart Automation Client Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="nuxeo_client" data-type="Request">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Automation Client Documentation</a>
+         &rsaquo; <a href="../nuxeo_client.html">nuxeo_client</a> &rsaquo; <a href="../nuxeo_client/Request.html">Request</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Request</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class Request {
+
+ static final Logger LOG = new Logger("nuxeo.client.request");
+
+ Client nxClient;
+ Uri uri;
+
+ String repo;
+ Duration execTimeout, uploadTimeout;
+
+ AutomationUploader _batchUploader;
+
+ Request(this.uri, this.nxClient, {
+     this.repo, this.execTimeout, this.uploadTimeout}) {
+ }
+
+ http.Client get httpClient =&gt; nxClient.httpClient;
+
+ setRequestHeaders(http.Request request, {
+     String repository,
+     String documentSchemas: "dublincore"}) {
+
+   // Set the timeout
+   var txTimeout = 5 + ((execTimeout != null) ? execTimeout.inSeconds : 0);
+   request.headers.set(HEADER_NX_TX_TIMEOUT, txTimeout.toString());
+
+   // Set the schemas
+   if (documentSchemas.isNotEmpty) {
+     request.headers.set(HEADER_NX_SCHEMAS, documentSchemas);
+   }
+
+   // Set the repository
+   if (repository == null) {
+     repository = repo;
+   }
+   if (repository != null) {
+     request.headers.set(HEADER_NX_REPOSITORY, repository);
+   }
+ }
+
+ handleResponse(response) {
+   var body = response.body;
+
+   LOG.finest("Response: $body");
+
+   var json = JSON.decode(body);
+
+   switch (json["entity-type"]) {
+     case "document":
+       return new Document.fromJSON(json);
+       break;
+     case "documents":
+       var docs = json["entries"].map((doc) =&gt; new Document.fromJSON(doc));
+
+       if (!json.containsKey("isPaginable") || !json["isPaginable"]) {
+         return docs;
+       }
+
+       return new PaginableDocuments(docs)
+           ..totalSize = json["totalSize"]
+           ..pageIndex = json["pageIndex"]
+           ..pageSize = json["pageSize"]
+           ..pageCount = json["pageCount"];
+
+       break;
+     case "exception":
+       throw new Exception(json["message"]);
+       break;
+   }
+ }
+}
+</pre>
+</div>
+<h3>Subclasses</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../nuxeo_automation_client/OperationRequest.html">OperationRequest</a></span>, <span class="type-box"><span class="icon-class"></span><a href="../nuxeo_rest_client/Request.html">Request</a></span></p>
+<div>
+<h3>Static Properties</h3>
+<div class="field"><h4 id="LOG">
+<button class="show-code">Code</button>
+final Logger         <strong>LOG</strong> <a class="anchor-link"
+            href="#LOG"
+            title="Permalink to Request.LOG">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static final Logger LOG = new Logger("nuxeo.client.request")
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>Request</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> uri, <a href="../nuxeo_client/Client.html">Client</a> nxClient, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> repo, <a href="http://api.dartlang.org/dart_core/Duration.html">Duration</a> execTimeout, <a href="http://api.dartlang.org/dart_core/Duration.html">Duration</a> uploadTimeout}) <a class="anchor-link" href="#"
+              title="Permalink to Request.Request">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+Request(this.uri, this.nxClient, {
+   this.repo, this.execTimeout, this.uploadTimeout}) {
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="execTimeout">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Duration.html">Duration</a>         <strong>execTimeout</strong> <a class="anchor-link"
+            href="#execTimeout"
+            title="Permalink to Request.execTimeout">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Duration execTimeout
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="httpClient">
+<button class="show-code">Code</button>
+final <a href="../http_client/Client.html">Client</a>         <strong>httpClient</strong> <a class="anchor-link"
+            href="#httpClient"
+            title="Permalink to Request.httpClient">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+http.Client get httpClient =&gt; nxClient.httpClient;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="nxClient">
+<button class="show-code">Code</button>
+<a href="../nuxeo_client/Client.html">Client</a>         <strong>nxClient</strong> <a class="anchor-link"
+            href="#nxClient"
+            title="Permalink to Request.nxClient">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Client nxClient
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="repo">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>repo</strong> <a class="anchor-link"
+            href="#repo"
+            title="Permalink to Request.repo">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String repo
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="uploadTimeout">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Duration.html">Duration</a>         <strong>uploadTimeout</strong> <a class="anchor-link"
+            href="#uploadTimeout"
+            title="Permalink to Request.uploadTimeout">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Duration execTimeout, uploadTimeout
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="uri">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a>         <strong>uri</strong> <a class="anchor-link"
+            href="#uri"
+            title="Permalink to Request.uri">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Uri uri
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="handleResponse">
+<button class="show-code">Code</button>
+dynamic <strong>handleResponse</strong>(response) <a class="anchor-link" href="#handleResponse"
+              title="Permalink to Request.handleResponse">#</a></h4>
+<div class="doc">
+<pre class="source">
+handleResponse(response) {
+ var body = response.body;
+
+ LOG.finest("Response: $body");
+
+ var json = JSON.decode(body);
+
+ switch (json["entity-type"]) {
+   case "document":
+     return new Document.fromJSON(json);
+     break;
+   case "documents":
+     var docs = json["entries"].map((doc) =&gt; new Document.fromJSON(doc));
+
+     if (!json.containsKey("isPaginable") || !json["isPaginable"]) {
+       return docs;
+     }
+
+     return new PaginableDocuments(docs)
+         ..totalSize = json["totalSize"]
+         ..pageIndex = json["pageIndex"]
+         ..pageSize = json["pageSize"]
+         ..pageCount = json["pageCount"];
+
+     break;
+   case "exception":
+     throw new Exception(json["message"]);
+     break;
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="setRequestHeaders">
+<button class="show-code">Code</button>
+dynamic <strong>setRequestHeaders</strong>(<a href="../http_client/Request.html">Request</a> request, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> repository, <a href="http://api.dartlang.org/dart_core/String.html">String</a> documentSchemas: "dublincore"}) <a class="anchor-link" href="#setRequestHeaders"
+              title="Permalink to Request.setRequestHeaders">#</a></h4>
+<div class="doc">
+<pre class="source">
+setRequestHeaders(http.Request request, {
+   String repository,
+   String documentSchemas: "dublincore"}) {
+
+ // Set the timeout
+ var txTimeout = 5 + ((execTimeout != null) ? execTimeout.inSeconds : 0);
+ request.headers.set(HEADER_NX_TX_TIMEOUT, txTimeout.toString());
+
+ // Set the schemas
+ if (documentSchemas.isNotEmpty) {
+   request.headers.set(HEADER_NX_SCHEMAS, documentSchemas);
+ }
+
+ // Set the repository
+ if (repository == null) {
+   repository = repo;
+ }
+ if (repository != null) {
+   request.headers.set(HEADER_NX_REPOSITORY, repository);
+ }
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

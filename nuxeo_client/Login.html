@@ -1,0 +1,110 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Login class / nuxeo_client Library / Dart Automation Client Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="nuxeo_client" data-type="Login">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Automation Client Documentation</a>
+         &rsaquo; <a href="../nuxeo_client.html">nuxeo_client</a> &rsaquo; <a href="../nuxeo_client/Login.html">Login</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Login</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class Login {
+ String username;
+ bool isAdministrator;
+ List&lt;String&gt; groups;
+
+ Login._internal(json) :
+   username = json["username"],
+   isAdministrator = json["isAdministrator"],
+   groups = json["groups"];
+
+ factory Login.fromJSON(json) =&gt; new Login._internal(json);
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="fromJSON">
+<button class="show-code">Code</button>
+factory <strong>Login.fromJSON</strong>(json) <a class="anchor-link" href="#fromJSON"
+              title="Permalink to Login.Login.fromJSON">#</a></h4>
+<div class="doc">
+<pre class="source">
+factory Login.fromJSON(json) =&gt; new Login._internal(json);
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="groups">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt;         <strong>groups</strong> <a class="anchor-link"
+            href="#groups"
+            title="Permalink to Login.groups">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+List&lt;String&gt; groups
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="isAdministrator">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>isAdministrator</strong> <a class="anchor-link"
+            href="#isAdministrator"
+            title="Permalink to Login.isAdministrator">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+bool isAdministrator
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="username">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>username</strong> <a class="anchor-link"
+            href="#username"
+            title="Permalink to Login.username">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String username
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

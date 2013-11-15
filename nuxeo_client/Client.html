@@ -1,0 +1,257 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Client abstract class / nuxeo_client Library / Dart Automation Client Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="nuxeo_client" data-type="Client">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Automation Client Documentation</a>
+         &rsaquo; <a href="../nuxeo_client.html">nuxeo_client</a> &rsaquo; <a href="../nuxeo_client/Client.html">Client</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Client</strong>
+          abstract class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p><code>Automation</code> client.</p>
+<pre class="source">
+abstract class Client {
+
+ static final LOG = new Logger("nuxeo.automation");
+
+ /// The [http.Client] to use
+ http.Client httpClient;
+
+ Uri _rpcUri, _restUri;
+
+ Client(this.httpClient, String url) {
+   _rpcUri = Uri.parse(url + "/site/automation");
+   _restUri = Uri.parse(url + "/api/v1");
+ }
+
+ /* REST */
+ rest.Request doc(String uidOrPath, {String repo}) {
+   var path;
+   if (uidOrPath.startsWith("/")) {
+     if (uidOrPath.endsWith("/")) {
+       uidOrPath = uidOrPath.substring(0, uidOrPath.length - 1);
+     }
+     path = "path$uidOrPath";
+   } else {
+     path = "id/$uidOrPath";
+   }
+   return new rest.Request(Uri.parse("$_restUri/$path"), this, repo: repo);
+ }
+
+ rest.Request user(String userId, {String repo}) =&gt;
+     new rest.Request(Uri.parse("$_restUri/user/$userId"), this, repo: repo);
+
+ rest.Request group(String groupId, {String repo}) =&gt;
+     new rest.Request(Uri.parse("$_restUri/group/$groupId"), this, repo: repo);
+
+ rest.Request directory(String directoryId, {String repo}) =&gt;
+     new rest.Request(Uri.parse("$_restUri/directory/$directoryId"), this, repo: repo);
+
+ /* RPC */
+
+ /// Creates an [OperationRequest] for the [Operation] with the given [id].
+ ///
+ /// You can also specify an [execTimeout] and an [uploadTimeout].
+ rpc.OperationRequest op(String id, {
+   execTimeout: const Duration(seconds: 30),
+   uploadTimeout: const Duration(minutes: 20)
+ }) =&gt; new rpc.OperationRequest(id, _rpcUri, this,
+     execTimeout: execTimeout,
+     uploadTimeout: uploadTimeout);
+
+ Future&lt;OperationRegistry&gt; get registry =&gt; OperationRegistry.get(_rpcUri, httpClient);
+
+ /// Logs in to the Nuxeo server and returns a [Login]
+ Future&lt;Login&gt; get login =&gt; rpc.login(_rpcUri, httpClient);
+
+}
+</pre>
+</div>
+<div>
+<h3>Static Properties</h3>
+<div class="field"><h4 id="LOG">
+<button class="show-code">Code</button>
+final         <strong>LOG</strong> <a class="anchor-link"
+            href="#LOG"
+            title="Permalink to Client.LOG">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static final LOG = new Logger("nuxeo.automation")
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>Client</strong>(<a href="../http_client/Client.html">Client</a> httpClient, <a href="http://api.dartlang.org/dart_core/String.html">String</a> url) <a class="anchor-link" href="#"
+              title="Permalink to Client.Client">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+Client(this.httpClient, String url) {
+ _rpcUri = Uri.parse(url + "/site/automation");
+ _restUri = Uri.parse(url + "/api/v1");
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="httpClient">
+<button class="show-code">Code</button>
+<a href="../http_client/Client.html">Client</a>         <strong>httpClient</strong> <a class="anchor-link"
+            href="#httpClient"
+            title="Permalink to Client.httpClient">#</a>
+        </h4>
+        <div class="doc">
+<p>The <a class="crossref" href="../http_client/Client.html">http.Client</a> to use</p>
+<pre class="source">
+http.Client httpClient
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="login">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="../nuxeo_client/Login.html">Login</a>&gt;         <strong>login</strong> <a class="anchor-link"
+            href="#login"
+            title="Permalink to Client.login">#</a>
+        </h4>
+        <div class="doc">
+<p>Logs in to the Nuxeo server and returns a <a class="crossref" href="../nuxeo_client/Login.html">Login</a></p>
+<pre class="source">
+Future&lt;Login&gt; get login =&gt; rpc.login(_rpcUri, httpClient);
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="registry">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="../nuxeo_client/OperationRegistry.html">OperationRegistry</a>&gt;         <strong>registry</strong> <a class="anchor-link"
+            href="#registry"
+            title="Permalink to Client.registry">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Future&lt;OperationRegistry&gt; get registry =&gt; OperationRegistry.get(_rpcUri, httpClient);
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="directory">
+<button class="show-code">Code</button>
+<a href="../nuxeo_rest_client/Request.html">Request</a> <strong>directory</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> directoryId, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> repo}) <a class="anchor-link" href="#directory"
+              title="Permalink to Client.directory">#</a></h4>
+<div class="doc">
+<pre class="source">
+rest.Request directory(String directoryId, {String repo}) =&gt;
+   new rest.Request(Uri.parse("$_restUri/directory/$directoryId"), this, repo: repo);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="doc">
+<button class="show-code">Code</button>
+<a href="../nuxeo_rest_client/Request.html">Request</a> <strong>doc</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> uidOrPath, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> repo}) <a class="anchor-link" href="#doc"
+              title="Permalink to Client.doc">#</a></h4>
+<div class="doc">
+<pre class="source">
+rest.Request doc(String uidOrPath, {String repo}) {
+ var path;
+ if (uidOrPath.startsWith("/")) {
+   if (uidOrPath.endsWith("/")) {
+     uidOrPath = uidOrPath.substring(0, uidOrPath.length - 1);
+   }
+   path = "path$uidOrPath";
+ } else {
+   path = "id/$uidOrPath";
+ }
+ return new rest.Request(Uri.parse("$_restUri/$path"), this, repo: repo);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="group">
+<button class="show-code">Code</button>
+<a href="../nuxeo_rest_client/Request.html">Request</a> <strong>group</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> groupId, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> repo}) <a class="anchor-link" href="#group"
+              title="Permalink to Client.group">#</a></h4>
+<div class="doc">
+<pre class="source">
+rest.Request group(String groupId, {String repo}) =&gt;
+   new rest.Request(Uri.parse("$_restUri/group/$groupId"), this, repo: repo);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="op">
+<button class="show-code">Code</button>
+<a href="../nuxeo_automation_client/OperationRequest.html">OperationRequest</a> <strong>op</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> id, {execTimeout: const Duration(seconds:30), uploadTimeout: const Duration(minutes:20)}) <a class="anchor-link" href="#op"
+              title="Permalink to Client.op">#</a></h4>
+<div class="doc">
+<p>Creates an <code>OperationRequest</code> for the <a class="crossref" href="../nuxeo_client/Operation.html">Operation</a> with the given 
+<span class="param">id</span>.</p>
+<p>You can also specify an 
+<span class="param">execTimeout</span> and an 
+<span class="param">uploadTimeout</span>.</p>
+<pre class="source">
+rpc.OperationRequest op(String id, {
+ execTimeout: const Duration(seconds: 30),
+ uploadTimeout: const Duration(minutes: 20)
+}) =&gt; new rpc.OperationRequest(id, _rpcUri, this,
+   execTimeout: execTimeout,
+   uploadTimeout: uploadTimeout);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="user">
+<button class="show-code">Code</button>
+<a href="../nuxeo_rest_client/Request.html">Request</a> <strong>user</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> userId, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> repo}) <a class="anchor-link" href="#user"
+              title="Permalink to Client.user">#</a></h4>
+<div class="doc">
+<pre class="source">
+rest.Request user(String userId, {String repo}) =&gt;
+   new rest.Request(Uri.parse("$_restUri/user/$userId"), this, repo: repo);
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

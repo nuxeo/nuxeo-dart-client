@@ -2,19 +2,19 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>nuxeo_automation Library / Dart Automation Client Documentation</title>
+        <title>nuxeo_client Library / Dart Automation Client Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
         <link rel="shortcut icon" href="favicon.ico">
         
         </head>
-        <body data-library="nuxeo_automation">
+        <body data-library="nuxeo_client">
         <div class="page">
         <div class="header">
           <a href="index.html"><div class="logo"></div></a>
           <a href="index.html">Dart Automation Client Documentation</a>
-         &rsaquo; <a href="nuxeo_automation.html">nuxeo_automation</a>        <div id="search-box">
+         &rsaquo; <a href="nuxeo_client.html">nuxeo_client</a>        <div id="search-box">
           <input type="search" name="q" id="q" autocomplete="off"
               class="search-input" placeholder="Search API">
         </div>
@@ -26,8 +26,8 @@
         
 </div>
 <div class="content">
-<h2><strong>nuxeo_automation</strong> library</h2>
-<div class="doc"><p>Provides a Nuxeo Automation Client Library.</p>
+<h2><strong>nuxeo_client</strong> library</h2>
+<div class="doc"><p>Provides a Nuxeo Client Library.</p>
 <h2>Installing</h2>
 <p>Use <a href="http://pub.dartlang.org">pub</a> to install this package. Add the following to your <code>pubspec.yaml</code>
 file.</p>
@@ -43,7 +43,7 @@ as these provide proper abstractions (see <a href="http_client.html">http_client
 <p><code>import 'package:nuxeo_automation/browser_client.dart' as nuxeo_automation;</code></p></li><li>
 <p>For standalone/console applications use:</p>
 <p><code>import 'package:nuxeo_automation/standalone_client.dart' as nuxeo_automation;</code></p></li><li>
-<p>Then create your <a class="crossref" href="nuxeo_automation/Client.html">Client</a> instance:</p>
+<p>Then create your <a class="crossref" href="nuxeo_client/Client.html">Client</a> instance:</p>
 <p><code>var nx = new nuxeo_automation.Client();</code></p></li></ul>
 <p>For more information, see the
 <a href="http://pub.dartlang.org/packages/nuxeo_automation">nuxeo_automation package on pub.dartlang.org</a>.</p></div>
@@ -186,7 +186,7 @@ const KEY_ENTITY_TYPE = "entity-type"
 <h3>Abstract Classes</h3>
           <div class="type">
           <h4>
-            <a href="nuxeo_automation/Client.html"><strong>Client</strong></a>
+            <a href="nuxeo_client/Client.html"><strong>Client</strong></a>
           </h4>
           </div>
           
@@ -195,55 +195,67 @@ const KEY_ENTITY_TYPE = "entity-type"
 <h3>Classes</h3>
           <div class="type">
           <h4>
-            <a href="nuxeo_automation/AutomationUploader.html"><strong>AutomationUploader</strong></a>
+            <a href="nuxeo_client/AutomationUploader.html"><strong>AutomationUploader</strong></a>
           </h4>
           </div>
           
           <div class="type">
           <h4>
-            <a href="nuxeo_automation/AutomationUploaderEvent.html"><strong>AutomationUploaderEvent</strong></a>
+            <a href="nuxeo_client/AutomationUploaderEvent.html"><strong>AutomationUploaderEvent</strong></a>
           </h4>
           </div>
           
           <div class="type">
           <h4>
-            <a href="nuxeo_automation/Document.html"><strong>Document</strong></a>
+            <a href="nuxeo_client/Document.html"><strong>Document</strong></a>
           </h4>
           </div>
           
           <div class="type">
           <h4>
-            <a href="nuxeo_automation/Operation.html"><strong>Operation</strong></a>
+            <a href="nuxeo_client/Login.html"><strong>Login</strong></a>
           </h4>
           </div>
           
           <div class="type">
           <h4>
-            <a href="nuxeo_automation/OperationParam.html"><strong>OperationParam</strong></a>
+            <a href="nuxeo_client/Operation.html"><strong>Operation</strong></a>
           </h4>
           </div>
           
           <div class="type">
           <h4>
-            <a href="nuxeo_automation/OperationRegistry.html"><strong>OperationRegistry</strong></a>
+            <a href="nuxeo_client/OperationParam.html"><strong>OperationParam</strong></a>
           </h4>
           </div>
           
           <div class="type">
           <h4>
-            <a href="nuxeo_automation/OperationRequest.html"><strong>OperationRequest</strong></a>
+            <a href="nuxeo_client/OperationRegistry.html"><strong>OperationRegistry</strong></a>
           </h4>
           </div>
           
           <div class="type">
           <h4>
-            <a href="nuxeo_automation/PaginableDocuments.html"><strong>PaginableDocuments</strong></a>
+            <a href="nuxeo_client/PaginableDocuments.html"><strong>PaginableDocuments</strong></a>
           </h4>
           </div>
           
           <div class="type">
           <h4>
-            <a href="nuxeo_automation/Upload.html"><strong>Upload</strong></a>
+            <a href="nuxeo_client/PropertyMap.html"><strong>PropertyMap</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="nuxeo_client/Request.html"><strong>Request</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="nuxeo_client/Upload.html"><strong>Upload</strong></a>
           </h4>
           </div>
           
@@ -252,7 +264,7 @@ const KEY_ENTITY_TYPE = "entity-type"
 <h3>Exceptions</h3>
           <div class="type">
           <h4>
-            <a href="nuxeo_automation/AutomationException.html"><strong>AutomationException</strong></a>
+            <a href="nuxeo_client/ClientException.html"><strong>ClientException</strong></a>
           </h4>
           </div>
           

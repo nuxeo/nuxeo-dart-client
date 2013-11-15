@@ -2,19 +2,19 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>AutomationUploader class / nuxeo_automation Library / Dart Automation Client Documentation</title>
+        <title>AutomationUploader class / nuxeo_client Library / Dart Automation Client Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="../styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
         <link rel="shortcut icon" href="../favicon.ico">
         
         </head>
-        <body data-library="nuxeo_automation" data-type="AutomationUploader">
+        <body data-library="nuxeo_client" data-type="AutomationUploader">
         <div class="page">
         <div class="header">
           <a href="../index.html"><div class="logo"></div></a>
           <a href="../index.html">Dart Automation Client Documentation</a>
-         &rsaquo; <a href="../nuxeo_automation.html">nuxeo_automation</a> &rsaquo; <a href="../nuxeo_automation/AutomationUploader.html">AutomationUploader</a>        <div id="search-box">
+         &rsaquo; <a href="../nuxeo_client.html">nuxeo_client</a> &rsaquo; <a href="../nuxeo_client/AutomationUploader.html">AutomationUploader</a>        <div id="search-box">
           <input type="search" name="q" id="q" autocomplete="off"
               class="search-input" placeholder="Search API">
         </div>
@@ -32,7 +32,7 @@
         
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
-<p><a class="crossref" href="../nuxeo_automation/AutomationUploader.html">AutomationUploader</a> manages the upload of files in a queue with a target
+<p><a class="crossref" href="../nuxeo_client/AutomationUploader.html">AutomationUploader</a> manages the upload of files in a queue with a target
 number of concurrent uploads.</p>
 <pre class="source">
 class AutomationUploader {
@@ -51,9 +51,9 @@ class AutomationUploader {
  bool directUpload;
 
  // update upload speed every second
- num uploadRateRefreshTime;
+ int uploadRateRefreshTime;
 
- num uploadTimeout;
+ int uploadTimeout;
 
  String batchId;
  bool _sendingRequestsInProgress = false;
@@ -147,7 +147,7 @@ class AutomationUploader {
      //})(xhr);
 
      // compute timeout in seconds and integer
-     var uploadTimeoutS = 5 + (uploadTimeout / 1000);
+     int uploadTimeoutS = (5 + (uploadTimeout / 1000)).toInt();
 
      LOG.info("starting upload for file $_uploadIdx");
 
@@ -160,7 +160,7 @@ class AutomationUploader {
      xhr.headers.set("X-File-Idx", _uploadIdx.toString());
 
      xhr.headers.set('Nuxeo-Transaction-Timeout', uploadTimeoutS.toString());
-     xhr.headers.set("Content-Type", "multipart/form-data");
+     //xhr.headers.set("Content-Type", "multipart/form-data");
 
      //this.opts.handler.uploadStarted(_uploadIdx, file);
      _uploadIdx++;
@@ -287,7 +287,7 @@ static final LOG = new Logger("nuxeo.automation.uploader")
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>AutomationUploader</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> uri, <a href="../http_client/Client.html">Client</a> client, {<a href="http://api.dartlang.org/dart_core/int.html">int</a> numConcurrentUploads: 5, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> directUpload: true, <a href="http://api.dartlang.org/dart_core/num.html">num</a> uploadRateRefreshTime: 1000, <a href="http://api.dartlang.org/dart_core/num.html">num</a> uploadTimeout: 0}) <a class="anchor-link" href="#"
+new <strong>AutomationUploader</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> uri, <a href="../http_client/Client.html">Client</a> client, {<a href="http://api.dartlang.org/dart_core/int.html">int</a> numConcurrentUploads: 5, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> directUpload: true, <a href="http://api.dartlang.org/dart_core/int.html">int</a> uploadRateRefreshTime: 1000, <a href="http://api.dartlang.org/dart_core/int.html">int</a> uploadTimeout: 0}) <a class="anchor-link" href="#"
               title="Permalink to AutomationUploader.AutomationUploader">#</a></h4>
 <div class="doc">
 <div class="inherited">
@@ -353,7 +353,7 @@ bool directUpload
 </div>
 <div class="field"><h4 id="evtController">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/StreamController.html">StreamController</a>&lt;<a href="../nuxeo_automation/AutomationUploaderEvent.html">AutomationUploaderEvent</a>&gt;         <strong>evtController</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_async/StreamController.html">StreamController</a>&lt;<a href="../nuxeo_client/AutomationUploaderEvent.html">AutomationUploaderEvent</a>&gt;         <strong>evtController</strong> <a class="anchor-link"
             href="#evtController"
             title="Permalink to AutomationUploader.evtController">#</a>
         </h4>
@@ -377,7 +377,7 @@ int numConcurrentUploads
 </div>
 <div class="field"><h4 id="onBatchStarted">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a href="../nuxeo_automation/AutomationUploaderEvent.html">AutomationUploaderEvent</a>&gt;         <strong>onBatchStarted</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a href="../nuxeo_client/AutomationUploaderEvent.html">AutomationUploaderEvent</a>&gt;         <strong>onBatchStarted</strong> <a class="anchor-link"
             href="#onBatchStarted"
             title="Permalink to AutomationUploader.onBatchStarted">#</a>
         </h4>
@@ -389,25 +389,25 @@ Stream&lt;AutomationUploaderEvent&gt; get onBatchStarted =&gt; evtController.str
 </div>
 <div class="field"><h4 id="uploadRateRefreshTime">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/num.html">num</a>         <strong>uploadRateRefreshTime</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>uploadRateRefreshTime</strong> <a class="anchor-link"
             href="#uploadRateRefreshTime"
             title="Permalink to AutomationUploader.uploadRateRefreshTime">#</a>
         </h4>
         <div class="doc">
 <pre class="source">
-num uploadRateRefreshTime
+int uploadRateRefreshTime
 </pre>
 </div>
 </div>
 <div class="field"><h4 id="uploadTimeout">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/num.html">num</a>         <strong>uploadTimeout</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>uploadTimeout</strong> <a class="anchor-link"
             href="#uploadTimeout"
             title="Permalink to AutomationUploader.uploadTimeout">#</a>
         </h4>
         <div class="doc">
 <pre class="source">
-num uploadTimeout
+int uploadTimeout
 </pre>
 </div>
 </div>
@@ -428,7 +428,7 @@ Uri uri
 <h3>Methods</h3>
 <div class="method"><h4 id="load">
 <button class="show-code">Code</button>
-dynamic <strong>load</strong>(<a href="../nuxeo_automation/Upload.html">Upload</a> upload) <a class="anchor-link" href="#load"
+dynamic <strong>load</strong>(<a href="../nuxeo_client/Upload.html">Upload</a> upload) <a class="anchor-link" href="#load"
               title="Permalink to AutomationUploader.load">#</a></h4>
 <div class="doc">
 <pre class="source">
@@ -462,7 +462,7 @@ load(Upload upload) {
 </div>
 <div class="method"><h4 id="uploadFile">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="../nuxeo_automation/Upload.html">Upload</a>&gt; <strong>uploadFile</strong>(cfile) <a class="anchor-link" href="#uploadFile"
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="../nuxeo_client/Upload.html">Upload</a>&gt; <strong>uploadFile</strong>(cfile) <a class="anchor-link" href="#uploadFile"
               title="Permalink to AutomationUploader.uploadFile">#</a></h4>
 <div class="doc">
 <pre class="source">
@@ -546,7 +546,7 @@ uploadFiles() {
    //})(xhr);
 
    // compute timeout in seconds and integer
-   var uploadTimeoutS = 5 + (uploadTimeout / 1000);
+   int uploadTimeoutS = (5 + (uploadTimeout / 1000)).toInt();
 
    LOG.info("starting upload for file $_uploadIdx");
 
@@ -559,7 +559,7 @@ uploadFiles() {
    xhr.headers.set("X-File-Idx", _uploadIdx.toString());
 
    xhr.headers.set('Nuxeo-Transaction-Timeout', uploadTimeoutS.toString());
-   xhr.headers.set("Content-Type", "multipart/form-data");
+   //xhr.headers.set("Content-Type", "multipart/form-data");
 
    //this.opts.handler.uploadStarted(_uploadIdx, file);
    _uploadIdx++;

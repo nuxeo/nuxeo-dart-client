@@ -2,19 +2,19 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>AutomationException class / nuxeo_automation Library / Dart Automation Client Documentation</title>
+        <title>ClientException class / nuxeo_client Library / Dart Automation Client Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="../styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
         <link rel="shortcut icon" href="../favicon.ico">
         
         </head>
-        <body data-library="nuxeo_automation" data-type="AutomationException">
+        <body data-library="nuxeo_client" data-type="ClientException">
         <div class="page">
         <div class="header">
           <a href="../index.html"><div class="logo"></div></a>
           <a href="../index.html">Dart Automation Client Documentation</a>
-         &rsaquo; <a href="../nuxeo_automation.html">nuxeo_automation</a> &rsaquo; <a href="../nuxeo_automation/AutomationException.html">AutomationException</a>        <div id="search-box">
+         &rsaquo; <a href="../nuxeo_client.html">nuxeo_client</a> &rsaquo; <a href="../nuxeo_client/ClientException.html">ClientException</a>        <div id="search-box">
           <input type="search" name="q" id="q" autocomplete="off"
               class="search-input" placeholder="Search API">
         </div>
@@ -26,26 +26,26 @@
         
 </div>
 <div class="content">
-        <h2><strong>AutomationException</strong>
+        <h2><strong>ClientException</strong>
           class
         </h2>
         
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
-<p>Exception thrown when an <a class="crossref" href="../nuxeo_automation/OperationRequest.html">OperationRequest</a> throws an error</p>
+<p>Exception thrown when a <a class="crossref" href="../nuxeo_client/Request.html">Request</a> throws an error</p>
 <pre class="source">
-class AutomationException implements Exception {
+class ClientException implements Exception {
  /**
   * A message describing the error.
   */
  final String message;
 
  /**
-  * Creates a new AutomationException with an optional error [message].
+  * Creates a new ClientException with an optional error [message].
   */
- const AutomationException([this.message = ""]);
+ const ClientException([this.message = ""]);
 
- String toString() =&gt; "AutomationException: $message";
+ String toString() =&gt; "ClientException: $message";
 }
 </pre>
 </div>
@@ -56,13 +56,13 @@ class AutomationException implements Exception {
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-const <strong>AutomationException</strong>([<a href="http://api.dartlang.org/dart_core/String.html">String</a> message = ""]) <a class="anchor-link" href="#"
-              title="Permalink to AutomationException.AutomationException">#</a></h4>
+const <strong>ClientException</strong>([<a href="http://api.dartlang.org/dart_core/String.html">String</a> message = ""]) <a class="anchor-link" href="#"
+              title="Permalink to ClientException.ClientException">#</a></h4>
 <div class="doc">
-<p>Creates a new AutomationException with an optional error 
+<p>Creates a new ClientException with an optional error 
 <span class="param">message</span>.</p>
 <pre class="source">
-const AutomationException([this.message = ""]);
+const ClientException([this.message = ""]);
 </pre>
 </div>
 </div>
@@ -73,7 +73,7 @@ const AutomationException([this.message = ""]);
 <button class="show-code">Code</button>
 final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>message</strong> <a class="anchor-link"
             href="#message"
-            title="Permalink to AutomationException.message">#</a>
+            title="Permalink to ClientException.message">#</a>
         </h4>
         <div class="doc">
 <p>A message describing the error.</p>
@@ -88,13 +88,13 @@ final String message
 <div class="method"><h4 id="toString">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
-              title="Permalink to AutomationException.toString">#</a></h4>
+              title="Permalink to ClientException.toString">#</a></h4>
 <div class="doc">
 <div class="inherited">
 <p>Returns a string representation of this object.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
-String toString() =&gt; "AutomationException: $message";
+String toString() =&gt; "ClientException: $message";
 </pre>
 </div>
 </div>

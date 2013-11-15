@@ -34,23 +34,60 @@
 <div class="doc">
 <pre class="source">
 abstract class Client {
- Request get(Uri uri);
- Request post(Uri uri, {bool multipart:false});
+ Request method(String method, Uri uri, {bool multipart:false});
+ Request get(Uri uri) =&gt; method("GET", uri);
+ Request post(Uri uri, {bool multipart:false}) =&gt; method("POST", uri, multipart: multipart);
+ Request put(Uri uri) =&gt; method("PUT", uri);
+ Request delete(Uri uri) =&gt; method("DELETE", uri);
 }
 </pre>
 </div>
 <div>
 <h3>Methods</h3>
+<div class="method"><h4 id="delete">
+<button class="show-code">Code</button>
+<a href="../http_client/Request.html">Request</a> <strong>delete</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> uri) <a class="anchor-link" href="#delete"
+              title="Permalink to Client.delete">#</a></h4>
+<div class="doc">
+<pre class="source">
+Request delete(Uri uri) =&gt; method("DELETE", uri);
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="get">
-abstract <a href="../http_client/Request.html">Request</a> <strong>get</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> uri) <a class="anchor-link" href="#get"
+<button class="show-code">Code</button>
+<a href="../http_client/Request.html">Request</a> <strong>get</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> uri) <a class="anchor-link" href="#get"
               title="Permalink to Client.get">#</a></h4>
+<div class="doc">
+<pre class="source">
+Request get(Uri uri) =&gt; method("GET", uri);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="method">
+abstract <a href="../http_client/Request.html">Request</a> <strong>method</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> method, <a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> uri, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> multipart: false}) <a class="anchor-link" href="#method"
+              title="Permalink to Client.method">#</a></h4>
 <div class="doc">
 </div>
 </div>
 <div class="method"><h4 id="post">
-abstract <a href="../http_client/Request.html">Request</a> <strong>post</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> uri, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> multipart: false}) <a class="anchor-link" href="#post"
+<button class="show-code">Code</button>
+<a href="../http_client/Request.html">Request</a> <strong>post</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> uri, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> multipart: false}) <a class="anchor-link" href="#post"
               title="Permalink to Client.post">#</a></h4>
 <div class="doc">
+<pre class="source">
+Request post(Uri uri, {bool multipart:false}) =&gt; method("POST", uri, multipart: multipart);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="put">
+<button class="show-code">Code</button>
+<a href="../http_client/Request.html">Request</a> <strong>put</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> uri) <a class="anchor-link" href="#put"
+              title="Permalink to Client.put">#</a></h4>
+<div class="doc">
+<pre class="source">
+Request put(Uri uri) =&gt; method("PUT", uri);
+</pre>
 </div>
 </div>
 </div>

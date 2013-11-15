@@ -2,19 +2,19 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>OperationRegistry class / nuxeo_automation Library / Dart Automation Client Documentation</title>
+        <title>OperationRegistry class / nuxeo_client Library / Dart Automation Client Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="../styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
         <link rel="shortcut icon" href="../favicon.ico">
         
         </head>
-        <body data-library="nuxeo_automation" data-type="OperationRegistry">
+        <body data-library="nuxeo_client" data-type="OperationRegistry">
         <div class="page">
         <div class="header">
           <a href="../index.html"><div class="logo"></div></a>
           <a href="../index.html">Dart Automation Client Documentation</a>
-         &rsaquo; <a href="../nuxeo_automation.html">nuxeo_automation</a> &rsaquo; <a href="../nuxeo_automation/OperationRegistry.html">OperationRegistry</a>        <div id="search-box">
+         &rsaquo; <a href="../nuxeo_client.html">nuxeo_client</a> &rsaquo; <a href="../nuxeo_client/OperationRegistry.html">OperationRegistry</a>        <div id="search-box">
           <input type="search" name="q" id="q" autocomplete="off"
               class="search-input" placeholder="Search API">
         </div>
@@ -32,7 +32,7 @@
         
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
-<p><a class="crossref" href="../nuxeo_automation/OperationRegistry.html">OperationRegistry</a> retrieves and caches the available operations per server <a class="crossref" href="../dart_core/Uri.html">Uri</a>.</p>
+<p><a class="crossref" href="../nuxeo_client/OperationRegistry.html">OperationRegistry</a> retrieves and caches the available operations per server <a class="crossref" href="../dart_core/Uri.html">Uri</a>.</p>
 <pre class="source">
 class OperationRegistry {
  Map&lt;String, String&gt; paths;
@@ -49,12 +49,12 @@ class OperationRegistry {
      return request.send()
          .then((http.Response response) {
            var body = response.body,
-               json = JSON.parse(body);
+               json = JSON.decode(body);
            _registries[uri] = new OperationRegistry._fromJSON(json);
            return _registries[uri];
          })
          .catchError((e) {
-           throw new AutomationException(e.toString());
+           throw new ClientException(e.toString());
          });
    }
  }
@@ -87,7 +87,7 @@ class OperationRegistry {
 <h3>Static Methods</h3>
 <div class="method"><h4 id="get">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="../nuxeo_automation/OperationRegistry.html">OperationRegistry</a>&gt; <strong>get</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> uri, [<a href="../http_client/Client.html">Client</a> client]) <a class="anchor-link" href="#get"
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="../nuxeo_client/OperationRegistry.html">OperationRegistry</a>&gt; <strong>get</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> uri, [<a href="../http_client/Client.html">Client</a> client]) <a class="anchor-link" href="#get"
               title="Permalink to OperationRegistry.get">#</a></h4>
 <div class="doc">
 <pre class="source">
@@ -99,12 +99,12 @@ static Future&lt;OperationRegistry&gt; get(Uri uri, [http.Client client]) {
    return request.send()
        .then((http.Response response) {
          var body = response.body,
-             json = JSON.parse(body);
+             json = JSON.decode(body);
          _registries[uri] = new OperationRegistry._fromJSON(json);
          return _registries[uri];
        })
        .catchError((e) {
-         throw new AutomationException(e.toString());
+         throw new ClientException(e.toString());
        });
  }
 }
@@ -116,7 +116,7 @@ static Future&lt;OperationRegistry&gt; get(Uri uri, [http.Client client]) {
 <h3>Properties</h3>
 <div class="field"><h4 id="chains">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>, <a href="../nuxeo_automation/Operation.html">Operation</a>&gt;         <strong>chains</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>, <a href="../nuxeo_client/Operation.html">Operation</a>&gt;         <strong>chains</strong> <a class="anchor-link"
             href="#chains"
             title="Permalink to OperationRegistry.chains">#</a>
         </h4>
@@ -128,7 +128,7 @@ Map&lt;String, Operation&gt; chains
 </div>
 <div class="field"><h4 id="ops">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>, <a href="../nuxeo_automation/Operation.html">Operation</a>&gt;         <strong>ops</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>, <a href="../nuxeo_client/Operation.html">Operation</a>&gt;         <strong>ops</strong> <a class="anchor-link"
             href="#ops"
             title="Permalink to OperationRegistry.ops">#</a>
         </h4>
@@ -155,10 +155,10 @@ Map&lt;String, String&gt; paths
 <h3>Operators</h3>
 <div class="method"><h4 id="[]">
 <button class="show-code">Code</button>
-<a href="../nuxeo_automation/Operation.html">Operation</a> <strong>operator []</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> key) <a class="anchor-link" href="#[]"
+<a href="../nuxeo_client/Operation.html">Operation</a> <strong>operator []</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> key) <a class="anchor-link" href="#[]"
               title="Permalink to OperationRegistry.operator []">#</a></h4>
 <div class="doc">
-<p>Get an <a class="crossref" href="../nuxeo_automation/Operation.html">Operation</a> with the given id.</p>
+<p>Get an <a class="crossref" href="../nuxeo_client/Operation.html">Operation</a> with the given id.</p>
 <pre class="source">
 Operation operator[](String key) =&gt; ops.containsKey(key) ? ops[key] : chains[key];
 </pre>

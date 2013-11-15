@@ -40,7 +40,7 @@ class Blob {
 
  Blob({this.filename: "blob", content, this.mimetype}) {
    if (content is String) {
-     this.content = encodeUtf8(content);
+     this.content = UTF8.encode(content);
    } else if (content is List&lt;int&gt;) {
      this.content = content;
    }
@@ -66,7 +66,7 @@ only.</p>
 <pre class="source">
 Blob({this.filename: "blob", content, this.mimetype}) {
  if (content is String) {
-   this.content = encodeUtf8(content);
+   this.content = UTF8.encode(content);
  } else if (content is List&lt;int&gt;) {
    this.content = content;
  }
