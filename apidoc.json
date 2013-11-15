@@ -1,1 +1,1 @@
-{"name":"dart:","description":"Dart System Libraries","libraries":[{"refId":"http_client"},{"refId":"nuxeo_automation_client"},{"refId":"nuxeo_client"},{"refId":"nuxeo_rest_client"},{"name":"package:unmodifiable_collection/unmodifiable_collection.dart","refId":"unmodifiable_collection"}],"revision":"0","location":"0","dependencies":[]}
+{"name":"dart:","description":"Dart System Libraries","libraries":[{"refId":"http_client"},{"refId":"nuxeo_automation_client"},{"refId":"nuxeo_client"},{"refId":"nuxeo_rest_client"}],"revision":"0","location":"0","dependencies":[]}
