@@ -71,7 +71,6 @@ class Pageable<T> extends IterableBase<T> {
   int totalSize,
       currentPageIndex,
       currentPageSize,
-      pageCount,
       maxPageSize,
       numberOfPages,
       pageSize;
