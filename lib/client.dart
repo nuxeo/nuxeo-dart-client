@@ -47,8 +47,9 @@ import 'dart:mirrors';
 import 'package:logging/logging.dart';
 import 'http.dart' as http;
 import 'rest.dart' as rest;
-export 'rest.dart' show RemoteDocument;
+export 'rest.dart' show RemoteDocument, Request;
 import 'automation.dart' as rpc;
+export 'automation.dart' show OperationRequest;
 
 part 'src/adapter.dart';
 part 'src/login.dart';
