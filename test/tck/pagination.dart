@@ -46,7 +46,7 @@ void testPagination(nuxeo.Client nx) {
             "page" : 0,
             "queryParams" : root.uid
           })
-          .then(expectAsync1((nuxeo.PaginableDocuments docs) {
+          .then(expectAsync1((nuxeo.Pageable<nuxeo.Document> docs) {
             expect(docs, hasLength(2));
             expect(docs.pageSize, equals(2));
             expect(docs.pageCount, equals(2));
@@ -63,7 +63,7 @@ void testPagination(nuxeo.Client nx) {
             "page" : 1,
             "queryParams" : root.uid
           })
-          .then(expectAsync1((nuxeo.PaginableDocuments docs) {
+          .then(expectAsync1((nuxeo.Pageable<nuxeo.Document> docs) {
             expect(docs, hasLength(1));
             expect(docs.pageSize, equals(2));
             expect(docs.pageCount, equals(2));

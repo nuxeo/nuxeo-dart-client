@@ -20,6 +20,9 @@ class Document {
   String type;
   String state;
   String versionLabel;
+  bool isCheckedOut;
+  String title;
+  DateTime lastModified;
   List<String> facets;
 
   Map<String, dynamic> properties = {};
@@ -31,6 +34,9 @@ class Document {
     type = json["type"],
     state = json["state"],
     versionLabel = json["versionLabel"],
+    isCheckedOut = json["isCheckedOut"],
+    title = json["title"],
+    lastModified = DateTime.parse(json["lastModified"]),
     facets = json["facets"] {
 
     if (json.containsKey("properties")) {
@@ -56,17 +62,27 @@ class Document {
     return properties[key];
   }
 
+  toString() => properties.toString();
 }
 
-class PaginableDocuments { //implements Iterable<Document> {
+class Pageable<T> extends IterableBase<T> {
 
-  Iterable<Document> docs;
+  Iterable<T> entries;
   int totalSize,
-      pageIndex,
-      pageSize,
-      pageCount;
+      currentPageIndex,
+      currentPageSize,
+      pageCount,
+      maxPageSize,
+      numberOfPages,
+      pageSize;
+  bool isLastPageAvailable,
+       isNextPageAvailable,
+       isPreviousPageAvailable,
+       isSortable;
 
-  PaginableDocuments(this.docs);
+  Pageable(this.entries) : super();
 
-  int get length => docs.length;
+  int get length => entries.length;
+
+  get iterator => entries.iterator;
 }
