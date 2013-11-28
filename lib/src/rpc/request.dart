@@ -5,7 +5,7 @@ part of nuxeo_automation_client;
  * This class implements the [call] method so it can be invoked as a [Function].
  * Tipically this is called through the [OperationRegistry].
  */
-class OperationRequest extends nx.Request {
+class OperationRequest extends nx.BaseRequest {
 
   static final Logger LOG = new Logger("nuxeo.client.request");
 

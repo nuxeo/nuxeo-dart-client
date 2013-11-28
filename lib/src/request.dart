@@ -2,6 +2,7 @@ part of nuxeo_client;
 
 const CTYPE_AUTOMATION = "application/json+nxautomation";
 const CTYPE_ENTITY = "application/json+nxentity";
+const CTYPE_JSON = "application/json";
 const CTYPE_REQUEST_NOCHARSET = "application/json+nxrequest";
 const CTYPE_MULTIPART_RELATED = "multipart/related";
 const CTYPE_MULTIPART_MIXED = "multipart/mixed";
@@ -12,7 +13,7 @@ const HEADER_NX_VOIDOP = "X-NXVoidOperation";
 const HEADER_NX_TX_TIMEOUT = "Nuxeo-Transaction-Timeout";
 const HEADER_NX_REPOSITORY = "X-NXRepository";
 
-class Request {
+abstract class BaseRequest {
 
   static final Logger LOG = new Logger("nuxeo.client.request");
 
@@ -24,7 +25,7 @@ class Request {
 
   AutomationUploader _batchUploader;
 
-  Request(this.uri, this.nxClient, {
+  BaseRequest(this.uri, this.nxClient, {
       this.repo, this.execTimeout, this.uploadTimeout}) {
   }
 
@@ -64,7 +65,8 @@ class Request {
   handleResponse(response) {
     var body = response.body;
 
-    if (response.headers["content-type"] == CTYPE_ENTITY) {
+    if (response.headers["content-type"] == CTYPE_ENTITY ||
+        response.headers["content-type"] == CTYPE_JSON) {
       LOG.finest("Response: $body");
 
       var json = JSON.decode(body);
@@ -72,8 +74,8 @@ class Request {
       switch (json["entity-type"]) {
         case "document":
         case "adapter":
-          _createEntity(json);
-          break;
+          return _createEntity(json);
+
         case "documents":
         case "adapters":
 

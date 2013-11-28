@@ -1,6 +1,6 @@
 part of nuxeo_rest_client;
 
-class Request extends nx.Request {
+class Request extends nx.BaseRequest {
 
   static final Logger LOG = new Logger("nuxeo.client.request");
 
