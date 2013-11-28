@@ -28,14 +28,7 @@ class RemoteDocument implements nx.Document {
 
   save() => nuxeo.doc(doc.uid).update(changeSet.toMap());
 
-  get repository => doc.repository;
-  get uid => doc.uid;
-  get path => doc.path;
-  get type => doc.type;
-  get state => doc.state;
-  get versionLabel => doc.versionLabel;
-  get facets => doc.facets;
-  get properties => doc.properties;
+  noSuchMethod(Invocation invocation) => reflect(doc).delegate(invocation);
 }
 
 class ChangeSet {
