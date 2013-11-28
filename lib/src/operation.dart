@@ -11,6 +11,7 @@ class Operation {
   String description;
   String url;
   Map<String, OperationParam> params;
+  List<OperationMethod> methods;
 
   Operation._internal();
 
@@ -22,6 +23,12 @@ class Operation {
       params[param.name] = param;
     });
 
+    var signature = json["signature"];
+    var methods = [];
+    for (int i = 0; i < signature.length;) {
+      methods.add(new OperationMethod(signature[i++], signature[i++]));
+    }
+
     return new Operation._internal()
     ..id = json["id"]
     ..label = json["label"]
@@ -29,11 +36,17 @@ class Operation {
     ..category = json["category"]
     ..requires = json["requires"]
     ..url = json["url"]
-    ..params = params;
+    ..params = params
+    ..methods = methods;
   }
 
   OperationParam operator [](String key) => params[key];
 
+}
+
+class OperationMethod {
+  String input, output;
+  OperationMethod(this.input, this.output);
 }
 
 /**
