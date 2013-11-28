@@ -1,7 +1,6 @@
 library http_browser;
 
 import 'dart:html' as html;
-import 'dart:convert' show UTF8;
 import 'dart:async';
 import '../http.dart' as base;
 
@@ -9,7 +8,8 @@ final LOG = base.LOG;
 
 class Response implements base.Response {
   Object response;
-  Response(this.response);
+  Map<String, String> headers;
+  Response(this.response, this.headers);
   get body => response;
 }
 
@@ -37,11 +37,12 @@ class Request extends base.Request {
   Future<Response> send([data]) {
     var completer = new Completer<Response>();
     request.onReadyStateChange.listen((e) {
-      if (request.readyState == html.HttpRequest.DONE &&
-          (request.status == 200)) {
-        completer.complete(new Response(request.response));
-      } else if (request.status == 500) {
-        completer.completeError(new Exception(request.statusText));
+      if (request.readyState == html.HttpRequest.DONE) {
+        if (request.status == 200) {
+          completer.complete(new Response(request.response, request.responseHeaders));
+        } else {
+          completer.completeError(new Exception(request.statusText));
+        }
       }
     });
     request.onError.listen((e) {
@@ -53,13 +54,13 @@ class Request extends base.Request {
       var formData = new html.FormData();
       data.data.forEach((k, v) {
         if (v is base.Blob) {
-          var blob = new html.Blob([UTF8.decode(v.content)], v.mimetype);
+          var blob = new html.Blob([v.content], v.mimetype);
           formData.appendBlob(k, blob, v.filename);
         }
       });
       request.send(formData);
     } else if (data is base.Blob) {
-      request.send(UTF8.decode(data.content));
+      request.send(data.content);
     } else {
       request.send(data);
     }

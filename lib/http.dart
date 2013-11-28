@@ -5,6 +5,7 @@ library http_client;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:logging/logging.dart';
 
 final Logger LOG = new Logger("http");
@@ -20,14 +21,16 @@ class MultipartFormData {
 
 class Blob {
   String filename;
-  List<int> content;
+  Uint8List content;
   String mimetype;
 
   Blob({this.filename: "blob", content, this.mimetype}) {
-    if (content is String) {
-      this.content = UTF8.encode(content);
-    } else if (content is List<int>) {
+    if (content is Uint8List) {
       this.content = content;
+    } else if (content is String) {
+      this.content = new Uint8List.fromList(UTF8.encode(content));
+    } else if (content is List<int>) {
+      this.content = new Uint8List.fromList(content);
     }
   }
 
@@ -36,6 +39,7 @@ class Blob {
 
 abstract class Response {
   get body;
+  get headers;
 }
 
 abstract class RequestHeaders {

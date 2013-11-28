@@ -13,6 +13,7 @@ class Response implements base.Response {
   Response(this._response);
 
   get body => _response.body;
+  get headers => _response.headers;
 
 }
 
