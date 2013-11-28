@@ -42,12 +42,15 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:math' as Math;
 import 'dart:convert' show JSON;
+@MirrorsUsed(metaTargets: 'EntityType')
+import 'dart:mirrors';
 import 'package:logging/logging.dart';
 import 'http.dart' as http;
 import 'rest.dart' as rest;
 export 'rest.dart' show RemoteDocument;
 import 'automation.dart' as rpc;
 
+part 'src/adapter.dart';
 part 'src/login.dart';
 part 'src/request.dart';
 part 'src/operation.dart';

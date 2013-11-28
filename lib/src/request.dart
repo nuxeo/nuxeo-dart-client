@@ -52,34 +52,76 @@ class Request {
     }
   }
 
-  handleResponse(response) {
-    var body = response.body;
-
-    LOG.finest("Response: $body");
-
-    var json = JSON.decode(body);
-
+  _createEntity(json) {
     switch (json["entity-type"]) {
       case "document":
         return new Document.fromJSON(json);
-        break;
-      case "documents":
-        var docs = json["entries"].map((doc) => new Document.fromJSON(doc));
+      default:
+        return BusinessAdapter.fromJSON(json);
+    }
+  }
 
-        if (!json.containsKey("isPaginable") || !json["isPaginable"]) {
-          return docs;
-        }
+  handleResponse(response) {
+    var body = response.body;
 
-        return new PaginableDocuments(docs)
+    if (response.headers["content-type"] == CTYPE_ENTITY) {
+      LOG.finest("Response: $body");
+
+      var json = JSON.decode(body);
+
+      switch (json["entity-type"]) {
+        case "document":
+        case "adapter":
+          _createEntity(json);
+          break;
+        case "documents":
+        case "adapters":
+
+          var entries = [];
+          json["entries"].forEach((entry) {
+            var entity = _createEntity(entry);
+            if (entity != null) {
+              entries.add(entity);
+            }
+          });
+
+          if (!json.containsKey("isPaginable") || !json["isPaginable"]) {
+            return entries;
+          }
+
+          // Find out the type of an entry
+          Type T = Object;
+          if (entries.isNotEmpty) {
+            T = entries.first.runtimeType;
+          } else {
+
+            if (json["entity-type"] == "documents") {
+              T = Document;
+            }
+            // We have no way to know the type for empty adapters list
+          }
+
+          return new Pageable(entries)
             ..totalSize = json["totalSize"]
-            ..pageIndex = json["pageIndex"]
-            ..pageSize = json["pageSize"]
-            ..pageCount = json["pageCount"];
+            ..currentPageIndex = json["currentPageIndex"]
+            ..currentPageSize = json["currentPageSize"]
+            ..isLastPageAvailable = json["isLasPageAvailable"]
+            ..isNextPageAvailable = json["isNextPageAvailable"]
+            ..isPreviousPageAvailable = json["isPreviousPageAvailable"]
+            ..isSortable = json["isSortable"]
+            ..maxPageSize = json["maxPageSize"]
+            ..numberOfPages = json["numberOfPages"]
+            ..pageSize = json["pageSize"];
 
-        break;
-      case "exception":
-        throw new Exception(json["message"]);
-        break;
+          break;
+        case "exception":
+          throw new Exception(json["message"]);
+
+        default:
+          return json["value"];
+      }
+    } else { // Everything else is a Blob ?!
+      return new http.Blob(content: body, mimetype: response.headers["content-type"]);
     }
   }
 }
