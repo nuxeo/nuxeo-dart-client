@@ -1,18 +1,9 @@
 part of tck;
 
-_cleanup(json) => json.replaceAll("\n", "").replaceAll("\r", "");
-
 void testMarshalling(nuxeo.Client nx) {
   group('Marshaling Extensions', () {
 
     group('Manage Complex Properties', () {
-
-      var creationFieldsJSON, updateFieldsJSON;
-
-      setUp(() => Future.wait([
-        getResource("test/resources/creationFields.json").then((json){ creationFieldsJSON = _cleanup(json); }),
-        getResource("test/resources/updateFields.json").then((json){ updateFieldsJSON = _cleanup(json); })]
-      ));
 
       var testDoc;
 
@@ -21,7 +12,7 @@ void testMarshalling(nuxeo.Client nx) {
         var creationProps = {
           "ds:tableName": "MyTable",
           "ds:attachments": ["att1", "att2", "att3"],
-          "ds:fields": creationFieldsJSON,
+          "ds:fields": JSON.encode(creationFieldsJSON),
           "dc:title": "testDoc"
         };
 
@@ -40,13 +31,13 @@ void testMarshalling(nuxeo.Client nx) {
         }));
       });
 
-      /*
+
       test("Update the document", () {
         nx.op("Document.Update")(
             input: "doc:${testDoc.path}",
             params: {
               "properties": {
-                "ds:fields": fieldsDataAsJSon
+                "ds:fields": JSON.encode(updateFieldsJSON)
               }
             }
         )
@@ -54,8 +45,83 @@ void testMarshalling(nuxeo.Client nx) {
           expect(doc.uid, isNotNull);
         }));
       });
-      */
+
 
     });
   });
 }
+
+var creationFieldsJSON = [
+    {
+        "fieldType": "string",
+        "description": "desc field0",
+        "roles": [
+            "Decision",
+            "Score"
+        ],
+        "name": "field0",
+        "columnName": "col0",
+        "sqlTypeHint": "whatever"
+    },
+    {
+        "fieldType": "string",
+        "description": "desc field1",
+        "roles": [
+            "Decision",
+            "Score"
+        ],
+        "name": "field1",
+        "columnName": "col1",
+        "sqlTypeHint": "whatever"
+    },
+    {
+        "fieldType": "string",
+        "description": "desc field2",
+        "roles": [
+            "Decision",
+            "Score"
+        ],
+        "name": "field2",
+        "columnName": "col2",
+        "sqlTypeHint": "whatever"
+    },
+    {
+        "fieldType": "string",
+        "description": "desc field3",
+        "roles": [
+            "Decision",
+            "Score"
+        ],
+        "name": "field3",
+        "columnName": "col3",
+        "sqlTypeHint": "whatever"
+    },
+    {
+        "fieldType": "string",
+        "description": "desc field4",
+        "roles": [
+            "Decision",
+            "Score"
+        ],
+        "name": "field4",
+        "columnName": "col4",
+        "sqlTypeHint": "whatever"
+    }
+];
+
+var updateFieldsJSON = [
+    {
+        "fieldType":"string",
+        "description":"desc fieldA",
+        "name":"fieldA",
+        "columnName":"colA",
+        "sqlTypeHint":"whatever"
+    },
+    {
+        "fieldType":"string",
+        "description":"desc fieldB",
+        "name":"fieldB",
+        "columnName":"colB",
+        "sqlTypeHint":"whatever"
+    }
+];

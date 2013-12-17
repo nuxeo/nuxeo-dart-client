@@ -7,6 +7,7 @@ import 'package:logging/logging.dart';
 import 'package:logging_handlers/logging_handlers_shared.dart';
 
 import 'dart:async';
+import 'dart:convert' show JSON;
 
 part 'tck/crud.dart';
 part 'tck/pagination.dart';
@@ -15,10 +16,6 @@ part 'tck/marshalling.dart';
 part 'tck/rest.dart';
 
 var LOG = new Logger("nuxeo.automation.TCK");
-
-typedef Future ResourceHandler(filename);
-
-ResourceHandler getResource;
 
 void run(nuxeo.Client nx) {
   // Setup logging
