@@ -6,13 +6,18 @@ import 'tck.dart' as TCK;
 
 main() {
   useHtmlEnhancedConfiguration();
-  TCK.getResource = (String filename) => HttpRequest.getString(filename);
 
-  var nx = new nuxeo.Client();
+  var url = "http://localhost:8080/nuxeo";
+  var nx = new nuxeo.Client(url: url);
 
   nx.login
-    .catchError((e) =>
-        document.body.append(new Element.tag("div")..text = "Error: ${e.message}"))
-     .then((_) => TCK.run(nx));
+    .catchError((e) {
+        document.body.append(new Element.tag("div")..text = "Failed to login to Nuxeo at $url ${e.message}");
+        return null;
+    })
+     .then((login) {
+       if (login != null)
+        TCK.run(nx);
+     });
 }
 

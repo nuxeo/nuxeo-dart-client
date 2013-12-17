@@ -40,8 +40,6 @@ class Request extends base.Request {
       if (request.readyState == html.HttpRequest.DONE) {
         if (request.status == 200) {
           completer.complete(new Response(request.response, request.responseHeaders));
-        } else {
-          completer.completeError(new Exception(request.statusText));
         }
       }
     });
