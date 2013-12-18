@@ -77,10 +77,10 @@ nuxeoctl mp-install nuxeo-rest-api --accept true
 <?xml version="1.0"?>
 <component name="org.nuxeo.ecm.platform.web.dart.tck">
  <extension target="org.nuxeo.ecm.platform.web.common.requestcontroller.service.RequestControllerService" point="corsConfig">
-    <corsConfig name="dartTCK" allowOrigin="http://127.0.0.1:3030">
+    <corsConfig name="dartTCK" allowOrigin="http://127.0.0.1:3030" supportedMethods="GET,POST,HEAD,OPTIONS,PUT,DELETE">
       <pattern>/nuxeo/site/automation.*</pattern>
     </corsConfig>
-    <corsConfig name="dartTCKApi" allowOrigin="http://127.0.0.1:3030">
+    <corsConfig name="dartTCKApi" allowOrigin="http://127.0.0.1:3030" supportedMethods="GET,POST,HEAD,OPTIONS,PUT,DELETE">
       <pattern>/nuxeo/api.*</pattern>
     </corsConfig>
   </extension>
