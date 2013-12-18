@@ -76,10 +76,12 @@ nuxeoctl mp-install nuxeo-rest-api --accept true
 ```xml
 <?xml version="1.0"?>
 <component name="org.nuxeo.ecm.platform.web.dart.tck">
-  <extension target="org.nuxeo.ecm.platform.web.common.requestcontroller.service.RequestControllerService" point="corsConfig">
+ <extension target="org.nuxeo.ecm.platform.web.common.requestcontroller.service.RequestControllerService" point="corsConfig">
     <corsConfig name="dartTCK" allowOrigin="http://127.0.0.1:3030">
-      <pattern>/nuxeo/api/.*</pattern>
-      <pattern>/nuxeo/site/automation/.*</pattern>
+      <pattern>/nuxeo/site/automation.*</pattern>
+    </corsConfig>
+    <corsConfig name="dartTCKApi" allowOrigin="http://127.0.0.1:3030">
+      <pattern>/nuxeo/api.*</pattern>
     </corsConfig>
   </extension>
 </component>
@@ -95,7 +97,14 @@ curl --verbose -u Administrator:Administrator -H "Origin: http://127.0.0.1:3030"
 #### Run the TCK
 
 * Start Nuxeo server
+* Run the console based tests
+
+     dart test/console_test_harness.dart    
+
 * Run the browser tests harness at test/browser_test_harness.dart
+
+     use 'Run in Dartium' from Dart Editor
+     
 * Check the browser for the test results
 
 ## Authors
