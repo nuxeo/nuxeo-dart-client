@@ -3,7 +3,7 @@ library hop_runner;
 import 'dart:async';
 import 'package:hop/hop.dart';
 import 'package:hop/hop_tasks.dart';
-import 'package:hop/src/hop_tasks_experimental.dart' as dartdoc;
+import 'package:hop_docgen/hop_docgen.dart';
 import 'package:logging/logging.dart';
 
 import '../test/console_test_harness.dart' as test;
@@ -14,11 +14,7 @@ void main(List<String> args) {
 
   addTask('test', createUnitTestTask(test.runTCK));
 
-  addTask('docs', createDartDocTask(
-      _getLibs,
-      linkApi: true,
-      postBuild: dartdoc.createPostBuild(_docsCfg),
-      excludeLibs: ['logging', 'unmodifiable_collection']));
+  addTask('docs', createDocGenTask('../compiled_dartdoc_viewer'));
 
   runHop(args, printAtLogLevel: Level.ALL);
 }
