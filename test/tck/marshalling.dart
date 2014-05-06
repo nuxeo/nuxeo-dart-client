@@ -18,14 +18,15 @@ void testMarshalling(nuxeo.Client nx) {
 
         var properties = new nuxeo.PropertyMap(creationProps).toString();
 
-        return nx.op("Document.Create")(
-            input:"doc:/",
-            params: {
+        return nx.op("Document.Create")
+            .input("doc:/")
+            .params({
               "type" : "DataSet",
               "name" : "testDoc",
               "properties" : properties
         })
-        .then(expectAsync1((nuxeo.Document doc) {
+        .call()
+        .then(expectAsync((nuxeo.Document doc) {
           expect(doc.uid, isNotNull);
           testDoc = doc;
         }));
@@ -33,15 +34,15 @@ void testMarshalling(nuxeo.Client nx) {
 
 
       test("Update the document", () {
-        nx.op("Document.Update")(
-            input: "doc:${testDoc.path}",
-            params: {
+        nx.op("Document.Update")
+            .input("doc:${testDoc.path}")
+            .params({
               "properties": {
                 "ds:fields": JSON.encode(updateFieldsJSON)
               }
-            }
-        )
-        .then(expectAsync1((nuxeo.Document doc) {
+            })
+        .call()
+        .then(expectAsync((nuxeo.Document doc) {
           expect(doc.uid, isNotNull);
         }));
       });

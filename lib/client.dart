@@ -59,6 +59,15 @@ part 'src/uploader.dart';
 part 'src/registry.dart';
 part 'src/document.dart';
 
+/// Nuxeo [Client] Defaults
+class DEFAULT {
+  static const USERNAME = "Administrator";
+  static const PASSWORD = "Administrator";
+  static const TIMEOUT = const Duration(seconds: 3);
+  static const SCHEMAS = const [];
+  static const REPOSITORY = "default";
+}
+
 /**
  * [Automation] client.
  */
@@ -69,14 +78,26 @@ abstract class Client {
   /// The [http.Client] to use
   http.Client httpClient;
 
+  String username, password;
   Uri _rpcUri, _restUri;
+  Duration timeout;
+  String repositoryName;
+  List<String> schemas;
+  Map headers;
 
-  Client(this.httpClient, String url) {
-    _rpcUri = Uri.parse(url + "/site/automation");
-    _restUri = Uri.parse(url + "/api/v1");
+  Introspection config;
+
+  Client(this.httpClient, {this.timeout, this.schemas, this.repositoryName, this.headers}) {
+    _rpcUri = Uri.parse("${httpClient.uri}/site/automation");
+    _restUri = Uri.parse("${httpClient.uri}/api/v1");
+
+    config = new Introspection(this);
   }
 
   /* REST */
+  rest.Request newRequest(String path, {String repo, Duration execTimeout}) =>
+        new rest.Request(Uri.parse("$_restUri/$path"), this);
+
   rest.Request doc(String uidOrPath, {String repo}) {
     var path;
     if (uidOrPath.startsWith("/")) {
@@ -87,17 +108,15 @@ abstract class Client {
     } else {
       path = "id/$uidOrPath";
     }
-    return new rest.Request(Uri.parse("$_restUri/$path"), this, repo: repo);
+    return newRequest(path, repo: repo);
   }
 
-  rest.Request user(String userId, {String repo}) =>
-      new rest.Request(Uri.parse("$_restUri/user/$userId"), this, repo: repo);
+  rest.Request user(String userId, {String repo}) => newRequest("/user/$userId", repo: repo);
 
-  rest.Request group(String groupId, {String repo}) =>
-      new rest.Request(Uri.parse("$_restUri/group/$groupId"), this, repo: repo);
+  rest.Request group(String groupId, {String repo}) => newRequest("/group/$groupId", repo: repo);
 
-  rest.Request directory(String directoryId, {String repo}) =>
-      new rest.Request(Uri.parse("$_restUri/directory/$directoryId"), this, repo: repo);
+  rest.Request directory(String directoryId, {String repo}) => newRequest("/directory/$directoryId", repo: repo);
+
 
   /* RPC */
 
@@ -107,15 +126,31 @@ abstract class Client {
   rpc.OperationRequest op(String id, {
     execTimeout: const Duration(seconds: 30),
     uploadTimeout: const Duration(minutes: 20)
-  }) => new rpc.OperationRequest(id, _rpcUri, this,
-      execTimeout: execTimeout,
-      uploadTimeout: uploadTimeout);
+  }) => new rpc.OperationRequest(id, _rpcUri, this);
 
   Future<OperationRegistry> get registry => OperationRegistry.get(_rpcUri, httpClient);
 
   /// Logs in to the Nuxeo server and returns a [Login]
-  Future<Login> get login => rpc.login(_rpcUri, httpClient);
+  Future<Login> login() => rpc.login(_rpcUri, httpClient);
 
+}
+
+/// Doctypes Introspection API
+class Introspection {
+
+  Client client;
+
+  Introspection(this.client);
+
+  get uri => "${client._restUri}/config";
+
+  fetch(path) => client.httpClient.get(Uri.parse("$uri/$path")).send();
+
+  Future<http.Response> types([String doctype = ""]) => fetch("types/$doctype");
+
+  Future<http.Response> schemas([String schema = ""]) => fetch("schemas/$schema");
+
+  Future<http.Response> facets([String facet = ""]) => fetch("facets/$facet");
 }
 
 /**

@@ -10,11 +10,17 @@ class Client extends nx.Client {
     String url : "http://localhost:8080/nuxeo",
     String username : "Administrator",
     String password : "Administrator",
-    String realm : "default"}) :
+    String realm : "default",
+    Duration timeout : nx.DEFAULT.TIMEOUT,
+    List schemas : nx.DEFAULT.SCHEMAS,
+    String repository : nx.DEFAULT.REPOSITORY}) :
     super(new http.Client(url,
         username: username,
         password: password,
-        realm: realm), url);
+        realm: realm),
+        timeout: timeout,
+        schemas: schemas,
+        repositoryName: repository);
 
 }
 

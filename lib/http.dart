@@ -10,6 +10,7 @@ import 'package:logging/logging.dart';
 
 final Logger LOG = new Logger("http");
 
+const HEADER_AUTHORIZATION = "Authorization";
 const HEADER_CONTENT_TYPE = "content-type";
 
 class MultipartFormData {
@@ -44,6 +45,7 @@ abstract class Response {
 
 abstract class RequestHeaders {
   set(String name, String value);
+  get asMap;
 }
 
 abstract class RequestUpload {
@@ -55,12 +57,22 @@ class RequestEvent {
 }
 
 abstract class Request {
+  String get method;
   RequestHeaders get headers;
   get upload;
   Future<Response> send([data]);
 }
 
+typedef Request Method(Uri uri);
+
 abstract class Client {
+  String username, password;
+  Uri uri;
+  /// [username] and [password] for authentication
+  /// [url] is the base URL
+  Client({this.username, this.password, String url: ""}) {
+    uri = Uri.parse(url);
+  }
   Request method(String method, Uri uri, {bool multipart:false});
   Request get(Uri uri) => method("GET", uri);
   Request post(Uri uri, {bool multipart:false}) => method("POST", uri, multipart: multipart);

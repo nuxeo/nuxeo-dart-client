@@ -11,47 +11,50 @@ class OperationRequest extends nx.BaseRequest {
 
   String id;
   Uri _opUri;
-  Duration execTimeout, uploadTimeout;
+  Map<String, Object> _params = {};
+  var _input;
+  Map<String, String> _context  = {};
+  bool _voidOperation = false;
 
   nx.AutomationUploader _batchUploader;
 
-  OperationRequest(this.id, Uri uri, nx.Client client, {
-      this.execTimeout, this.uploadTimeout}) : super(uri, client) {
+  OperationRequest(this.id, Uri uri, nx.Client client) : super(uri, client) {
     _opUri = Uri.parse("$uri/$id");
   }
 
   Future<nx.Operation> get op => nx.OperationRegistry.get(uri, httpClient).then((registry) => registry[id]);
 
-  /// Call the operation.
+  // Fluent API
+  OperationRequest params(Map params) => this.._params.addAll(params);
+  OperationRequest param(String name, value) => this.._params[name] = value;
+  OperationRequest context(Map context) => this.._context.addAll(context);
+  OperationRequest input(input) => this.._input = input;
+  OperationRequest voidOperation(voidOperation) => this.._voidOperation = voidOperation;
+
+  bool get isMultipart => (_input is http.Blob);
+
+  /// Executes the request.
   /// Returns a [Future]
   /// Throws [ClientException]
-  Future call({
-          dynamic input: null,
-          Map<String, Object> params: null,
-          Map<String, String> context: null,
-          String repository,
-          String documentSchemas: "dublincore",
-          bool voidOp: false}) => op.then((nx.Operation op) {
+  Future<http.Response> execute([arguments]) => op.then((nx.Operation op) {
 
       if (op == null) {
         throw new ArgumentError("No such operation: $id");
       }
 
+      // Set the automation parameters
       var data = {};
+      if (_params != null) data["params"] = _params;
+      if (_input != null && !isMultipart) data["input"] = _input;
+      if (_context != null) data["context"] = _context;
 
-      // Setup the parameters
-      if (params != null) {
-        data["params"] = {};
-        params.forEach((key, value) {
-          var param = op[key];
-          if (param == null) {
-            throw new ArgumentError("No such parameter '$key' for operation ${op.id}.");
-          }
-          if (value != null) {
-            data["params"][key] = value;
-          }
-        });
-      }
+      // Check the parameters
+      data["params"].forEach((key, value) {
+        var param = op[key];
+        if (param == null) {
+          throw new ArgumentError("No such parameter '$key' for operation ${op.id}.");
+        }
+      });
 
       var targetUri = _opUri;
 
@@ -62,42 +65,27 @@ class OperationRequest extends nx.BaseRequest {
         }
         data["params"]["operationId"] = id;
         data["params"]["batchId"] = batchId;
-
         // Override the target url
         targetUri = Uri.parse("${uri}/batch/execute");
       }
 
-      var isMultipart = (input is http.Blob);
-
-      // Setup the input
-      if (input != null && !isMultipart) {
-        data["input"] = input;
-      }
-
-      // Setup the context
-      if (context != null) {
-        data["context"] = context;
-      }
-
-      var request = httpClient.post(targetUri, multipart: isMultipart);
+      // Create the request
+      request = httpClient.post(targetUri, multipart: isMultipart);
 
       // Setup the headers
-      setRequestHeaders(request, repository: repository, documentSchemas: documentSchemas);
+      setRequestHeaders();
 
-      request.headers.set(nx.HEADER_NX_VOIDOP, voidOp.toString());
+      request.headers.set(nx.HEADER_NX_VOIDOP, _voidOperation.toString());
 
       var json = JSON.encode(data);
       LOG.finest("Request: $json");
-
-      // The data to send
-      var requestData;
 
       // check for multipart request
       if (isMultipart) {
         var params = new http.Blob(content: json, mimetype: nx.CTYPE_REQUEST_NOCHARSET, filename: "request");
         var formData = new http.MultipartFormData();
         formData.append("request", params);
-        formData.append(input.filename, input);
+        formData.append(_input.filename, _input);
         requestData = formData;
       } else {
         // Set the content type
@@ -105,14 +93,7 @@ class OperationRequest extends nx.BaseRequest {
         requestData = json;
       }
 
-      return request
-          .send(requestData)
-          .catchError((e) {
-            throw new nx.ClientException(e.message);
-          })
-          .then(handleResponse);
-
-
+      return request.send(requestData);
   });
 
   String get batchId => _batchUploader.batchId;
@@ -120,7 +101,7 @@ class OperationRequest extends nx.BaseRequest {
 
   nx.AutomationUploader get uploader {
     if (_batchUploader == null) {
-      _batchUploader = new nx.AutomationUploader(uri, httpClient);
+      _batchUploader = new nx.AutomationUploader(uri, httpClient, uploadTimeout: timeout);
     }
     return _batchUploader;
   }

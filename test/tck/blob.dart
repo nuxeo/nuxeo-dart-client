@@ -1,19 +1,21 @@
 part of tck;
 
 void testBlobs(nuxeo.Client nx) {
+
   group('Direct Blob upload', () {
 
     nuxeo.Document root;
 
     test('Create root', () =>
-      nx.op("Document.Create")(
-          input:"doc:/",
-          params: {
+      nx.op("Document.Create")
+      .input("doc:/")
+      .params({
             "type" : "Folder",
             "name" : "TestBlobs",
             "properties" : "dc:title=Test Blobs \ndc:description=Simple container"
           })
-      .then(expectAsync1((nuxeo.Document doc) {
+       .call()
+      .then(expectAsync((nuxeo.Document doc) {
         expect(doc.uid, isNotNull);
         root = doc;
       }))
@@ -26,12 +28,13 @@ void testBlobs(nuxeo.Client nx) {
           mimetype: "text/plain",
           filename: "testMe.txt");
 
-      return nx.op("FileManager.Import")(
-          input: blob,
-          context: {
+      return nx.op("FileManager.Import")
+          .input(blob)
+          .context({
             "currentDocument": root.path
           })
-      .then(expectAsync1((nuxeo.Document doc) {
+          .call()
+      .then(expectAsync((nuxeo.Document doc) {
         expect(doc.type, equals("Note"));
       }));
     });
@@ -43,22 +46,23 @@ void testBlobs(nuxeo.Client nx) {
           mimetype: "application/something",
           filename: "testBin.bin");
 
-      return nx.op("FileManager.Import")(
-          input: blob,
-          context: {
+      return nx.op("FileManager.Import")
+          .input(blob)
+          .context({
             "currentDocument": root.path
           })
-      .then(expectAsync1((nuxeo.Document doc) {
+          .call()
+      .then(expectAsync((nuxeo.Document doc) {
         expect(doc.type, equals("File"));
       }));
     });
 
     test('Read children', () {
       expect(root, isNotNull);
-      nx.op("Document.GetChildren")(
-          input: "doc:${root.path}"
-       )
-      .then(expectAsync1((Iterable<nuxeo.Document> docs) {
+      nx.op("Document.GetChildren")
+      .input("doc:${root.path}")
+      .call()
+      .then(expectAsync((Iterable<nuxeo.Document> docs) {
         expect(docs, hasLength(2));
       }));
     });
@@ -71,14 +75,15 @@ void testBlobs(nuxeo.Client nx) {
     nuxeo.Document root;
 
     test('Create root', () =>
-      nx.op("Document.Create")(
-          input:"doc:/",
-          params: {
+      nx.op("Document.Create")
+      .input("doc:/")
+      .params({
             "type" : "Folder",
             "name" : "TestBlobs",
             "properties" : "dc:title=Test Blobs Batch \ndc:description=Simple container"
-          })
-      .then(expectAsync1((nuxeo.Document doc) {
+       })
+      .call()
+      .then(expectAsync((nuxeo.Document doc) {
         expect(doc.uid, isNotNull);
         root = doc;
       }))
@@ -94,7 +99,7 @@ void testBlobs(nuxeo.Client nx) {
           filename: "testMe.txt");
 
       return op.uploader.uploadFile(blob)
-      .then(expectAsync1((nuxeo.Upload upload) {
+      .then(expectAsync((nuxeo.Upload upload) {
         expect(upload.fileIndex, equals(0));
       }));
     });
@@ -107,27 +112,28 @@ void testBlobs(nuxeo.Client nx) {
           filename: "testBin.bin");
 
       return op.uploader.uploadFile(blob)
-      .then(expectAsync1((nuxeo.Upload upload) {
+      .then(expectAsync((nuxeo.Upload upload) {
         expect(upload.fileIndex, equals(1));
       }));
     });
 
     test('Do import', () {
       expect(root, isNotNull);
-      return op(context : {
+      return op.context({
         "currentDocument" : root.path
       })
-      .then(expectAsync1((Iterable<nuxeo.Document> docs) {
+      .call()
+      .then(expectAsync((Iterable<nuxeo.Document> docs) {
         expect(docs, hasLength(2));
       }));
     });
 
     test('Read children', () {
       expect(root, isNotNull);
-      nx.op("Document.GetChildren")(
-          input: "doc:${root.path}"
-       )
-      .then(expectAsync1((Iterable<nuxeo.Document> docs) {
+      nx.op("Document.GetChildren")
+      .input("doc:${root.path}")
+      .call()
+      .then(expectAsync((Iterable<nuxeo.Document> docs) {
         expect(docs, hasLength(2));
       }));
     });
@@ -142,14 +148,15 @@ void testBlobs(nuxeo.Client nx) {
     var filename = "testMe.txt";
 
     test('Create root', () =>
-      nx.op("Document.Create")(
-          input:"doc:/",
-          params: {
+      nx.op("Document.Create")
+      .input("doc:/")
+      .params({
             "type" : "Folder",
             "name" : "TestBlobsUpdate",
             "properties" : "dc:title=Test Blobs update via Batch \ndc:description=Simple container"
-          })
-      .then(expectAsync1((nuxeo.Document doc) {
+      })
+      .call()
+      .then(expectAsync((nuxeo.Document doc) {
         expect(doc.uid, isNotNull);
         root = doc;
       }))
@@ -157,13 +164,14 @@ void testBlobs(nuxeo.Client nx) {
 
     test('Create Child1', () {
       expect(root, isNotNull);
-      return nx.op("Document.Create")(
-          input:"doc:${root.path}",
-          params: {
+      return nx.op("Document.Create")
+          .input("doc:${root.path}")
+          .params({
             "type" : "File",
             "name" : "TestFile1"
           })
-      .then(expectAsync1((nuxeo.Document doc) {
+          .call()
+      .then(expectAsync((nuxeo.Document doc) {
         expect(doc.uid, isNotNull);
         child = doc;
       }));
@@ -178,7 +186,7 @@ void testBlobs(nuxeo.Client nx) {
           filename: filename);
 
       return op.uploader.uploadFile(blob)
-      .then(expectAsync1((nuxeo.Upload upload) {
+      .then(expectAsync((nuxeo.Upload upload) {
         expect(upload.fileIndex, equals(0));
       }));
     });
@@ -196,15 +204,14 @@ void testBlobs(nuxeo.Client nx) {
         }
       };
 
-      nx.op("Document.Update")(
-        documentSchemas: "common,dublincore,file",
-        params: {
+      nx.op("Document.Update")
+      .params({
           "save": "true",
           "properties": properties
-        },
-        input: "doc:${child.uid}"
-      )
-      .then(expectAsync1((nuxeo.Document doc) {
+      })
+      .input("doc:${child.uid}")
+      .call()
+      .then(expectAsync((nuxeo.Document doc) {
         expect(doc.properties['dc:description'], properties['dc:description']);
         expect(doc.properties['file:content']['name'], filename);
       }));

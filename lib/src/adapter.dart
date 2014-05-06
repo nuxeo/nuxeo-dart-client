@@ -7,7 +7,7 @@ class EntityType {
 }
 
 /**
- * BusinessAdapater
+ * BusinessAdapter
  */
 class BusinessAdapter {
   static final _classMirrors = {};

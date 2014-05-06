@@ -6,8 +6,16 @@ import 'http/client.dart' as http;
 
 class Client extends nx.Client {
 
-  Client({String url : "http://localhost:8080/nuxeo"}) :
-    super(new http.Client(), url);
+  Client({
+    String url : "http://localhost:8080/nuxeo",
+    String username : nx.DEFAULT.USERNAME,
+    String password : nx.DEFAULT.PASSWORD,
+    Duration timeout : nx.DEFAULT.TIMEOUT,
+    List schemas : nx.DEFAULT.SCHEMAS,
+    String repository : nx.DEFAULT.REPOSITORY}) :
+    super(
+        new http.Client(username: username, password: password, url: url),
+        timeout: timeout, schemas: schemas, repositoryName: repository);
 
 }
 

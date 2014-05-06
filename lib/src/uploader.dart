@@ -64,7 +64,7 @@ class AutomationUploader {
   // update upload speed every second
   int uploadRateRefreshTime;
 
-  int uploadTimeout;
+  Duration uploadTimeout;
 
   String batchId;
   bool _sendingRequestsInProgress = false;
@@ -79,7 +79,7 @@ class AutomationUploader {
     this.directUpload : true,
     // update upload speed every second
     this.uploadRateRefreshTime : 1000,
-    this.uploadTimeout : 0
+    this.uploadTimeout
   }) {
     batchId = "batch-" +
         new DateTime.now().millisecondsSinceEpoch.toString() +
@@ -158,7 +158,7 @@ class AutomationUploader {
       //})(xhr);
 
       // compute timeout in seconds and integer
-      int uploadTimeoutS = (5 + (uploadTimeout / 1000)).toInt();
+      int uploadTimeoutS = (uploadTimeout + new Duration(seconds: 5)).inSeconds;
 
       LOG.info("starting upload for file $_uploadIdx");
 

@@ -1,6 +1,7 @@
 library nuxeo_rest_client;
 
 import 'dart:convert' show JSON;
+@MirrorsUsed(targets: nx.Document)
 import 'dart:mirrors';
 
 import 'package:logging/logging.dart';

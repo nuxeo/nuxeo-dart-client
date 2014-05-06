@@ -14,38 +14,33 @@ class Response implements base.Response {
 }
 
 class Headers implements base.RequestHeaders {
-  html.HttpRequest request;
-  Headers(this.request);
-  set(name, value) => request.setRequestHeader(name, value);
+  Map<String, String> _headers = {};
+  set(name, value) => _headers[name] = value;
+  get asMap => _headers;
 }
 
 class Request extends base.Request {
-  html.HttpRequest request;
+  Headers headers = new Headers();
+  bool withCredentials = false;
+  String method;
+  Uri _uri;
 
-  Request(String method, Uri uri) {
-    LOG.finest("$method $uri");
-    request = new html.HttpRequest()
-    ..open(method, uri.toString(), async: true)
-    ..withCredentials = true
-    ..setRequestHeader("Accept", "*/*"); // explicitly set the accept header to make FF work
+  Request(this.method, this._uri, {String username, String password}) {
+    LOG.finest("$method $_uri");
+
+    headers.set("Accept", "*/*"); // explicitly set the accept header to make FF work
+    // Set the basic auth header
+    if (username != null && password != null) {
+      headers.set(base.HEADER_AUTHORIZATION, 'Basic ' + html.window.btoa("$username:$password"));
+      withCredentials = true;
+    }
   }
 
-  get upload => request.upload;
-
-  get headers => new Headers(request);
+  // TODO(nfgs) - Fix this!
+  get upload => null;
 
   Future<Response> send([data]) {
-    var completer = new Completer<Response>();
-    request.onReadyStateChange.listen((e) {
-      if (request.readyState == html.HttpRequest.DONE) {
-        if (request.status == 200) {
-          completer.complete(new Response(request.response, request.responseHeaders));
-        }
-      }
-    });
-    request.onError.listen((e) {
-      completer.completeError(new Exception(request.statusText));
-    });
+    var sendData = data;
 
     // Convert to html.FormData and html.Blob
     if (data is base.MultipartFormData) {
@@ -56,19 +51,25 @@ class Request extends base.Request {
           formData.appendBlob(k, blob, v.filename);
         }
       });
-      request.send(formData);
+      sendData = formData;
     } else if (data is base.Blob) {
-      request.send(data.content);
-    } else {
-      request.send(data);
+      sendData = data.content;
     }
-    return completer.future;
+
+    return html.HttpRequest.request(
+        _uri.toString(),
+        method: method,
+        withCredentials: withCredentials,
+        requestHeaders: headers.asMap,
+        sendData: sendData)
+    .then((request) => new Response(request.response, request.responseHeaders));
   }
 }
 
 class Client extends base.Client {
-
-  Request method(String method, Uri uri, {bool multipart:false}) => new Request(method, uri);
-
+  /// [username] and [password] for authentication
+  /// [url] is the base URL to be used with the credentials
+  Client({String username, String password, String url}) : super(username: username, password: password, url: url);
+  Request method(String method, Uri uri, {bool multipart:false}) => new Request(method, uri, username: username, password: password);
 }
 

@@ -8,9 +8,9 @@ main() {
   useHtmlEnhancedConfiguration();
 
   var url = "http://localhost:8080/nuxeo";
-  var nx = new nuxeo.Client(url: url);
+  var nx = new nuxeo.Client(url: url, schemas: ["dublincore", "file"]);
 
-  nx.login
+  nx.login()
     .catchError((e) {
         document.body.append(new Element.tag("div")..text = "Failed to login to Nuxeo at $url ${e.message}");
         return null;

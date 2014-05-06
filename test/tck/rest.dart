@@ -8,7 +8,7 @@ void testREST(nuxeo.Client nx) {
 
     test('Fetch domain document', () =>
       nx.doc("/default-domain").fetch()
-      .then(expectAsync1((nuxeo.RemoteDocument rdoc) {
+      .then(expectAsync((nuxeo.RemoteDocument rdoc) {
         expect(rdoc.uid, isNotNull);
         doc = rdoc;
       }))
@@ -26,7 +26,7 @@ void testREST(nuxeo.Client nx) {
       expect(doc.changeSet.properties['dc:source'], isNotNull, reason: "changeSet should contain an entry for dc:source");
 
       doc.save()
-      .then(expectAsync1((nuxeo.Document doc) {
+      .then(expectAsync((nuxeo.Document doc) {
         expect(doc.uid, isNotNull);
         expect(doc.properties['dc:source'], equals(newSourceValue));
       }));

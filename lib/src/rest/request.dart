@@ -5,18 +5,27 @@ class Request extends nx.BaseRequest {
   static final Logger LOG = new Logger("nuxeo.client.request");
 
   Map methods;
+  String _method;
 
   Map<String, String> _queryParameters = {};
 
-  Request(Uri uri, nx.Client client, {String repo, Duration execTimeout, Duration uploadTimeout}) :
-        super(uri, client, repo:repo, execTimeout: execTimeout, uploadTimeout: uploadTimeout);
+  Request(Uri uri, nx.Client client) : super(uri, client) {
+    methods = {
+      "GET": httpClient.get,
+      "POST": httpClient.post,
+      "PUT": httpClient.put,
+      "DELETE": httpClient.delete
+    };
+  }
 
-  fetch() => this(httpClient.get);
-  create(content) => this(httpClient.post, content);
-  update(content) => this (httpClient.put, content);
-  delete() => this(httpClient.delete);
+  method(String method) => this.._method = method;
 
-  call(method, [body]) {
+  fetch() => method("GET")();
+  create(content) => method("POST")(content);
+  update(content) => method("PUT")(content);
+  delete() => method("DELETE")();
+
+  execute([body]) {
 
     // Add the query parameters
     var queryParameters = [];
@@ -26,24 +35,19 @@ class Request extends nx.BaseRequest {
 
     var uri = Uri.parse("${this.uri}?${queryParameters.join('&')}");
 
-    http.Request request = method(uri);
-    setRequestHeaders(request);
+    request = methods[_method](uri);
+    setRequestHeaders();
 
     // Set the content type
     request.headers.set(http.HEADER_CONTENT_TYPE, nx.CTYPE_ENTITY);
 
-    var requestData;
+    requestData = null;
     if (body != null) {
       requestData = JSON.encode(body);
       LOG.finest("Body: $body");
     }
 
-    return request
-          .send(requestData)
-          .catchError((e) {
-            throw new nx.ClientException(e.message);
-          })
-          .then(handleResponse);
+    return request.send(requestData);
   }
 
   handleResponse(response) {

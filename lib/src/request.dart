@@ -20,38 +20,57 @@ abstract class BaseRequest {
   Client nxClient;
   Uri uri;
 
-  String repo;
-  Duration execTimeout, uploadTimeout;
+  Duration timeout;
+  List<String> _schemas;
+  String _repositoryName;
+  Map _headers;
+
+  // Hold this data for debugging
+  http.Request request;
+  var requestData;
 
   AutomationUploader _batchUploader;
 
-  BaseRequest(this.uri, this.nxClient, {
-      this.repo, this.execTimeout, this.uploadTimeout}) {
+  BaseRequest(this.uri, this.nxClient) {
+    timeout = nxClient.timeout;
+    _schemas = nxClient.schemas;
+    _repositoryName = nxClient.repositoryName;
+    _headers = nxClient.headers;
   }
 
   http.Client get httpClient => nxClient.httpClient;
 
-  setRequestHeaders(http.Request request, {
-      String repository,
-      String documentSchemas: "dublincore"}) {
+  get headers => request.headers.asMap;
+
+  setRequestHeaders() {
 
     // Set the timeout
-    var txTimeout = 5 + ((execTimeout != null) ? execTimeout.inSeconds : 0);
-    request.headers.set(HEADER_NX_TX_TIMEOUT, txTimeout.toString());
+    var txTimeout = timeout + new Duration(seconds: 5);
+    request.headers.set(HEADER_NX_TX_TIMEOUT, txTimeout.inSeconds.toString());
 
     // Set the schemas
-    if (documentSchemas.isNotEmpty) {
-      request.headers.set(HEADER_NX_SCHEMAS, documentSchemas);
+    if (_schemas.isNotEmpty) {
+      request.headers.set(HEADER_NX_SCHEMAS, _schemas.join(","));
     }
 
     // Set the repository
-    if (repository == null) {
-      repository = repo;
-    }
-    if (repository != null) {
-      request.headers.set(HEADER_NX_REPOSITORY, repository);
+    if (_repositoryName != null) {
+      request.headers.set(HEADER_NX_REPOSITORY, _repositoryName);
     }
   }
+
+  /// Send the request
+  Future<http.Response> execute([arguments]);
+
+  /// Send the request and handle the response
+  Future<http.Response> call([arguments]) =>
+      execute(arguments)
+      .then(handleResponse)
+      .catchError((e) {
+        throw new ClientException(e.message);
+      });
+
+
 
   _createEntity(json) {
     switch (json["entity-type"]) {
@@ -115,7 +134,6 @@ abstract class BaseRequest {
             ..numberOfPages = json["numberOfPages"]
             ..pageSize = json["pageSize"];
 
-          break;
         case "exception":
           throw new Exception(json["message"]);
 

@@ -7,11 +7,11 @@ import 'package:nuxeo_automation/standalone_client.dart' as nuxeo;
 import 'tck.dart' as TCK;
 
 main() {
-  var nx = new nuxeo.Client();
+  var nx = new nuxeo.Client(schemas: ["dublincore", "file"]);
+  nx.login()
+    .then((_) => runTCK(new VMConfiguration(), nx))
+    .catchError((e) => fail("Failed to login to Nuxeo"));
 
-  nx.login
-    .catchError((e) => fail("Failed to login to Nuxeo"))
-    .then((_) => runTCK(new VMConfiguration(), nx));
 }
 
 /// We need a synchronous method to use with Hop

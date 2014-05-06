@@ -21,6 +21,7 @@ class Headers implements base.RequestHeaders {
   http.BaseRequest _request;
   Headers(this._request);
   set(name, value) => _request.headers[name] = value;
+  get asMap => _request.headers;
 }
 
 
@@ -38,6 +39,7 @@ class Request implements base.Request {
     }
   }
 
+  get method => _request.method;
   get upload => null;
   get headers => new Headers(_request);
 
@@ -77,14 +79,12 @@ class Request implements base.Request {
 class Client extends base.Client {
 
   HttpClient _client;
-  Uri uri;
 
   Client(String url, {
       String username,
       String password,
       String realm
-  }) {
-    uri = Uri.parse(url);
+  }) : super(url: url, username: username, password: password) {
     var credentials = new io.HttpClientBasicCredentials(username, password);
     _client = new HttpClient(uri, realm, credentials);
   }
@@ -107,10 +107,13 @@ class HttpClient extends http.BaseClient {
     var stream = request.finalize();
 
     return _inner.openUrl(request.method, request.url).then((ioRequest) {
-      ioRequest.followRedirects = request.followRedirects;
-      ioRequest.maxRedirects = request.maxRedirects;
-      ioRequest.contentLength = request.contentLength;
-      ioRequest.persistentConnection = request.persistentConnection;
+      var contentLength = request.contentLength == null ?
+          -1 : request.contentLength;
+      ioRequest
+          ..followRedirects = request.followRedirects
+          ..maxRedirects = request.maxRedirects
+          ..contentLength = contentLength
+          ..persistentConnection = request.persistentConnection;
       request.headers.forEach((name, value) {
         ioRequest.headers.set(name, value);
       });
@@ -121,10 +124,12 @@ class HttpClient extends http.BaseClient {
         headers[key] = values.join(',');
       });
 
+      var contentLength = response.contentLength == -1 ?
+          null : response.contentLength;
       return new http.StreamedResponse(
           response,
           response.statusCode,
-          response.contentLength,
+          contentLength: contentLength,
           request: request,
           headers: headers,
           isRedirect: response.isRedirect,
