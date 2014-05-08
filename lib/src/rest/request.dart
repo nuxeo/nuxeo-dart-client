@@ -18,7 +18,7 @@ class Request extends nx.BaseRequest {
     };
   }
 
-  method(String method) => this.._method = method;
+  Request method(String method) => this.._method = method;
 
   fetch() => method("GET")();
   create(content) => method("POST")(content);
@@ -44,7 +44,6 @@ class Request extends nx.BaseRequest {
     requestData = null;
     if (body != null) {
       requestData = JSON.encode(body);
-      LOG.finest("Body: $body");
     }
 
     return request.send(requestData);

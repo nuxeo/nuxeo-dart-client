@@ -62,7 +62,11 @@ class Request extends base.Request {
         withCredentials: withCredentials,
         requestHeaders: headers.asMap,
         sendData: sendData)
-    .then((request) => new Response(request.response, request.responseHeaders));
+    .then((request) => new Response(request.response, request.responseHeaders))
+    .catchError((e) {
+      var request = e.currentTarget;
+      throw new base.ClientException(e.target.responseText, request: this, response: new Response(request.response, request.responseHeaders));
+    });
   }
 }
 

@@ -67,7 +67,7 @@ abstract class BaseRequest {
       execute(arguments)
       .then(handleResponse)
       .catchError((e) {
-        throw new ClientException(e.message);
+        throw new http.ClientException(e.message);
       });
 
 

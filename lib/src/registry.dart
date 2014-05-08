@@ -23,7 +23,7 @@ class OperationRegistry {
             return _registries[uri];
           })
           .catchError((e) {
-            throw new ClientException(e.toString());
+            throw new http.ClientException(e.toString());
           });
     }
   }

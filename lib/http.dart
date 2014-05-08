@@ -79,3 +79,26 @@ abstract class Client {
   Request put(Uri uri) => method("PUT", uri);
   Request delete(Uri uri) => method("DELETE", uri);
 }
+
+/**
+ * Exception thrown when a [Request] throws an error
+ */
+class ClientException implements Exception {
+  /**
+   * A message describing the error.
+   */
+  final String message;
+
+  /// The [Request] that originated the [ClientException]
+  final Request request;
+
+  /// The [Response] we got back from the server
+  final Response response;
+
+  /**
+   * Creates a new ClientException with an optional error [message].
+   */
+  const ClientException(this.message, {this.request, this.response});
+
+  String toString() => "ClientException: $message";
+}

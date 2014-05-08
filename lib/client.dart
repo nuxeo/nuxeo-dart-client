@@ -46,6 +46,7 @@ import 'dart:convert' show JSON;
 import 'dart:mirrors';
 import 'package:logging/logging.dart';
 import 'http.dart' as http;
+export 'http.dart' show ClientException;
 import 'rest.dart' as rest;
 export 'rest.dart' show RemoteDocument, Request;
 import 'automation.dart' as rpc;
@@ -151,21 +152,4 @@ class Introspection {
   Future<http.Response> schemas([String schema = ""]) => fetch("schemas/$schema");
 
   Future<http.Response> facets([String facet = ""]) => fetch("facets/$facet");
-}
-
-/**
- * Exception thrown when a [Request] throws an error
- */
-class ClientException implements Exception {
-  /**
-   * A message describing the error.
-   */
-  final String message;
-
-  /**
-   * Creates a new ClientException with an optional error [message].
-   */
-  const ClientException([this.message = ""]);
-
-  String toString() => "ClientException: $message";
 }
