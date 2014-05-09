@@ -36,8 +36,11 @@ class Document {
     versionLabel = json["versionLabel"],
     isCheckedOut = json["isCheckedOut"],
     title = json["title"],
-    lastModified = DateTime.parse(json["lastModified"]),
     facets = json["facets"] {
+
+    if (json["lastModified"]!= null) {
+      lastModified = DateTime.parse(json["lastModified"]);
+    }
 
     if (json.containsKey("properties")) {
       json["properties"].forEach((k, v) { properties[k] = v; });
