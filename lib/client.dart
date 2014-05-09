@@ -102,7 +102,7 @@ abstract class Client {
   rest.Request doc(String uidOrPath, {String repo}) {
     var path;
     if (uidOrPath.startsWith("/")) {
-      if (uidOrPath.endsWith("/")) {
+      if (uidOrPath.length > 1 && uidOrPath.endsWith("/")) {
         uidOrPath = uidOrPath.substring(0, uidOrPath.length - 1);
       }
       path = "path$uidOrPath";
