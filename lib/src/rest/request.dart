@@ -39,12 +39,9 @@ class Request extends nx.BaseRequest {
     setRequestHeaders();
 
     // Set the content type
-    request.headers.set(http.HEADER_CONTENT_TYPE, nx.CTYPE_ENTITY);
+    request.headers.set(http.HEADER_CONTENT_TYPE, nx.CTYPE_JSON);
 
-    requestData = null;
-    if (body != null) {
-      requestData = JSON.encode(body);
-    }
+    requestData = body;
 
     return request.send(requestData);
   }
