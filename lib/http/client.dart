@@ -9,7 +9,9 @@ final LOG = base.LOG;
 class Response implements base.Response {
   Object response;
   Map<String, String> headers;
-  Response(this.response, this.headers);
+  int status;
+  String statusText;
+  Response(this.response, this.headers, {this.status, this.statusText});
   get body => response;
 }
 
@@ -62,10 +64,12 @@ class Request extends base.Request {
         withCredentials: withCredentials,
         requestHeaders: headers.asMap,
         sendData: sendData)
-    .then((request) => new Response(request.response, request.responseHeaders))
+    .then((request) => new Response(request.response, request.responseHeaders, status: request.status, statusText: request.statusText))
     .catchError((e) {
       var request = e.currentTarget;
-      throw new base.ClientException(e.target.responseText, request: this, response: new Response(request.response, request.responseHeaders));
+      throw new base.ClientException(e.target.responseText, request: this,
+          response: new Response(request.response, request.responseHeaders,
+              status: request.status, statusText: request.statusText));
     });
   }
 }
