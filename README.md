@@ -49,7 +49,7 @@ nx.op("Document.GetChildren")(input:"doc:/")
 
 ## Documentation
 
-[API Reference](http://nelsonsilva.github.io/nuxeo-dart-client/nuxeo_client.html)
+[API Reference](http://nelsonsilva.github.io/nuxeo-dart-client/)
 
 ## Running the TCK
 
