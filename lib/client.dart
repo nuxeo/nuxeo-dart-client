@@ -1,5 +1,5 @@
 /**
- * Provides a Nuxeo Client Library.
+ * Provides a Client Library for Nuxeo API.
  *
  * ## Installing ##
  *
@@ -7,7 +7,7 @@
  * file.
  *
  *     dependencies:
- *       nuxeo_automation: any
+ *       nuxeo_client: any
  *
  * Then run `pub install`.
  *
@@ -20,19 +20,19 @@
  *
  * * For browser applications use:
  *
- *     `import 'package:nuxeo_automation/browser_client.dart' as nuxeo_automation;`
+ *     `import 'package:nuxeo_client/browser_client.dart' as nuxeo;`
  *
  * * For standalone/console applications use:
  *
- *     `import 'package:nuxeo_automation/standalone_client.dart' as nuxeo_automation;`
+ *     `import 'package:nuxeo_client/standalone_client.dart' as nuxeo;`
  *
  * * Then create your [Client] instance:
  *
- *     `var nx = new nuxeo_automation.Client();`
+ *     `var nx = new nuxeo.Client();`
  *
  *
  * For more information, see the
- * [nuxeo_automation package on pub.dartlang.org](http://pub.dartlang.org/packages/nuxeo_automation).
+ * [nuxeo_client package on pub.dartlang.org](http://pub.dartlang.org/packages/nuxeo_client).
  *
  * [pub]: http://pub.dartlang.org
  */

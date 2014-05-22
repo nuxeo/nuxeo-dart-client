@@ -1,8 +1,8 @@
 library tck;
 
 import 'package:unittest/unittest.dart';
-import 'package:nuxeo_automation/http.dart' as http;
-import 'package:nuxeo_automation/client.dart' as nuxeo;
+import 'package:nuxeo_client/http.dart' as http;
+import 'package:nuxeo_client/client.dart' as nuxeo;
 import 'package:logging/logging.dart';
 import 'package:logging_handlers/logging_handlers_shared.dart';
 

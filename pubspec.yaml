@@ -1,8 +1,8 @@
-name: nuxeo_automation
+name: nuxeo_client
 version: 0.0.2
 author: Nelson Silva <nelson.silva@inevo.pt>
-description: A Nuxeo Automation Client
-homepage: https://github.com/nelsonsilva/nuxeo-dart-automation
+description: A Client Library for Nuxeo API
+homepage: https://github.com/nelsonsilva/nuxeo-dart-client
 environment:
   sdk: '>=1.0.0 <2.0.0'
 dependencies:

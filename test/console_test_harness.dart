@@ -3,7 +3,7 @@
 import 'package:unittest/unittest.dart';
 import 'package:unittest/vm_config.dart';
 
-import 'package:nuxeo_automation/standalone_client.dart' as nuxeo;
+import 'package:nuxeo_client/standalone_client.dart' as nuxeo;
 import 'tck.dart' as TCK;
 
 main() {

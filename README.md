@@ -1,8 +1,12 @@
-![Nuxeo Dart](https://raw.github.com/nelsonsilva/nuxeo-dart-automation/master/resource/nuxeo_dart.png)
+![Nuxeo Dart](https://raw.github.com/nelsonsilva/nuxeo-dart-client/master/resource/nuxeo_dart.png)
 
-## A Nuxeo Automation client in Dart
+## Dart Client Library for Nuxeo API
 
-[![Build Status](https://drone.io/github.com/nelsonsilva/nuxeo-dart-automation/status.png)](https://drone.io/github.com/nelsonsilva/nuxeo-dart-automation/latest)
+[![Build Status](https://drone.io/github.com/nelsonsilva/nuxeo-dart-client/status.png)](https://drone.io/github.com/nelsonsilva/nuxeo-dart-client/latest)
+
+Dart client library for the Nuxeo Automation and REST API.
+
+The library can work in a browser, or in the console using the same API.
 
 ## Getting started
 
@@ -13,24 +17,24 @@
 
 * Start the Dart Editor
 * Create a new Dart project
-* Add the nuxeo_automation dependency to your `pubspec.yaml` file.
+* Add the nuxeo_client dependency to your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  nuxeo_automation: any
+  nuxeo_client: any
 ```
-* Import the nuxeo_automation library:
+* Import the nuxeo_client library:
     - For browser applications use:
 ```
-import 'package:nuxeo_automation/browser_client.dart' as nuxeo_automation;
+import 'package:nuxeo_client/browser_client.dart' as nuxeo;
 ```
     - For standalone/console applications use:
 ```
-import 'package:nuxeo_automation/standalone_client.dart' as nuxeo_automation;
+import 'package:nuxeo_client/standalone_client.dart' as nuxeo;
 ```
 
 * Create your client:
 ```
-var nx = new nuxeo_automation.Client()
+var nx = new nuxeo.Client()
 ```
 
 * Call some operations, for instance:
@@ -45,7 +49,7 @@ nx.op("Document.GetChildren")(input:"doc:/")
 
 ## Documentation
 
-[API Reference](http://nelsonsilva.github.io/nuxeo-dart-automation/nuxeo_client.html)
+[API Reference](http://nelsonsilva.github.io/nuxeo-dart-client/nuxeo_client.html)
 
 ## Running the TCK
 
@@ -61,13 +65,13 @@ You can run the Dart Automation Client TCK with your own Nuxeo server (version >
 nuxeoctl mp-install nuxeo-rest-api --accept true
 ```
 
-### Standalone Automation Client
+### Standalone Nuxeo Client
 
 * Start Nuxeo server
 * Run the console tests harness at test/console_test_harness.dart
 * Check the console output for the test results
 
-### Browser Automation Client
+### Browser Nuxeo Client
 
 #### Setup CORS
 
@@ -109,3 +113,14 @@ curl --verbose -u Administrator:Administrator -H "Origin: http://127.0.0.1:3030"
 
 ## Authors
  * [Nelson Silva](https://github.com/nelsonsilva) ([+Nelson Silva](https://plus.google.com/114313790760784276282/))
+ 
+## About Nuxeo
+
+Nuxeo provides a modular, extensible Java-based [open source software platform for enterprise content management] [1] and packaged applications for [document management] [2], [digital asset management] [3] and [case management] [4]. Designed by developers for developers, the Nuxeo platform offers a modern architecture, a powerful plug-in model and extensive packaging capabilities for building content applications.
+
+[1]: http://www.nuxeo.com/en/products/ep
+[2]: http://www.nuxeo.com/en/products/document-management
+[3]: http://www.nuxeo.com/en/products/dam
+[4]: http://www.nuxeo.com/en/products/case-management
+
+More information on: <http://www.nuxeo.com/>

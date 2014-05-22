@@ -1,6 +1,6 @@
 import 'dart:html';
 import 'package:unittest/html_enhanced_config.dart';
-import 'package:nuxeo_automation/browser_client.dart' as nuxeo;
+import 'package:nuxeo_client/browser_client.dart' as nuxeo;
 
 import 'tck.dart' as TCK;
 
