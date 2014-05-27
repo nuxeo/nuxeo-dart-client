@@ -93,6 +93,10 @@ abstract class Client {
     _restUri = Uri.parse("${httpClient.uri}/api/v1");
 
     config = new Introspection(this);
+
+    if (headers == null) {
+      headers = {};
+    }
   }
 
   /* REST */
