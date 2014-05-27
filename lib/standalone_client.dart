@@ -13,14 +13,16 @@ class Client extends nx.Client {
     String realm : "default",
     Duration timeout : nx.DEFAULT.TIMEOUT,
     List schemas : nx.DEFAULT.SCHEMAS,
-    String repository : nx.DEFAULT.REPOSITORY}) :
+    String repository : nx.DEFAULT.REPOSITORY,
+    Map headers}) :
     super(new http.Client(url,
         username: username,
         password: password,
         realm: realm),
         timeout: timeout,
         schemas: schemas,
-        repositoryName: repository);
+        repositoryName: repository,
+        headers: headers);
 
 }
 

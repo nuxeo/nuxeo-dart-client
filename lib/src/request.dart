@@ -57,6 +57,11 @@ abstract class BaseRequest {
     if (_repositoryName != null) {
       request.headers.set(HEADER_NX_REPOSITORY, _repositoryName);
     }
+
+    // Add any extra headers
+    if (nxClient.headers != null) {
+      nxClient.headers.forEach((k, v) { request.headers.set(k, v); });
+    }
   }
 
   /// Send the request
