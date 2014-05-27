@@ -1,5 +1,6 @@
 library http_standalone;
 
+import 'dart:convert' show JSON;
 import 'dart:io' as io;
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -63,6 +64,8 @@ class Request implements base.Request {
         // Handle blob
         if (data is base.Blob) {
           (_request as http.Request).bodyBytes = data.content;
+        } else if (data is Map) {
+          (_request as http.Request).body = JSON.encode(data);
         } else {
           (_request as http.Request).body = data;
         }
