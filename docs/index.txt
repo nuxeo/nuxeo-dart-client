@@ -577,9 +577,6 @@ nuxeo_client/http_client.Client.uri property
 nuxeo_client/http_client.Client.username property
 nuxeo_client/http_client.ClientException class
 nuxeo_client/http_client.ClientException.ClientException- constructor
-nuxeo_client/http_client.ClientException.message property
-nuxeo_client/http_client.ClientException.request property
-nuxeo_client/http_client.ClientException.response property
 nuxeo_client/http_client.ClientException.toString method
 nuxeo_client/http_client.HEADER_AUTHORIZATION property
 nuxeo_client/http_client.HEADER_CONTENT_TYPE property
@@ -889,6 +886,9 @@ nuxeo_client/nuxeo_client_standalone.Client.user method
 nuxeo_client/nuxeo_client_standalone.Client.username property
 nuxeo_client/nuxeo_client_standalone.ClientException class
 nuxeo_client/nuxeo_client_standalone.ClientException.ClientException- constructor
+nuxeo_client/nuxeo_client_standalone.ClientException.message property
+nuxeo_client/nuxeo_client_standalone.ClientException.request property
+nuxeo_client/nuxeo_client_standalone.ClientException.response property
 nuxeo_client/nuxeo_client_standalone.ClientException.toString method
 nuxeo_client/nuxeo_client_standalone.DEFAULT class
 nuxeo_client/nuxeo_client_standalone.DEFAULT.PASSWORD property
