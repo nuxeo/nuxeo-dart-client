@@ -60,7 +60,11 @@ abstract class BaseRequest {
 
     // Add any extra headers
     if (nxClient.headers != null) {
-      nxClient.headers.forEach((k, v) { request.headers.set(k, v); });
+      nxClient.headers.forEach((k, v) {
+        if (v != null) {
+          request.headers.set(k, v);
+        }
+      });
     }
   }
 
