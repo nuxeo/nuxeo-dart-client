@@ -31,7 +31,7 @@ class OperationRequest extends nx.BaseRequest {
   OperationRequest input(input) => this.._input = input;
   OperationRequest voidOperation(voidOperation) => this.._voidOperation = voidOperation;
 
-  bool get isMultipart => (_input is http.Blob);
+  bool get isMultipart => (_input is http.Blob) || (_input is List && _input.isNotEmpty && _input[0] is http.Blob);
 
   /// Executes the request.
   /// Returns a [Future]
@@ -78,14 +78,16 @@ class OperationRequest extends nx.BaseRequest {
       request.headers.set(nx.HEADER_NX_VOIDOP, _voidOperation.toString());
 
       var json = JSON.encode(data);
-      LOG.finest("Request: $json");
 
       // check for multipart request
       if (isMultipart) {
         var params = new http.Blob(content: json, mimetype: nx.CTYPE_REQUEST_NOCHARSET, filename: "request");
         var formData = new http.MultipartFormData();
         formData.append("request", params);
-        formData.append(_input.filename, _input);
+        var blobs = (_input is List) ? _input : [_input];
+        blobs.forEach((http.Blob blob) {
+          formData.append(blob.filename, blob);
+        });
         requestData = formData;
       } else {
         // Set the content type
@@ -101,7 +103,7 @@ class OperationRequest extends nx.BaseRequest {
 
   nx.AutomationUploader get uploader {
     if (_batchUploader == null) {
-      _batchUploader = new nx.AutomationUploader(uri, httpClient, uploadTimeout: timeout);
+      _batchUploader = nxClient.createUploader(uploadTimeout: timeout);
     }
     return _batchUploader;
   }

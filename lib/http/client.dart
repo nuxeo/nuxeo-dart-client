@@ -55,7 +55,7 @@ class Request extends base.Request {
       });
       sendData = formData;
     } else if (data is base.Blob) {
-      sendData = data.content;
+      sendData = new html.Blob([data.content], data.mimetype);
     }
 
     return html.HttpRequest.request(

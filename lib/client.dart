@@ -138,6 +138,7 @@ abstract class Client {
   /// Logs in to the Nuxeo server and returns a [Login]
   Future<Login> login() => rpc.login(_rpcUri, httpClient);
 
+  AutomationUploader createUploader({Duration uploadTimeout}) => new AutomationUploader(_rpcUri, httpClient, uploadTimeout: uploadTimeout);
 }
 
 /// Doctypes Introspection API
