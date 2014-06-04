@@ -624,6 +624,7 @@ nuxeo_client/nuxeo_client.BusinessAdapter.register method
 nuxeo_client/nuxeo_client.BusinessAdapter.typeOf method
 nuxeo_client/nuxeo_client.Client class
 nuxeo_client/nuxeo_client.Client.Client- constructor
+nuxeo_client/nuxeo_client.Client.createUploader method
 nuxeo_client/nuxeo_client.Client.directory method
 nuxeo_client/nuxeo_client.Client.doc method
 nuxeo_client/nuxeo_client.Client.group method
@@ -738,6 +739,15 @@ nuxeo_client/nuxeo_client_browser.BusinessAdapter.register method
 nuxeo_client/nuxeo_client_browser.BusinessAdapter.typeOf method
 nuxeo_client/nuxeo_client_browser.Client class
 nuxeo_client/nuxeo_client_browser.Client.Client- constructor
+nuxeo_client/nuxeo_client_browser.Client.createUploader method
+nuxeo_client/nuxeo_client_browser.Client.directory method
+nuxeo_client/nuxeo_client_browser.Client.doc method
+nuxeo_client/nuxeo_client_browser.Client.group method
+nuxeo_client/nuxeo_client_browser.Client.login method
+nuxeo_client/nuxeo_client_browser.Client.newRequest method
+nuxeo_client/nuxeo_client_browser.Client.op method
+nuxeo_client/nuxeo_client_browser.Client.registry getter
+nuxeo_client/nuxeo_client_browser.Client.user method
 nuxeo_client/nuxeo_client_browser.ClientException class
 nuxeo_client/nuxeo_client_browser.ClientException.ClientException- constructor
 nuxeo_client/nuxeo_client_browser.ClientException.toString method
@@ -869,6 +879,7 @@ nuxeo_client/nuxeo_client_standalone.Client class
 nuxeo_client/nuxeo_client_standalone.Client.Client- constructor
 nuxeo_client/nuxeo_client_standalone.Client.LOG property
 nuxeo_client/nuxeo_client_standalone.Client.config property
+nuxeo_client/nuxeo_client_standalone.Client.createUploader method
 nuxeo_client/nuxeo_client_standalone.Client.directory method
 nuxeo_client/nuxeo_client_standalone.Client.doc method
 nuxeo_client/nuxeo_client_standalone.Client.group method
