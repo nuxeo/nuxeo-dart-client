@@ -69,7 +69,7 @@ class AutomationUploader {
   String batchId;
   bool _sendingRequestsInProgress = false;
   Queue<Upload> _uploadStack = new Queue();
-  int _uploadIdx = 0;
+  int uploadIdx = 0;
   int _nbUploadInprogress = 0;
   List _completedUploads = [];
 
@@ -79,11 +79,14 @@ class AutomationUploader {
     this.directUpload : true,
     // update upload speed every second
     this.uploadRateRefreshTime : 1000,
-    this.uploadTimeout
+    this.uploadTimeout,
+    this.batchId
   }) {
-    batchId = "batch-" +
+    if (batchId == null) {
+      batchId = "batch-" +
         new DateTime.now().millisecondsSinceEpoch.toString() +
         "-" + new Math.Random().nextInt(100000).toString();
+    }
   }
 
   Future<Upload> uploadFile(cfile) {
@@ -99,7 +102,7 @@ class AutomationUploader {
 
     if (_nbUploadInprogress >= numConcurrentUploads) {
       _sendingRequestsInProgress = false;
-      LOG.info("delaying upload for next file(s) $_uploadIdx"
+      LOG.info("delaying upload for next file(s) $uploadIdx"
             "+ since there are already $_nbUploadInprogress"
             " active uploads");
       return;
@@ -115,7 +118,7 @@ class AutomationUploader {
       // create a new xhr object
       var xhr = client.post(Uri.parse("${uri}/batch/upload"));
 
-      upload.fileIndex = _uploadIdx + 0;
+      upload.fileIndex = uploadIdx + 0;
       upload.downloadStartTime = new DateTime.now();
       upload.currentStart = upload.downloadStartTime;
       upload.currentProgress = 0;
@@ -160,7 +163,7 @@ class AutomationUploader {
       // compute timeout in seconds and integer
       int uploadTimeoutS = (uploadTimeout + new Duration(seconds: 5)).inSeconds;
 
-      LOG.info("starting upload for file $_uploadIdx");
+      LOG.info("starting upload for file $uploadIdx");
 
       xhr.headers.set("Cache-Control", "no-cache");
       xhr.headers.set("X-Requested-With", "XMLHttpRequest");
@@ -168,13 +171,13 @@ class AutomationUploader {
       xhr.headers.set("X-File-Size", file.length.toString());
       xhr.headers.set("X-File-Type", file.mimetype);
       xhr.headers.set("X-Batch-Id", batchId);
-      xhr.headers.set("X-File-Idx", _uploadIdx.toString());
+      xhr.headers.set("X-File-Idx", uploadIdx.toString());
 
       xhr.headers.set('Nuxeo-Transaction-Timeout', uploadTimeoutS.toString());
       //xhr.headers.set("Content-Type", "multipart/form-data");
 
-      //this.opts.handler.uploadStarted(_uploadIdx, file);
-      _uploadIdx++;
+      //this.opts.handler.uploadStarted(uploadIdx, file);
+      uploadIdx++;
 
       xhr.send(file).then((response) {
         load(upload);
@@ -182,7 +185,7 @@ class AutomationUploader {
 
       if (_nbUploadInprogress >= numConcurrentUploads) {
         _sendingRequestsInProgress = false;
-        LOG.info("delaying upload for next file(s) $_uploadIdx"
+        LOG.info("delaying upload for next file(s) $uploadIdx"
               "+ since there are already "
               "$_nbUploadInprogress active uploads");
         return;
