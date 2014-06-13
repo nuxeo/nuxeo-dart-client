@@ -70,7 +70,7 @@ class DEFAULT {
 }
 
 /**
- * [Automation] client.
+ * Nuxeo client.
  */
 abstract class Client {
 
@@ -138,8 +138,6 @@ abstract class Client {
   /// Logs in to the Nuxeo server and returns a [Login]
   Future<Login> login() => rpc.login(_rpcUri, httpClient);
 
-  AutomationUploader createUploader({Duration uploadTimeout, String batchId}) =>
-      new AutomationUploader(_rpcUri, httpClient, uploadTimeout: uploadTimeout, batchId: batchId);
 }
 
 /// Doctypes Introspection API

@@ -16,7 +16,7 @@ class OperationRequest extends nx.BaseRequest {
   Map<String, String> _context  = {};
   bool _voidOperation = false;
 
-  nx.AutomationUploader _batchUploader;
+  nx.BatchUploader _batchUploader;
 
   OperationRequest(this.id, Uri uri, nx.Client client) : super(uri, client) {
     _opUri = Uri.parse("$uri/$id");
@@ -101,9 +101,9 @@ class OperationRequest extends nx.BaseRequest {
   String get batchId => _batchUploader.batchId;
   bool get _hasBatchUpload => _batchUploader != null;
 
-  nx.AutomationUploader get uploader {
+  nx.BatchUploader get uploader {
     if (_batchUploader == null) {
-      _batchUploader = nxClient.createUploader(uploadTimeout: timeout);
+      _batchUploader = new nx.BatchUploader(nxClient, uploadTimeout: timeout);
     }
     return _batchUploader;
   }

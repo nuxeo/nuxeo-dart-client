@@ -29,7 +29,7 @@ abstract class BaseRequest {
   http.Request request;
   var requestData;
 
-  AutomationUploader _batchUploader;
+  BatchUploader _batchUploader;
 
   BaseRequest(this.uri, this.nxClient) {
     timeout = nxClient.timeout;

@@ -43,15 +43,14 @@ class Upload {
 }
 
 /**
- * [AutomationUploader] manages the upload of files in a queue with a target
+ * [BatchUploader] manages the upload of files in a queue with a target
  * number of concurrent uploads.
  */
-class AutomationUploader {
+class BatchUploader {
 
   static final LOG = new Logger("nuxeo.automation.uploader");
 
-  Uri uri;
-  http.Client client;
+  Client client;
 
   StreamController<AutomationUploaderEvent> evtController = new StreamController<AutomationUploaderEvent>();
   Stream<AutomationUploaderEvent> get onBatchStarted => evtController.stream.where((e) => e.type == "batchStarted");
@@ -73,7 +72,7 @@ class AutomationUploader {
   int _nbUploadInprogress = 0;
   List _completedUploads = [];
 
-  AutomationUploader(this.uri, this.client, {
+  BatchUploader(this.client, {
     this.numConcurrentUploads : 5,
     // define if upload should be triggered directly
     this.directUpload : true,
@@ -116,7 +115,7 @@ class AutomationUploader {
       var upload = _uploadStack.removeFirst();
 
       // create a new xhr object
-      var xhr = client.post(Uri.parse("${uri}/batch/upload"));
+      var xhr = client.httpClient.post(Uri.parse("${client._rpcUri}/batch/upload"));
 
       upload.fileIndex = uploadIdx + 0;
       upload.downloadStartTime = new DateTime.now();
