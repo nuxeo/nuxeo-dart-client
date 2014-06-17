@@ -2,17 +2,19 @@ library http_browser;
 
 import 'dart:html' as html;
 import 'dart:async';
+import 'dart:typed_data';
 import '../http.dart' as base;
 
 final LOG = base.LOG;
 
 class Response implements base.Response {
-  Object response;
+  ByteBuffer buffer;
   Map<String, String> headers;
   int status;
   String statusText;
-  Response(this.response, this.headers, {this.status, this.statusText});
-  get body => response;
+  Response(this.buffer, this.headers, {this.status, this.statusText});
+  /// Returns the body as [String]
+  get body => new String.fromCharCodes(new Uint8List.view(buffer));
 }
 
 class Headers implements base.RequestHeaders {
@@ -63,11 +65,14 @@ class Request extends base.Request {
         method: method,
         withCredentials: withCredentials,
         requestHeaders: headers.asMap,
+        responseType: 'arraybuffer', // Request as arraybuffer to allow proper handling of blobs
         sendData: sendData)
     .then((request) => new Response(request.response, request.responseHeaders, status: request.status, statusText: request.statusText))
     .catchError((e) {
       var request = e.currentTarget;
-      throw new base.ClientException(e.target.responseText, request: this,
+      throw new base.ClientException(
+          new String.fromCharCodes(new Uint8List.view(e.target.response)),
+          request: this,
           response: new Response(request.response, request.responseHeaders,
               status: request.status, statusText: request.statusText));
     });
