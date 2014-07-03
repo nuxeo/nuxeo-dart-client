@@ -59,7 +59,7 @@ class OperationRequest extends nx.BaseRequest {
       var targetUri = _opUri;
 
       // Check for batch upload
-      if (_hasBatchUpload) {
+      if (hasBatchUpload) {
         if (data["params"] == null) {
           data["params"] = {};
         }
@@ -99,7 +99,7 @@ class OperationRequest extends nx.BaseRequest {
   });
 
   String get batchId => _batchUploader.batchId;
-  bool get _hasBatchUpload => _batchUploader != null;
+  bool get hasBatchUpload => _batchUploader != null;
 
   nx.BatchUploader get uploader {
     if (_batchUploader == null) {
