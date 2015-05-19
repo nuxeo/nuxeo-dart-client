@@ -20,6 +20,8 @@ class Request extends nx.BaseRequest {
 
   Request method(String method) => this.._method = method;
 
+  param(String name, String value) => this.._queryParameters[name] = value;
+  
   fetch() => method("GET")();
   create(content) => method("POST")(content);
   update(content) => method("PUT")(content);
@@ -33,7 +35,7 @@ class Request extends nx.BaseRequest {
       queryParameters.add("$k=$v");
     });
 
-    var uri = Uri.parse("${this.uri}?${queryParameters.join('&')}");
+    var uri = Uri.parse("${this.uri}${this.uri.hasQuery ? '' : '?'}${queryParameters.join('&')}");
 
     request = methods[_method](uri);
     setRequestHeaders();
