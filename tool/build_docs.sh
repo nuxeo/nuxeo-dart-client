@@ -22,7 +22,7 @@ cp ../../../../resource/* static
 popd
 
 # Clone gh-pages
-git clone git@github.com:nelsonsilva/nuxeo-dart-client.git gh-pages
+git clone git@github.com:nuxeo/nuxeo-dart-client.git gh-pages
 pushd gh-pages
 git checkout -t origin/gh-pages
 

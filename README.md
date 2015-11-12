@@ -1,8 +1,8 @@
-![Nuxeo Dart](https://raw.github.com/nelsonsilva/nuxeo-dart-client/master/resource/nuxeo_dart.png)
+![Nuxeo Dart](https://raw.github.com/nuxeo/nuxeo-dart-client/master/resource/nuxeo_dart.png)
 
 ## Dart Client Library for Nuxeo API
 
-[![Build Status](https://drone.io/github.com/nelsonsilva/nuxeo-dart-client/status.png)](https://drone.io/github.com/nelsonsilva/nuxeo-dart-client/latest)
+[![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=nuxeo-dart-client-master)](https://qa.nuxeo.org/jenkins/job/nuxeo-dart-client-master/)
 
 Dart client library for the Nuxeo Automation and REST API.
 
@@ -49,7 +49,7 @@ nx.op("Document.GetChildren")(input:"doc:/")
 
 ## Documentation
 
-[API Reference](http://nelsonsilva.github.io/nuxeo-dart-client/)
+[API Reference](http://nuxeo.github.io/nuxeo-dart-client/)
 
 ## Running the TCK
 
@@ -108,12 +108,12 @@ curl --verbose -u Administrator:Administrator -H "Origin: http://127.0.0.1:3030"
 * Run the browser tests harness at test/browser_test_harness.dart
 
      use 'Run in Dartium' from Dart Editor
-     
+
 * Check the browser for the test results
 
 ## Authors
  * [Nelson Silva](https://github.com/nelsonsilva) ([+Nelson Silva](https://plus.google.com/114313790760784276282/))
- 
+
 ## About Nuxeo
 
 Nuxeo provides a modular, extensible Java-based [open source software platform for enterprise content management] [1] and packaged applications for [document management] [2], [digital asset management] [3] and [case management] [4]. Designed by developers for developers, the Nuxeo platform offers a modern architecture, a powerful plug-in model and extensive packaging capabilities for building content applications.
