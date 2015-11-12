@@ -72,10 +72,10 @@ class OperationRequest extends nx.BaseRequest {
       // Create the request
       request = httpClient.post(targetUri, multipart: isMultipart);
 
+      headers[nx.HEADER_NX_VOIDOP] = _voidOperation.toString();
+
       // Setup the headers
       setRequestHeaders();
-
-      request.headers.set(nx.HEADER_NX_VOIDOP, _voidOperation.toString());
 
       var json = JSON.encode(data);
 

@@ -21,7 +21,7 @@ class Client extends nx.Client {
         realm: realm),
         timeout: timeout,
         schemas: schemas,
-        repositoryName: repository,
+        repository: repository,
         headers: headers);
 
 }

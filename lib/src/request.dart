@@ -8,10 +8,13 @@ const CTYPE_MULTIPART_RELATED = "multipart/related";
 const CTYPE_MULTIPART_MIXED = "multipart/mixed";
 const CTYPE_REQUEST = "application/json+nxrequest; charset=UTF-8";
 const KEY_ENTITY_TYPE = "entity-type";
-const HEADER_NX_SCHEMAS = "X-NXDocumentProperties";
+const HEADER_NX_SCHEMAS = "X-NXproperties";
 const HEADER_NX_VOIDOP = "X-NXVoidOperation";
 const HEADER_NX_TX_TIMEOUT = "Nuxeo-Transaction-Timeout";
 const HEADER_NX_REPOSITORY = "X-NXRepository";
+const HEADER_NX_VERSIONING_OPTION = "X-Versioning-Option";
+const HEADER_NX_FETCH_DOCUMENT = "X-NXfetch.document";
+const HEADER_NX_FETCH_DEPTH = "depth";
 
 abstract class BaseRequest {
 
@@ -20,10 +23,7 @@ abstract class BaseRequest {
   Client nxClient;
   Uri uri;
 
-  Duration timeout;
-  List<String> _schemas;
-  String _repositoryName;
-  Map _headers;
+  Map headers;
 
   // Hold this data for debugging
   http.Request request;
@@ -32,40 +32,67 @@ abstract class BaseRequest {
   BatchUploader _batchUploader;
 
   BaseRequest(this.uri, this.nxClient) {
+    headers = new Map.from(nxClient.headers);
     timeout = nxClient.timeout;
-    _schemas = nxClient.schemas;
-    _repositoryName = nxClient.repositoryName;
-    _headers = nxClient.headers;
+    schemas = nxClient.schemas;
+    repository = nxClient.repository;
   }
 
   http.Client get httpClient => nxClient.httpClient;
 
-  get headers => request.headers.asMap;
+  get schemas => headers[HEADER_NX_SCHEMAS].split(",");
+  set schemas(List<String> s) {
+    if (s.isNotEmpty) {
+      headers[HEADER_NX_SCHEMAS] = s.join(",");
+    }
+  }
+
+  get repository => headers[HEADER_NX_REPOSITORY];
+  set repository(String r) {
+    headers[HEADER_NX_REPOSITORY] = r;
+  }
+
+
+  get timeout => new Duration(seconds: int.parse(headers[HEADER_NX_TX_TIMEOUT]));
+  set timeout(Duration t) {
+    headers[HEADER_NX_TX_TIMEOUT] = t.inSeconds.toString();
+  }
+
+  get voidOp => headers[HEADER_NX_VOIDOP] == "true";
+  set voidOp(bool f) {
+    if (f) {
+      headers[HEADER_NX_VOIDOP] = f.toString();
+    } else {
+      headers.remove(HEADER_NX_VOIDOP);
+    }
+  }
+
+  get versioningOption => headers[HEADER_NX_VERSIONING_OPTION];
+  set versioningOption(String option) {
+    if (option == "NONE") {
+      headers.remove(HEADER_NX_VERSIONING_OPTION);
+    } else {
+      headers[HEADER_NX_VERSIONING_OPTION] = option;
+    }
+  }
+
+  get fetchDocument => headers[HEADER_NX_FETCH_DOCUMENT];
+  set fetchDocument(String parts) {
+    headers[HEADER_NX_FETCH_DOCUMENT] = parts;
+  }
+
+  get fetchDepth => int.parse(headers[HEADER_NX_FETCH_DEPTH]);
+  set fetchDepth(int depth) {
+    headers[HEADER_NX_FETCH_DEPTH] = depth.toString();
+  }
 
   setRequestHeaders() {
-
-    // Set the timeout
-    var txTimeout = timeout + new Duration(seconds: 5);
-    request.headers.set(HEADER_NX_TX_TIMEOUT, txTimeout.inSeconds.toString());
-
-    // Set the schemas
-    if (_schemas.isNotEmpty) {
-      request.headers.set(HEADER_NX_SCHEMAS, _schemas.join(","));
-    }
-
-    // Set the repository
-    if (_repositoryName != null) {
-      request.headers.set(HEADER_NX_REPOSITORY, _repositoryName);
-    }
-
-    // Add any extra headers
-    if (nxClient.headers != null) {
-      nxClient.headers.forEach((k, v) {
-        if (v != null) {
-          request.headers.set(k, v);
-        }
-      });
-    }
+    // Set the request headers
+    headers.forEach((k, v) {
+      if (v != null) {
+        request.headers.set(k, v);
+      }
+    });
   }
 
   /// Send the request

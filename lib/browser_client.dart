@@ -16,7 +16,7 @@ class Client extends nx.Client {
     Map headers}) :
     super(
         new http.Client(username: username, password: password, url: url),
-        timeout: timeout, schemas: schemas, repositoryName: repository, headers: headers);
+        timeout: timeout, schemas: schemas, repository: repository, headers: headers);
 
 }
 

@@ -38,12 +38,13 @@ class Request extends nx.BaseRequest {
     var uri = Uri.parse("${this.uri}${this.uri.hasQuery ? '' : '?'}${queryParameters.join('&')}");
 
     request = methods[_method](uri);
-    setRequestHeaders();
 
     // Set the content type
-    request.headers.set(http.HEADER_CONTENT_TYPE, nx.CTYPE_JSON);
+    headers[http.HEADER_CONTENT_TYPE] = nx.CTYPE_JSON;
 
-    requestData = body;
+    setRequestHeaders();
+
+    requestData = (body is String) ? body : JSON.encode(body);
 
     return request.send(requestData);
   }
@@ -62,7 +63,7 @@ class Request extends nx.BaseRequest {
 
   /// Get the children of a document
   children({int currentPageIndex, int pageSize, int maxResults})
-    => _addAdapter("children", queryParams: {
+    => adapt("children", queryParams: {
       "currentPageIndex": currentPageIndex,
       "pageSize": pageSize,
       "maxResults" : maxResults
@@ -72,7 +73,7 @@ class Request extends nx.BaseRequest {
   search({
     String query, String fullText, String orderBy,
     int currentPageIndex, int pageSize, int maxResults})
-    => _addAdapter("search", queryParams: {
+    => adapt("search", queryParams: {
       "query" : query,
       "fullText": fullText,
       "orderBy": orderBy,
@@ -83,17 +84,17 @@ class Request extends nx.BaseRequest {
 
   /// Execute a page provider on document
   pp(String name, {int currentPageIndex, int pageSize, int maxResults})
-  => _addAdapter("pp", pathParams: [name], queryParams: {
+  => adapt("pp", pathParams: [name], queryParams: {
     "currentPageIndex": currentPageIndex,
     "pageSize": pageSize,
     "maxResults" : maxResults
   });
 
   /// View the ACL of a document
-  acl() => _addAdapter("acl");
+  acl() => adapt("acl");
 
   /// View the audit trail of a document
-  audit() => _addAdapter("audit");
+  audit() => adapt("audit");
 
   /// Business object adapter on a document
   bo(nameOrType, [String docName]) {
@@ -103,22 +104,22 @@ class Request extends nx.BaseRequest {
     if (docName != null) {
       pathParams.add(docName);
     }
-   return _addAdapter("bo", pathParams: pathParams);
+   return adapt("bo", pathParams: pathParams);
   }
 
   /// Execute an operation or a chain on a document
   op(String name, {Map params})
-  => _addAdapter("op", pathParams: [name], queryParams: params);
+  => adapt("op", pathParams: [name], queryParams: params);
 
   /// All method calls with be used as adapters
   noSuchMethod(Invocation invocation) {
     String member = MirrorSystem.getName(invocation.memberName);
     if (invocation.isMethod) {
-      _addAdapter(member, pathParams: invocation.positionalArguments, queryParams: invocation.namedArguments);
+      adapt(member, pathParams: invocation.positionalArguments, queryParams: invocation.namedArguments);
     }
   }
 
-  _addAdapter(String name, {List<String> pathParams, Map queryParams}) {
+  adapt(String name, {List<String> pathParams, Map queryParams}) {
 
     uri = Uri.parse("$uri/@$name");
 

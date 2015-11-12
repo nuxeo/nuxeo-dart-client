@@ -41,7 +41,7 @@ void testPagination(nuxeo.Client nx) {
 
     test('Query for page 1', () {
       expect(root, isNotNull);
-      nx.op("Document.PageProvider")
+      nx.op("Repository.PageProvider")
           .params({
             "query" : "select * from Document where ecm:parentId = ?",
             "pageSize" : 2,
@@ -59,7 +59,7 @@ void testPagination(nuxeo.Client nx) {
 
     test('Query for page 2', () {
       expect(root, isNotNull);
-      nx.op("Document.PageProvider")
+      nx.op("Repository.PageProvider")
           .params({
             "query" : "select * from Document where ecm:parentId = ?",
             "pageSize" : 2,

@@ -115,7 +115,7 @@ class BatchUploader {
       var upload = _uploadStack.removeFirst();
 
       // create a new xhr object
-      var xhr = client.httpClient.post(Uri.parse("${client._rpcUri}/batch/upload"));
+      var xhr = client.httpClient.post(Uri.parse("${client.rpcUri}/batch/upload"));
 
       upload.fileIndex = uploadIdx + 0;
       upload.downloadStartTime = new DateTime.now();

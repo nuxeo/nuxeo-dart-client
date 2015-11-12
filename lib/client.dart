@@ -80,17 +80,17 @@ abstract class Client {
   http.Client httpClient;
 
   String username, password;
-  Uri _rpcUri, _restUri;
+  Uri rpcUri, restUri;
   Duration timeout;
-  String repositoryName;
+  String repository;
   List<String> schemas;
   Map headers;
 
   Introspection config;
 
-  Client(this.httpClient, {this.timeout, this.schemas, this.repositoryName, this.headers}) {
-    _rpcUri = Uri.parse("${httpClient.uri}/site/automation");
-    _restUri = Uri.parse("${httpClient.uri}/api/v1");
+  Client(this.httpClient, {this.timeout, this.schemas, this.repository, this.headers}) {
+    rpcUri = Uri.parse("${httpClient.uri}/site/automation");
+    restUri = Uri.parse("${httpClient.uri}/api/v1");
 
     config = new Introspection(this);
 
@@ -101,7 +101,7 @@ abstract class Client {
 
   /* REST */
   rest.Request newRequest(String path, {String repo, Duration execTimeout}) =>
-        new rest.Request(Uri.parse("$_restUri/$path"), this);
+        new rest.Request(Uri.parse("$restUri/$path"), this);
 
   rest.Request doc(String uidOrPath, {String repo}) {
     var path;
@@ -131,12 +131,12 @@ abstract class Client {
   rpc.OperationRequest op(String id, {
     execTimeout: const Duration(seconds: 30),
     uploadTimeout: const Duration(minutes: 20)
-  }) => new rpc.OperationRequest(id, _rpcUri, this);
+  }) => new rpc.OperationRequest(id, rpcUri, this);
 
-  Future<OperationRegistry> get registry => OperationRegistry.get(_rpcUri, httpClient);
+  Future<OperationRegistry> get registry => OperationRegistry.get(rpcUri, httpClient);
 
   /// Logs in to the Nuxeo server and returns a [Login]
-  Future<Login> login() => rpc.login(_rpcUri, httpClient);
+  Future<Login> login() => rpc.login(rpcUri, httpClient);
 
 }
 
@@ -147,7 +147,7 @@ class Introspection {
 
   Introspection(this.client);
 
-  get uri => "${client._restUri}/config";
+  get uri => "${client.restUri}/config";
 
   fetch(path) => client.httpClient.get(Uri.parse("$uri/$path")).send();
 

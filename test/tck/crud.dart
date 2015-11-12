@@ -66,7 +66,7 @@ void testCRUD(nuxeo.Client nx) {
           .input("doc:${children[1].path}")
           .params({
             "save" : "true",
-            "properties" : "dc:description=Simple File\ndc:subjects=subject1,subject2",
+            "properties" : "dc:description=Simple File\ndc:subjects=art,sciences",
           })
           .call()
       .then(expectAsync((nuxeo.Document doc) {
