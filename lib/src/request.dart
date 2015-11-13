@@ -15,6 +15,7 @@ const HEADER_NX_REPOSITORY = "X-NXRepository";
 const HEADER_NX_VERSIONING_OPTION = "X-Versioning-Option";
 const HEADER_NX_FETCH_DOCUMENT = "X-NXfetch.document";
 const HEADER_NX_FETCH_DEPTH = "depth";
+const HEADER_NX_ENRICHERS = "X-NXenrichers.document";
 
 abstract class BaseRequest {
 
@@ -52,6 +53,14 @@ abstract class BaseRequest {
     headers[HEADER_NX_REPOSITORY] = r;
   }
 
+  get enrichers => headers[HEADER_NX_ENRICHERS].split(",");
+  set enrichers(List<String> s) {
+    if (s.isEmpty) {
+      headers.remove(HEADER_NX_ENRICHERS);
+    } else {
+      headers[HEADER_NX_ENRICHERS] = s.join(",");
+    }
+  }
 
   get timeout => new Duration(seconds: int.parse(headers[HEADER_NX_TX_TIMEOUT]));
   set timeout(Duration t) {

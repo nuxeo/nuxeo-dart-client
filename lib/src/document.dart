@@ -24,6 +24,7 @@ class Document {
   String title;
   DateTime lastModified;
   List<String> facets;
+  var contextParameters;
 
   Map<String, dynamic> properties = {};
 
@@ -36,7 +37,8 @@ class Document {
     versionLabel = json["versionLabel"],
     isCheckedOut = json["isCheckedOut"],
     title = json["title"],
-    facets = json["facets"] {
+    facets = json["facets"],
+    contextParameters = json["contextParameters"] {
 
     if (json["lastModified"]!= null) {
       lastModified = DateTime.parse(json["lastModified"]);
