@@ -32,6 +32,10 @@ abstract class BaseRequest {
 
   BatchUploader _batchUploader;
 
+  final _evtController = new StreamController.broadcast();
+  Stream get onRequest => _evtController.stream.where((e) => e == "request");
+  Stream get onResponse => _evtController.stream.where((e) => e == "response");
+
   BaseRequest(this.uri, this.nxClient) {
     headers = new Map.from(nxClient.headers);
     timeout = nxClient.timeout;
@@ -115,7 +119,9 @@ abstract class BaseRequest {
         throw new http.ClientException(e.message);
       });
 
-
+  fire(evt) {
+    _evtController.add(evt);
+  }
 
   _createEntity(json) {
     switch (json["entity-type"]) {

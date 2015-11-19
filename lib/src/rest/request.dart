@@ -46,7 +46,9 @@ class Request extends nx.BaseRequest {
 
     requestData = (body is String) ? body : JSON.encode(body);
 
-    return request.send(requestData);
+    fire("request");
+
+    return request.send(requestData).whenComplete(() { fire("response"); });
   }
 
   handleResponse(response) {

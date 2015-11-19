@@ -95,7 +95,9 @@ class OperationRequest extends nx.BaseRequest {
         requestData = json;
       }
 
-      return request.send(requestData);
+      fire("request");
+
+      return request.send(requestData).whenComplete(() { fire("response"); });
   });
 
   String get batchId => _batchUploader.batchId;
