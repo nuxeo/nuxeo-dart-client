@@ -78,24 +78,36 @@ class BatchUploader {
     this.directUpload : true,
     // update upload speed every second
     this.uploadRateRefreshTime : 1000,
-    this.uploadTimeout,
-    this.batchId
+    this.uploadTimeout
   }) {
-    if (batchId == null) {
-      batchId = "batch-" +
-        new DateTime.now().millisecondsSinceEpoch.toString() +
-        "-" + new Math.Random().nextInt(100000).toString();
-    }
   }
 
-  Future<Upload> uploadFile(cfile) {
+  Future initialize() {
+    if (batchId != null) {
+      return new Future.value(batchId);
+    }
+    return client.httpClient.post(Uri.parse("${client.restUri}/upload"))
+    .send()
+    .then((response) {
+      var json = JSON.decode(response.body);
+      if (json.isEmpty) {
+        throw new Exception("Failed to initialize batch upload.");
+      }
+      if (batchId == null) {
+        batchId = json["batchId"];
+      }
+      return batchId;
+    });
+  }
+
+  Future<Upload> uploadFile(cfile) => initialize().then((_) {
     var entry = new Upload(cfile);
     _uploadStack.add(entry);
     if (directUpload && !_sendingRequestsInProgress && _uploadStack.isNotEmpty) {
       uploadFiles();
     }
     return entry.future;
-  }
+  });
 
   uploadFiles() {
 
@@ -113,10 +125,6 @@ class BatchUploader {
     while (_uploadStack.isNotEmpty) {
 
       var upload = _uploadStack.removeFirst();
-
-      // create a new xhr object
-      var xhr = client.httpClient.post(Uri.parse("${client.rpcUri}/batch/upload"));
-
       upload.fileIndex = uploadIdx + 0;
       upload.downloadStartTime = new DateTime.now();
       upload.currentStart = upload.downloadStartTime;
@@ -128,54 +136,20 @@ class BatchUploader {
 
       _nbUploadInprogress++;
 
-
-      //var upload = xhr.upload;
-
-      // add listeners
-      //xhr.upload.onProgress.listen(_progress);
-
-      //if (file.callback) {
-      //  upload.callback = file.callback;
-      //}
-
-      // The "load" event doesn't work correctly on WebKit (Chrome,
-      // Safari),
-      // it fires too early, before the server has returned its response.
-      // still it is required for Firefox
-      //if (navigator.userAgent.indexOf('Firefox') > -1) {
-      //  upload.addEventListener("load", function(event) {
-      //    log("trigger load");
-      //    log(event);
-      //    me.load(event.target)
-      //  }, false);
-      //}
-
-      // on ready state change is not fired in all cases on webkit
-      // - on webkit we rely on progress lister to detected upload end
-      // - but on Firefox the event we need it
-      //xhr.onreadystatechange = (function(xhr) {
-      //  return function() {
-      //    me.readyStateChange(xhr)
-      //  }
-      //})(xhr);
-
       // compute timeout in seconds and integer
       int uploadTimeoutS = (uploadTimeout + new Duration(seconds: 5)).inSeconds;
 
       LOG.info("starting upload for file $uploadIdx");
 
+      // create a new xhr object
+      var xhr = client.httpClient.post(Uri.parse("${client.restUri}/upload/${batchId}/${uploadIdx}"));
       xhr.headers.set("Cache-Control", "no-cache");
       xhr.headers.set("X-Requested-With", "XMLHttpRequest");
       xhr.headers.set("X-File-Name", Uri.encodeComponent(file.filename));
       xhr.headers.set("X-File-Size", file.length.toString());
       xhr.headers.set("X-File-Type", file.mimetype);
-      xhr.headers.set("X-Batch-Id", batchId);
-      xhr.headers.set("X-File-Idx", uploadIdx.toString());
-
       xhr.headers.set('Nuxeo-Transaction-Timeout', uploadTimeoutS.toString());
-      //xhr.headers.set("Content-Type", "multipart/form-data");
 
-      //this.opts.handler.uploadStarted(uploadIdx, file);
       uploadIdx++;
 
       xhr.send(file).then((response) {
@@ -193,19 +167,6 @@ class BatchUploader {
     }
 
   }
-  /*
-  readyStateChange : function(xhr) {
-    var upload = xhr.upload;
-    log("readyStateChange event on file upload " + upload.fileIndex
-        + " (state : " + xhr.readyState + ")");
-    if (xhr.readyState == 4) {
-      if (xhr.status == 200) {
-        this.load(upload);
-      } else {
-        log("Upload failed, status: " + xhr.status);
-      }
-    }
-  },*/
 
   load(Upload upload) {
     var fileIdx = upload.fileIndex;
@@ -233,49 +194,16 @@ class BatchUploader {
     }
   }
 
-  /*
-  _progress : function(event) {
-    log(event);
-    if (event.lengthComputable) {
-      var percentage = Math.round((event.loaded * 100) / event.total);
-      if (event.target.currentProgress != percentage) {
-
-        log("progress event on upload of file "
-            + event.target.fileIndex + " --> " + percentage + "%");
-
-        event.target.currentProgress = percentage;
-        this.opts.handler.fileUploadProgressUpdated(
-            event.target.fileIndex, event.target.fileObj,
-            event.target.currentProgress);
-
-        var elapsed = new Date().getTime();
-        var diffTime = elapsed - event.target.currentStart;
-        if (diffTime >= this.opts.handler.uploadRateRefreshTime) {
-          var diffData = event.loaded - event.target.startData;
-          var speed = diffData / diffTime; // in KB/sec
-
-          this.opts.handler
-              .fileUploadSpeedUpdated(event.target.fileIndex,
-                  event.target.fileObj, speed);
-
-          event.target.startData = event.loaded;
-          event.target.currentStart = elapsed;
-        }
-        if (event.loaded == event.total) {
-          log("file " + event.target.fileIndex
-              + " detected upload complete");
-          // having all the bytes sent to the server does not mean the
-          // server did actually receive everything
-          // but since load event is not reliable on Webkit we need
-          // this
-          // window.setTimeout(function(){load(event.target, opts);},
-          // 5000);
-        } else {
-          log("file " + event.target.fileIndex + " not completed :"
-              + event.loaded + "/" + event.total);
-        }
+  info() => client.httpClient.get(Uri.parse("${client.restUri}/upload/$batchId"))
+    .send()
+    .then((response) {
+      var json = JSON.decode(response.body);
+      if (json.isEmpty) {
+        throw new Exception("Batch $batchId does not exist.");
       }
-    }
-  }*/
+      return json;
+    });
+
+  drop() => client.httpClient.delete(Uri.parse("${client.restUri}/upload/${batchId}")).send();
 
 }
