@@ -134,9 +134,9 @@ abstract class BaseRequest {
 
   handleResponse(response) {
     var body = response.body;
+    var contentType = response.headers["content-type"];
 
-    if (response.headers["content-type"] == CTYPE_ENTITY ||
-        response.headers["content-type"] == CTYPE_JSON) {
+    if (contentType != null && (contentType.startsWith(CTYPE_ENTITY) || contentType.startsWith(CTYPE_JSON))) {
       LOG.finest("Response: $body");
 
       var json = JSON.decode(body);
