@@ -32,7 +32,7 @@ class Request extends nx.BaseRequest {
     // Add the query parameters
     var queryParameters = [];
     _queryParameters.forEach((k, v) {
-      queryParameters.add("$k=$v");
+      queryParameters.add("$k=${Uri.encodeQueryComponent(v)}");
     });
 
     var uri = Uri.parse("${this.uri}${this.uri.hasQuery ? '' : '?'}${queryParameters.join('&')}");
