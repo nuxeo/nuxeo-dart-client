@@ -36,6 +36,7 @@ class Request extends base.Request {
     // Set the basic auth header
     if (username != null && password != null) {
       headers.set(base.HEADER_AUTHORIZATION, 'Basic ' + html.window.btoa("$username:$password"));
+    } else {
       withCredentials = true;
     }
   }
