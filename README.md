@@ -2,7 +2,7 @@
 
 ## Dart Client Library for Nuxeo API
 
-[![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=nuxeo-dart-client-master)](https://qa.nuxeo.org/jenkins/job/nuxeo-dart-client-master/)
+[![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=Client/nuxeo-dart-client-master)](https://qa.nuxeo.org/jenkins/job/Client/nuxeo-dart-client-master)
 
 Dart client library for the Nuxeo Automation and REST API.
 
