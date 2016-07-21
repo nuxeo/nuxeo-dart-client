@@ -1,5 +1,5 @@
 name: nuxeo_client
-version: 0.3.0
+version: 0.3.1
 author: Nelson Silva <nsilva@nuxeo.com>
 description: A Client Library for Nuxeo API
 homepage: https://github.com/nuxeo/nuxeo-dart-client
