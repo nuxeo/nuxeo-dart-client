@@ -44,7 +44,7 @@ class Request extends nx.BaseRequest {
 
     setRequestHeaders();
 
-    requestData = (body is String) ? body : JSON.encode(body);
+    requestData = (body == null || body is String) ? body : JSON.encode(body);
 
     fire("request");
 
