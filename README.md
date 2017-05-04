@@ -2,7 +2,7 @@
 
 ## Dart Client Library for Nuxeo API
 
-[![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=Client/nuxeo-dart-client-master)](https://qa.nuxeo.org/jenkins/job/Client/nuxeo-dart-client-master)
+[![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=Client/nuxeo-dart-client-master)](https://qa.nuxeo.org/jenkins/job/Client/job/nuxeo-dart-client-master/)
 
 Dart client library for the Nuxeo Automation and REST API.
 
@@ -59,7 +59,7 @@ You can run the Dart Automation Client TCK with your own Nuxeo server (version >
 
 #### Prerequisites
 
-* Download [nuxeo-automation-test](https://maven-us.nuxeo.org/nexus/content/groups/public/org/nuxeo/ecm/automation/nuxeo-automation-test/5.8/nuxeo-automation-test-5.8.jar) to nxserver/bundles
+* Download [nuxeo-automation-test](https://maven-us.nuxeo.org/nexus/content/groups/public/org/nuxeo/ecm/automation/nuxeo-automation-test/8.10/nuxeo-automation-test-8.10.jar) to nxserver/bundles
 * Install nuxeo-rest-api
 ```
 nuxeoctl mp-install nuxeo-rest-api --accept true
